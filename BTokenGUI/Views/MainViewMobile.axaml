@@ -4,12 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:BTokenGUI.ViewModels"
              xmlns:views="using:BTokenGUI.Views"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="BTokenGUI.Views.MainView"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
+             x:Class="BTokenGUI.Views.MainViewMobile"
              x:DataType="vm:MainViewModel">
-  <StackPanel HorizontalAlignment="Center"
-              VerticalAlignment="Center">
-    <views:NodeView />
-    <views:ChainView />
-  </StackPanel>
+  <TabControl TabStripPlacement="Bottom">
+    <TabItem Header="Node">
+      <views:NodeView />
+    </TabItem>
+    <TabItem Header="Chain">
+      <views:ChainView />
+    </TabItem>
+  </TabControl>
 </UserControl>

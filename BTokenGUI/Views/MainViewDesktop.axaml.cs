@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace BTokenGUI.Views;
 
-public partial class MainView : UserControl
+public partial class MainViewDesktop : UserControl
 {
-  public MainView()
+  public MainViewDesktop()
   {
     InitializeComponent();
   }

@@ -28,11 +28,11 @@ public partial class App : Application
     }
     else if (ApplicationLifetime is IActivityApplicationLifetime activity)
     {
-      activity.MainViewFactory = () => new MainView { DataContext = mainViewModel };
+      activity.MainViewFactory = () => new MainViewMobile { DataContext = mainViewModel };
     }
     else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
     {
-      singleView.MainView = new MainView { DataContext = mainViewModel };
+      singleView.MainView = new MainViewMobile { DataContext = mainViewModel };
     }
 
     _ = rPCClient.Run();
