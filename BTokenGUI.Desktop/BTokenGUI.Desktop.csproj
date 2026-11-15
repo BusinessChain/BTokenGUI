@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BTokenGUI\BTokenGUI.csproj" />
+    <ProjectReference Include="..\..\BTokenCore\Hosts\ConsoleHost\ConsoleHost.csproj" />
   </ItemGroup>
 
 </Project>
