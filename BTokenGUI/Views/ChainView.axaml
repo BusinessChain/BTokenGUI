@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             x:Class="BTokenGUI.Views.ChainView"
+             x:DataType="vm:MainViewModel">
+  <StackPanel Spacing="10" Margin="20">
+    <TextBlock Text="Chain" FontWeight="Bold" />
+    <TextBlock Text="{Binding TipBlock}" />
+  </StackPanel>
+</UserControl>

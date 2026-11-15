@@ -3,13 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:views="using:BTokenGUI.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BTokenGUI.Views.MainView"
              x:DataType="vm:MainViewModel">
   <StackPanel HorizontalAlignment="Center"
-              VerticalAlignment="Center"
-              Spacing="10">
-    <TextBlock Text="{Binding StatusConnection}" HorizontalAlignment="Center" />
-    <TextBlock Text="{Binding TipBlock}" HorizontalAlignment="Center" />
+              VerticalAlignment="Center">
+    <views:NodeView />
+    <views:ChainView />
   </StackPanel>
 </UserControl>

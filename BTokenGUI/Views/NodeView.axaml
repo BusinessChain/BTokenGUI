@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             x:Class="BTokenGUI.Views.NodeView"
+             x:DataType="vm:MainViewModel">
+  <StackPanel Spacing="10" Margin="20">
+    <TextBlock Text="Node" FontWeight="Bold" />
+    <TextBlock Text="{Binding StatusConnection}" />
+  </StackPanel>
+</UserControl>
