@@ -7,8 +7,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BTokenGUI.Views.MainViewDesktop"
              x:DataType="vm:MainViewModel">
-  <Grid ColumnDefinitions="*,*">
+  <Grid ColumnDefinitions="*,*,2*">
     <views:NodeView Grid.Column="0" />
     <views:ChainView Grid.Column="1" />
+    <views:NetworkView Grid.Column="2" />
   </Grid>
 </UserControl>

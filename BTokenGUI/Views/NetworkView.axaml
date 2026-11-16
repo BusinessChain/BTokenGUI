@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:models="using:BTokenGUI.Models"
+             x:Class="BTokenGUI.Views.NetworkView"
+             x:DataType="vm:MainViewModel">
+  <DockPanel Margin="20">
+    <TextBlock DockPanel.Dock="Top" Text="Network" FontWeight="Bold" Margin="0,0,0,10" />
+    <ScrollViewer>
+      <ItemsControl ItemsSource="{Binding Networks}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="models:NetworkSnapshot">
+            <StackPanel Spacing="6" Margin="0,0,0,16">
+              <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+              <ItemsControl ItemsSource="{Binding Peers}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="models:PeerSnapshot">
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6">
+                      <StackPanel Spacing="4">
+                        <TextBlock Text="{Binding IP}" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Connection, StringFormat='Connection: {0}'}" />
+                        <TextBlock Text="{Binding StateCurrent, StringFormat='State: {0}'}" />
+                        <TextBlock Text="{Binding IsDisposed, StringFormat='Disposed: {0}'}" />
+                        <TextBlock Text="{Binding TimeConnected, StringFormat='Connected since: {0:G}'}" />
+                        <ItemsControl ItemsSource="{Binding Messages}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:MessageSnapshot">
+                              <Grid ColumnDefinitions="120,*,60" Margin="0,2">
+                                <TextBlock Grid.Column="0" Text="{Binding Command}" VerticalAlignment="Center" />
+                                <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding LevelMax}" Value="{Binding Level}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="{Binding Level, StringFormat={}{0:F1}}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                              </Grid>
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>
