@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text.Json;
@@ -15,6 +17,11 @@ public class RPCClient
   public event Action<string, JsonElement> OnNotification;
   public event Action<bool> OnConnectionChanged;
 
+  ClientWebSocket WebSocket;
+  SemaphoreSlim SemaphoreSend = new(1);
+  long IdRequestLast;
+  ConcurrentDictionary<long, TaskCompletionSource<JsonElement>> RequestsPending = new();
+
 
   public async Task Run()
   {
@@ -26,6 +33,8 @@ public class RPCClient
       {
         await webSocket.ConnectAsync(new Uri(URL_RPC), CancellationToken.None).ConfigureAwait(false);
 
+        WebSocket = webSocket;
+
         OnConnectionChanged?.Invoke(true);
 
         try
@@ -35,6 +44,12 @@ public class RPCClient
         }
         finally
         {
+          WebSocket = null;
+
+          foreach (long id in RequestsPending.Keys)
+            if (RequestsPending.TryRemove(id, out TaskCompletionSource<JsonElement> request))
+              request.TrySetException(new WebSocketException("Connection to node lost."));
+
           OnConnectionChanged?.Invoke(false);
         }
       }
@@ -43,6 +58,46 @@ public class RPCClient
 
       await Task.Delay(MILLISECONDS_DELAY_RECONNECT).ConfigureAwait(false);
     }
+  }
+
+  public async Task<JsonElement> SendRequest(string method, object parameters)
+  {
+    ClientWebSocket webSocket = WebSocket ?? throw new InvalidOperationException("Not connected to node.");
+
+    long id = Interlocked.Increment(ref IdRequestLast);
+
+    TaskCompletionSource<JsonElement> response = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    RequestsPending[id] = response;
+
+    byte[] request = JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
+    {
+      ["jsonrpc"] = "2.0",
+      ["id"] = id,
+      ["method"] = method,
+      ["params"] = parameters
+    });
+
+    await SemaphoreSend.WaitAsync().ConfigureAwait(false);
+
+    try
+    {
+      await webSocket.SendAsync(
+        new ArraySegment<byte>(request),
+        WebSocketMessageType.Text,
+        endOfMessage: true,
+        CancellationToken.None).ConfigureAwait(false);
+    }
+    catch
+    {
+      RequestsPending.TryRemove(id, out _);
+      throw;
+    }
+    finally
+    {
+      SemaphoreSend.Release();
+    }
+
+    return await response.Task.ConfigureAwait(false);
   }
 
   static async Task<byte[]> ReceiveMessage(WebSocket webSocket)
@@ -73,7 +128,15 @@ public class RPCClient
 
       JsonElement root = document.RootElement;
 
-      if (!root.TryGetProperty("id", out _) && root.TryGetProperty("method", out JsonElement method))
+      if (root.TryGetProperty("id", out JsonElement id))
+      {
+        if (id.ValueKind == JsonValueKind.Number && RequestsPending.TryRemove(id.GetInt64(), out TaskCompletionSource<JsonElement> request))
+          if (root.TryGetProperty("error", out JsonElement error))
+            request.SetException(new InvalidOperationException(error.GetProperty("message").GetString()));
+          else
+            request.SetResult(root.GetProperty("result").Clone());
+      }
+      else if (root.TryGetProperty("method", out JsonElement method))
       {
         root.TryGetProperty("params", out JsonElement parameters);
         OnNotification?.Invoke(method.GetString(), parameters.Clone());
