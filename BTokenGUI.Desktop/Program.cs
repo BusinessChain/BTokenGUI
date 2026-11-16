@@ -13,20 +13,24 @@ sealed class Program
   [STAThread]
   public static void Main(string[] args)
   {
-    StartConsoleHost();
+    Process consoleHost = StartConsoleHost();
 
     BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+
+#if DEBUG
+    consoleHost?.Kill(true);
+#endif
   }
 
-  static void StartConsoleHost()
+  static Process StartConsoleHost()
   {
     if (Process.GetProcessesByName(NAME_CONSOLE_HOST).Length > 0)
-      return;
+      return null;
 
     string directoryNode = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BToken");
     Directory.CreateDirectory(directoryNode);
 
-    Process.Start(new ProcessStartInfo
+    return Process.Start(new ProcessStartInfo
     {
       FileName = Path.Combine(AppContext.BaseDirectory, OperatingSystem.IsWindows() ? NAME_CONSOLE_HOST + ".exe" : NAME_CONSOLE_HOST),
       WorkingDirectory = directoryNode,
