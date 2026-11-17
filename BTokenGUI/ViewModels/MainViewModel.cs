@@ -19,7 +19,7 @@ public partial class MainViewModel : ViewModelBase
   [ObservableProperty]
   public partial string TipBlock { get; set; } = "No block received yet";
 
-  public ObservableCollection<NetworkSnapshot> Networks { get; } = [];
+  public ObservableCollection<Network> Networks { get; } = [];
 
   const int MILLISECONDS_INTERVAL_POLL_NETWORKS = 1000;
 
@@ -48,11 +48,11 @@ public partial class MainViewModel : ViewModelBase
         {
           foreach (JsonProperty networkJSON in result.EnumerateObject())
           {
-            NetworkSnapshot network = Networks.FirstOrDefault(n => n.Name == networkJSON.Name);
+            Network network = Networks.FirstOrDefault(n => n.Name == networkJSON.Name);
 
             if (network == null)
             {
-              network = new NetworkSnapshot(networkJSON.Name);
+              network = new Network(networkJSON.Name);
               Networks.Add(network);
             }
 
