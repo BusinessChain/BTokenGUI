@@ -58,7 +58,18 @@ public partial class MainViewModel : ViewModelBase
               message.Value.GetProperty("level").GetDouble(),
               message.Value.GetProperty("levelMax").GetInt32())).ToList())).ToList())).ToList();
 
-        Dispatcher.UIThread.Post(() => Networks = networks);
+        Dispatcher.UIThread.Post(() =>
+        {
+          HashSet<(string, string)> peersExpanded = Networks
+            .SelectMany(network => network.Peers.Where(peer => peer.IsExpanded).Select(peer => (network.Name, peer.IP)))
+            .ToHashSet();
+
+          foreach (NetworkSnapshot network in networks)
+            foreach (PeerSnapshot peer in network.Peers)
+              peer.IsExpanded = peersExpanded.Contains((network.Name, peer.IP));
+
+          Networks = networks;
+        });
       }
       catch (Exception exception) when (exception is InvalidOperationException or WebSocketException or ObjectDisposedException)
       { }

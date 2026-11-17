@@ -15,9 +15,11 @@
               <ItemsControl ItemsSource="{Binding Peers}">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate x:DataType="models:PeerSnapshot">
-                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6">
-                      <StackPanel Spacing="4">
+                    <Expander IsExpanded="{Binding IsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,0,6">
+                      <Expander.Header>
                         <TextBlock Text="{Binding IP}" FontWeight="SemiBold" />
+                      </Expander.Header>
+                      <StackPanel Spacing="4">
                         <TextBlock Text="{Binding Connection, StringFormat='Connection: {0}'}" />
                         <TextBlock Text="{Binding StateCurrent, StringFormat='State: {0}'}" />
                         <TextBlock Text="{Binding IsDisposed, StringFormat='Disposed: {0}'}" />
@@ -34,7 +36,7 @@
                           </ItemsControl.ItemTemplate>
                         </ItemsControl>
                       </StackPanel>
-                    </Border>
+                    </Expander>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>

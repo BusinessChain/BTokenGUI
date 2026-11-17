@@ -11,6 +11,9 @@ public record PeerSnapshot(
   string StateCurrent,
   bool IsDisposed,
   DateTime TimeConnected,
-  List<MessageSnapshot> Messages);
+  List<MessageSnapshot> Messages)
+{
+  public bool IsExpanded { get; set; }
+}
 
 public record MessageSnapshot(string Command, double Level, int LevelMax);

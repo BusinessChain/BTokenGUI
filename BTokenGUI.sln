@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTokenGUI.Android", "BToken
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleHost", "..\BTokenCore\Hosts\ConsoleHost\ConsoleHost.csproj", "{372DEBD5-B6F0-4312-9EF9-EFB05EB3CAA1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1A4FC40F-EBDC-47E2-AB60-3A93BF2890F5}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionBTokenGUI.xlsx = SolutionBTokenGUI.xlsx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
