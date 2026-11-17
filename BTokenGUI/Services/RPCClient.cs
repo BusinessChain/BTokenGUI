@@ -14,7 +14,6 @@ public class RPCClient
   const string URL_RPC = "ws://127.0.0.1:8778/";
   const int MILLISECONDS_DELAY_RECONNECT = 2000;
 
-  public event Action<string, JsonElement> OnNotification;
   public event Action<bool> OnConnectionChanged;
 
   ClientWebSocket WebSocket;
@@ -128,19 +127,13 @@ public class RPCClient
 
       JsonElement root = document.RootElement;
 
-      if (root.TryGetProperty("id", out JsonElement id))
-      {
-        if (id.ValueKind == JsonValueKind.Number && RequestsPending.TryRemove(id.GetInt64(), out TaskCompletionSource<JsonElement> request))
-          if (root.TryGetProperty("error", out JsonElement error))
-            request.SetException(new InvalidOperationException(error.GetProperty("message").GetString()));
-          else
-            request.SetResult(root.GetProperty("result").Clone());
-      }
-      else if (root.TryGetProperty("method", out JsonElement method))
-      {
-        root.TryGetProperty("params", out JsonElement parameters);
-        OnNotification?.Invoke(method.GetString(), parameters.Clone());
-      }
+      if (root.TryGetProperty("id", out JsonElement id)
+        && id.ValueKind == JsonValueKind.Number
+        && RequestsPending.TryRemove(id.GetInt64(), out TaskCompletionSource<JsonElement> request))
+        if (root.TryGetProperty("error", out JsonElement error))
+          request.SetException(new InvalidOperationException(error.GetProperty("message").GetString()));
+        else
+          request.SetResult(root.GetProperty("result").Clone());
     }
     catch (JsonException)
     { }
