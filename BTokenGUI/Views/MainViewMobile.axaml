@@ -14,8 +14,8 @@
     <TabItem Header="Chain">
       <views:ChainView />
     </TabItem>
-    <TabItem Header="Network">
-      <views:NetworkView />
+    <TabItem Header="Networks">
+      <views:NetworksView />
     </TabItem>
   </TabControl>
 </UserControl>

@@ -23,7 +23,7 @@ public partial class Peer : ObservableObject
   public partial DateTime TimeConnected { get; set; }
 
   [ObservableProperty]
-  public partial List<DOSMonitor> Messages { get; set; }
+  public partial List<DOSMonitor> DOSMonitors { get; set; }
 
 
   public Peer(string iP)
@@ -37,7 +37,7 @@ public partial class Peer : ObservableObject
     StateCurrent = peer.GetProperty("stateCurrent").GetString();
     IsDisposed = peer.GetProperty("isDisposed").GetBoolean();
     TimeConnected = peer.GetProperty("timeConnected").GetDateTime().ToLocalTime();
-    Messages = peer.GetProperty("messages").EnumerateObject().Select(message => new DOSMonitor(
+    DOSMonitors = peer.GetProperty("messages").EnumerateObject().Select(message => new DOSMonitor(
       message.Name,
       message.Value.GetProperty("level").GetDouble(),
       message.Value.GetProperty("levelMax").GetInt32())).ToList();

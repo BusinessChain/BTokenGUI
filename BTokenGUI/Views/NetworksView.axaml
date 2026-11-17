@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:BTokenGUI.ViewModels"
              xmlns:models="using:BTokenGUI.Models"
-             x:Class="BTokenGUI.Views.NetworkView"
+             x:Class="BTokenGUI.Views.NetworksView"
              x:DataType="vm:MainViewModel">
   <DockPanel Margin="20">
-    <TextBlock DockPanel.Dock="Top" Text="Network" FontWeight="Bold" Margin="0,0,0,10" />
+    <TextBlock DockPanel.Dock="Top" Text="Networks" FontWeight="Bold" Margin="0,0,0,10" />
     <ScrollViewer>
       <ItemsControl ItemsSource="{Binding Networks}">
         <ItemsControl.ItemTemplate>
@@ -24,7 +24,7 @@
                         <TextBlock Text="{Binding StateCurrent, StringFormat='State: {0}'}" />
                         <TextBlock Text="{Binding IsDisposed, StringFormat='Disposed: {0}'}" />
                         <TextBlock Text="{Binding TimeConnected, StringFormat='Connected since: {0:G}'}" />
-                        <ItemsControl ItemsSource="{Binding Messages}">
+                        <ItemsControl ItemsSource="{Binding DOSMonitors}">
                           <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="models:Peer+DOSMonitor">
                               <Grid ColumnDefinitions="120,*,60" Margin="0,2">

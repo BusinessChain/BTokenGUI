@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace BTokenGUI.Views;
 
-public partial class NetworkView : UserControl
+public partial class NetworksView : UserControl
 {
-  public NetworkView()
+  public NetworksView()
   {
     InitializeComponent();
   }

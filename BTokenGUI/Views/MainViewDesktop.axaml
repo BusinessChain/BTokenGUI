@@ -10,6 +10,6 @@
   <Grid ColumnDefinitions="*,*,2*">
     <views:NodeView Grid.Column="0" />
     <views:ChainView Grid.Column="1" />
-    <views:NetworkView Grid.Column="2" />
+    <views:NetworksView Grid.Column="2" />
   </Grid>
 </UserControl>
