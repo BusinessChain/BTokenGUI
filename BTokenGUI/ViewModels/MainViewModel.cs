@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text.Json;
@@ -19,8 +19,7 @@ public partial class MainViewModel : ViewModelBase
   [ObservableProperty]
   public partial string TipBlock { get; set; } = "No block received yet";
 
-  [ObservableProperty]
-  public partial List<NetworkSnapshot> Networks { get; set; } = [];
+  public ObservableCollection<NetworkSnapshot> Networks { get; } = [];
 
   const int MILLISECONDS_INTERVAL_POLL_NETWORKS = 1000;
 
@@ -45,30 +44,20 @@ public partial class MainViewModel : ViewModelBase
       {
         JsonElement result = await rPCClient.SendRequest("getNetworks", null).ConfigureAwait(false);
 
-        List<NetworkSnapshot> networks = result.EnumerateObject().Select(network => new NetworkSnapshot(
-          network.Name,
-          network.Value.EnumerateArray().Select(peer => new PeerSnapshot(
-            peer.GetProperty("ip").GetString(),
-            peer.GetProperty("connection").GetString(),
-            peer.GetProperty("stateCurrent").GetString(),
-            peer.GetProperty("isDisposed").GetBoolean(),
-            peer.GetProperty("timeConnected").GetDateTime().ToLocalTime(),
-            peer.GetProperty("messages").EnumerateObject().Select(message => new MessageSnapshot(
-              message.Name,
-              message.Value.GetProperty("level").GetDouble(),
-              message.Value.GetProperty("levelMax").GetInt32())).ToList())).ToList())).ToList();
-
         Dispatcher.UIThread.Post(() =>
         {
-          HashSet<(string, string)> peersExpanded = Networks
-            .SelectMany(network => network.Peers.Where(peer => peer.IsExpanded).Select(peer => (network.Name, peer.IP)))
-            .ToHashSet();
+          foreach (JsonProperty networkJSON in result.EnumerateObject())
+          {
+            NetworkSnapshot network = Networks.FirstOrDefault(n => n.Name == networkJSON.Name);
 
-          foreach (NetworkSnapshot network in networks)
-            foreach (PeerSnapshot peer in network.Peers)
-              peer.IsExpanded = peersExpanded.Contains((network.Name, peer.IP));
+            if (network == null)
+            {
+              network = new NetworkSnapshot(networkJSON.Name);
+              Networks.Add(network);
+            }
 
-          Networks = networks;
+            network.Update(networkJSON.Value);
+          }
         });
       }
       catch (Exception exception) when (exception is InvalidOperationException or WebSocketException or ObjectDisposedException)

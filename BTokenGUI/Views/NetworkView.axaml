@@ -14,8 +14,8 @@
               <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
               <ItemsControl ItemsSource="{Binding Peers}">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate x:DataType="models:PeerSnapshot">
-                    <Expander IsExpanded="{Binding IsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0,0,0,6">
+                  <DataTemplate x:DataType="models:Peer">
+                    <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
                       <Expander.Header>
                         <TextBlock Text="{Binding IP}" FontWeight="SemiBold" />
                       </Expander.Header>
