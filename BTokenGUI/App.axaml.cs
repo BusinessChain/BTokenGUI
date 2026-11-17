@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using BTokenGUI.Services;
 using BTokenGUI.ViewModels;
 using BTokenGUI.Views;
 
@@ -19,8 +18,7 @@ public partial class App : Application
 
   public override void OnFrameworkInitializationCompleted()
   {
-    RPCClient rPCClient = new();
-    MainViewModel mainViewModel = new(rPCClient);
+    MainViewModel mainViewModel = new();
 
     if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
     {

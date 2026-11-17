@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
@@ -6,7 +7,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using BTokenGUI.Models;
-using BTokenGUI.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BTokenGUI.ViewModels;
@@ -21,15 +21,18 @@ public partial class MainViewModel : ObservableObject
 
   public ObservableCollection<Network> Networks { get; } = [];
 
+  const string URL_RPC = "http://127.0.0.1:8778/";
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
 
+  HttpClient HttpClient = new();
 
-  public MainViewModel(RPCClient rPCClient)
+
+  public MainViewModel()
   {
-    _ = PollNode(rPCClient);
+    _ = PollNode();
   }
 
-  async Task PollNode(RPCClient rPCClient)
+  async Task PollNode()
   {
     while (true)
     {
@@ -37,8 +40,8 @@ public partial class MainViewModel : ObservableObject
 
       try
       {
-        JsonElement networksJSON = await rPCClient.SendRequest("getNetworks", null).ConfigureAwait(false);
-        JsonElement blockchainsJSON = await rPCClient.SendRequest("getBlockchains", null).ConfigureAwait(false);
+        JsonElement networksJSON = await SendRequest("getNetworks", null).ConfigureAwait(false);
+        JsonElement blockchainsJSON = await SendRequest("getBlockchains", null).ConfigureAwait(false);
 
         string tipsBlockchain = string.Join("\n", blockchainsJSON.EnumerateObject().Select(blockchainJSON =>
           $"{blockchainJSON.Name}: block {blockchainJSON.Value.GetProperty("height").GetInt32()}, {blockchainJSON.Value.GetProperty("hash").GetString()[..16]}"));
@@ -67,5 +70,27 @@ public partial class MainViewModel : ObservableObject
         Dispatcher.UIThread.Post(() => StatusConnection = "Connecting to node");
       }
     }
+  }
+
+  async Task<JsonElement> SendRequest(string method, object parameters)
+  {
+    byte[] request = JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
+    {
+      ["jsonrpc"] = "2.0",
+      ["id"] = 1,
+      ["method"] = method,
+      ["params"] = parameters
+    });
+
+    using HttpResponseMessage response = await HttpClient.PostAsync(URL_RPC, new ByteArrayContent(request)).ConfigureAwait(false);
+
+    using JsonDocument document = JsonDocument.Parse(await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false));
+
+    JsonElement root = document.RootElement;
+
+    if (root.TryGetProperty("error", out JsonElement error))
+      throw new InvalidOperationException(error.GetProperty("message").GetString());
+
+    return root.GetProperty("result").Clone();
   }
 }
