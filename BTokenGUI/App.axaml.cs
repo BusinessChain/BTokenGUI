@@ -30,10 +30,6 @@ public partial class App : Application
     {
       activity.MainViewFactory = () => new MainViewMobile { DataContext = mainViewModel };
     }
-    else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
-    {
-      singleView.MainView = new MainViewMobile { DataContext = mainViewModel };
-    }
 
     _ = rPCClient.Run();
 

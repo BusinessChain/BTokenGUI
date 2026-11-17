@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BTokenGUI.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : ObservableObject
 {
   [ObservableProperty]
   public partial string StatusConnection { get; set; } = "Connecting to node";
