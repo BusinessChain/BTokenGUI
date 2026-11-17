@@ -1,7 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.WebSockets;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -26,9 +26,6 @@ public partial class MainViewModel : ObservableObject
 
   public MainViewModel(RPCClient rPCClient)
   {
-    rPCClient.OnConnectionChanged += isConnected =>
-      Dispatcher.UIThread.Post(() => StatusConnection = isConnected ? "Connected to node" : "Connecting to node");
-
     _ = PollNode(rPCClient);
   }
 
@@ -62,10 +59,13 @@ public partial class MainViewModel : ObservableObject
           }
 
           TipsBlockchain = tipsBlockchain;
+          StatusConnection = "Connected to node";
         });
       }
-      catch (Exception exception) when (exception is InvalidOperationException or WebSocketException or ObjectDisposedException)
-      { }
+      catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
+      {
+        Dispatcher.UIThread.Post(() => StatusConnection = "Connecting to node");
+      }
     }
   }
 }

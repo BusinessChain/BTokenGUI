@@ -31,8 +31,6 @@ public partial class App : Application
       activity.MainViewFactory = () => new MainViewMobile { DataContext = mainViewModel };
     }
 
-    _ = rPCClient.Run();
-
     base.OnFrameworkInitializationCompleted();
   }
 }
