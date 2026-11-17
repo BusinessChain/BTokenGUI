@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace BTokenGUI.Models;
 
-public class Network
+public partial class Network
 {
   public string Name { get; }
   public ObservableCollection<Peer> Peers { get; } = [];

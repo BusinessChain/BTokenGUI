@@ -14,7 +14,7 @@
               <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
               <ItemsControl ItemsSource="{Binding Peers}">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate x:DataType="models:Peer">
+                  <DataTemplate x:DataType="models:Network+Peer">
                     <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
                       <Expander.Header>
                         <TextBlock Text="{Binding IP}" FontWeight="SemiBold" />
@@ -26,7 +26,7 @@
                         <TextBlock Text="{Binding TimeConnected, StringFormat='Connected since: {0:G}'}" />
                         <ItemsControl ItemsSource="{Binding DOSMonitors}">
                           <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Peer+DOSMonitor">
+                            <DataTemplate x:DataType="models:Network+Peer+DOSMonitor">
                               <Grid ColumnDefinitions="120,*,60" Margin="0,2">
                                 <TextBlock Grid.Column="0" Text="{Binding Command}" VerticalAlignment="Center" />
                                 <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding LevelMax}" Value="{Binding Level}" VerticalAlignment="Center" />
