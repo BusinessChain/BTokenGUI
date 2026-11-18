@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -65,8 +66,11 @@ public partial class MainViewModel : ObservableObject
           StatusConnection = "Connected to node";
         });
       }
-      catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
+      catch (Exception exception)
       {
+        if (exception is not (HttpRequestException or TaskCanceledException or InvalidOperationException))
+          Trace.WriteLine($"PollNode failed with {exception.GetType().Name}: {exception.Message}");
+
         Dispatcher.UIThread.Post(() => StatusConnection = "Connecting to node");
       }
     }
