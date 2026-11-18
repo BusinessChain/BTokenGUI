@@ -14,7 +14,7 @@ public partial class Blockchain
   public partial class Miner : ObservableObject
   {
     [ObservableProperty]
-    public partial long FeeAnchor { get; set; }
+    public partial long Budget { get; set; }
 
     [ObservableProperty]
     public partial string StatusMining { get; set; }
@@ -26,7 +26,7 @@ public partial class Blockchain
     public void Update(JsonElement snapshotMiner)
     {
       StatusMining = snapshotMiner.GetProperty("isMining").GetBoolean()
-        ? $"Mining once per Bitcoin tip at anchor fee {snapshotMiner.GetProperty("feeAnchor").GetInt64()} satoshis"
+        ? $"Mining with a budget of {snapshotMiner.GetProperty("budget").GetInt64()} satoshis per 10 minutes"
         : "Stopped";
 
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
@@ -37,7 +37,7 @@ public partial class Blockchain
     {
       await SendRequestMiner("startMining", new Dictionary<string, object>
       {
-        ["feeAnchor"] = FeeAnchor
+        ["budget"] = Budget
       });
     }
 

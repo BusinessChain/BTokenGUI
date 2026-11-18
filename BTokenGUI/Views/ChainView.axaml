@@ -21,8 +21,8 @@
                           <StackPanel Spacing="6" Margin="10">
                             <SelectableTextBlock Text="Miner" FontWeight="Bold" />
                             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" RowSpacing="6" ColumnSpacing="12">
-                              <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Anchor fee in satoshis" VerticalAlignment="Center" />
-                              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FeeAnchor}" />
+                              <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
+                              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Budget}" />
                             </Grid>
                             <StackPanel Orientation="Horizontal" Spacing="6">
                               <Button Content="Start" Command="{Binding StartMiningCommand}" />
