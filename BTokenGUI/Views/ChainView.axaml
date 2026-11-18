@@ -37,6 +37,13 @@
                       </DataTemplate>
                     </ContentControl.ContentTemplate>
                   </ContentControl>
+                  <Border Classes="Panel">
+                    <StackPanel Spacing="6" Margin="10">
+                      <SelectableTextBlock Text="Wallet" FontWeight="Bold" />
+                      <SelectableTextBlock Text="{Binding AddressReceiving, StringFormat='Receiving address: {0}'}" TextWrapping="Wrap" />
+                      <SelectableTextBlock Text="{Binding BalanceWallet, StringFormat='Balance: {0}'}" TextWrapping="Wrap" />
+                    </StackPanel>
+                  </Border>
                   <ItemsControl ItemsSource="{Binding Blocks}">
                     <ItemsControl.ItemTemplate>
                       <DataTemplate x:DataType="models:Blockchain+Block">
