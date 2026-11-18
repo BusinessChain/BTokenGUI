@@ -1,12 +1,49 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:models="using:BTokenGUI.Models"
              x:Class="BTokenGUI.Views.ChainView"
              x:DataType="vm:MainViewModel">
   <Border Classes="Panel">
-    <StackPanel Spacing="10" Margin="20">
-      <SelectableTextBlock Text="Chain" FontWeight="Bold" />
-      <SelectableTextBlock Text="{Binding BlocksNewest}" />
-    </StackPanel>
+    <DockPanel Margin="20">
+      <SelectableTextBlock DockPanel.Dock="Top" Text="Chain" FontWeight="Bold" Margin="0,0,0,10" />
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Blockchains}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Blockchain">
+              <Border Classes="Panel">
+                <StackPanel Spacing="6" Margin="10">
+                  <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                  <ItemsControl ItemsSource="{Binding Blocks}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="models:Blockchain+Block">
+                        <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
+                          <Expander.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                              <SelectableTextBlock Text="{Binding Height}" FontWeight="SemiBold" />
+                              <SelectableTextBlock Text="{Binding HashShort}" />
+                            </StackPanel>
+                          </Expander.Header>
+                          <ItemsControl ItemsSource="{Binding Fields}">
+                            <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="models:Blockchain+Block+Field">
+                                <Grid ColumnDefinitions="140,*" Margin="0,2">
+                                  <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
+                                  <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                                </Grid>
+                              </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                          </ItemsControl>
+                        </Expander>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </DockPanel>
   </Border>
 </UserControl>

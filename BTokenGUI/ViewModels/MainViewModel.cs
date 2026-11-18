@@ -17,10 +17,9 @@ public partial class MainViewModel : ObservableObject
   [ObservableProperty]
   public partial string StatusConnection { get; set; } = "Connecting to node";
 
-  [ObservableProperty]
-  public partial string BlocksNewest { get; set; } = "No blockchain state received yet";
-
   public ObservableCollection<Network> Networks { get; } = [];
+
+  public ObservableCollection<Blockchain> Blockchains { get; } = [];
 
   const string URL_RPC = "http://127.0.0.1:8778/";
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
@@ -45,13 +44,6 @@ public partial class MainViewModel : ObservableObject
         JsonElement networksJSON = await SendRequest("getNetworks", null).ConfigureAwait(false);
         JsonElement blockchainsJSON = await SendRequest("getBlockchains", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
 
-        string blocksNewest = string.Join("\n\n", blockchainsJSON.EnumerateObject().Select(blockchainJSON =>
-          blockchainJSON.Name + "\n" + string.Join("\n", blockchainJSON.Value.EnumerateArray().Select(blockJSON =>
-          {
-            string hash = blockJSON.GetProperty("hash").GetString();
-            return $"{blockJSON.GetProperty("height").GetInt32()}  {hash[..8]} ... {hash[^8..]}";
-          }))));
-
         Dispatcher.UIThread.Post(() =>
         {
           foreach (JsonProperty networkJSON in networksJSON.EnumerateObject())
@@ -67,7 +59,19 @@ public partial class MainViewModel : ObservableObject
             network.Update(networkJSON.Value);
           }
 
-          BlocksNewest = blocksNewest;
+          foreach (JsonProperty blockchainJSON in blockchainsJSON.EnumerateObject())
+          {
+            Blockchain blockchain = Blockchains.FirstOrDefault(b => b.Name == blockchainJSON.Name);
+
+            if (blockchain == null)
+            {
+              blockchain = new Blockchain(blockchainJSON.Name);
+              Blockchains.Add(blockchain);
+            }
+
+            blockchain.Update(blockchainJSON.Value);
+          }
+
           StatusConnection = "Connected to node";
         });
       }
