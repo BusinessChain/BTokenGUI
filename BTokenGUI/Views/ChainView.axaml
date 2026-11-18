@@ -6,7 +6,7 @@
   <Border Classes="Panel">
     <StackPanel Spacing="10" Margin="20">
       <SelectableTextBlock Text="Chain" FontWeight="Bold" />
-      <SelectableTextBlock Text="{Binding TipsBlockchain}" />
+      <SelectableTextBlock Text="{Binding BlocksNewest}" />
     </StackPanel>
   </Border>
 </UserControl>

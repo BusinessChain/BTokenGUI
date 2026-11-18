@@ -18,12 +18,13 @@ public partial class MainViewModel : ObservableObject
   public partial string StatusConnection { get; set; } = "Connecting to node";
 
   [ObservableProperty]
-  public partial string TipsBlockchain { get; set; } = "No blockchain state received yet";
+  public partial string BlocksNewest { get; set; } = "No blockchain state received yet";
 
   public ObservableCollection<Network> Networks { get; } = [];
 
   const string URL_RPC = "http://127.0.0.1:8778/";
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
+  const int COUNT_BLOCKS_NEWEST = 6;
 
   HttpClient HttpClient = new();
 
@@ -42,13 +43,14 @@ public partial class MainViewModel : ObservableObject
       try
       {
         JsonElement networksJSON = await SendRequest("getNetworks", null).ConfigureAwait(false);
-        JsonElement blockchainsJSON = await SendRequest("getBlockchains", null).ConfigureAwait(false);
+        JsonElement blockchainsJSON = await SendRequest("getBlockchains", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
 
-        string tipsBlockchain = string.Join("\n", blockchainsJSON.EnumerateObject().Select(blockchainJSON =>
-        {
-          string hash = blockchainJSON.Value.GetProperty("hash").GetString();
-          return $"{blockchainJSON.Name}: block {blockchainJSON.Value.GetProperty("height").GetInt32()}, {hash[..8]} ... {hash[^8..]}";
-        }));
+        string blocksNewest = string.Join("\n\n", blockchainsJSON.EnumerateObject().Select(blockchainJSON =>
+          blockchainJSON.Name + "\n" + string.Join("\n", blockchainJSON.Value.EnumerateArray().Select(blockJSON =>
+          {
+            string hash = blockJSON.GetProperty("hash").GetString();
+            return $"{blockJSON.GetProperty("height").GetInt32()}  {hash[..8]} ... {hash[^8..]}";
+          }))));
 
         Dispatcher.UIThread.Post(() =>
         {
@@ -65,7 +67,7 @@ public partial class MainViewModel : ObservableObject
             network.Update(networkJSON.Value);
           }
 
-          TipsBlockchain = tipsBlockchain;
+          BlocksNewest = blocksNewest;
           StatusConnection = "Connected to node";
         });
       }
