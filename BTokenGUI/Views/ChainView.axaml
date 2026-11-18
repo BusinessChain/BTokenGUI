@@ -14,6 +14,29 @@
               <Border Classes="Panel">
                 <StackPanel Spacing="6" Margin="10">
                   <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                  <ContentControl Content="{Binding MinerBlockchain}">
+                    <ContentControl.ContentTemplate>
+                      <DataTemplate x:DataType="models:Blockchain+Miner">
+                        <Border Classes="Panel">
+                          <StackPanel Spacing="6" Margin="10">
+                            <SelectableTextBlock Text="Miner" FontWeight="Bold" />
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+                              <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Anchors per 10 minutes" VerticalAlignment="Center" />
+                              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CountAnchorsPer10Minutes}" />
+                              <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Anchor fee in satoshis" VerticalAlignment="Center" />
+                              <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FeeAnchor}" />
+                            </Grid>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                              <Button Content="Start" Command="{Binding StartMiningCommand}" />
+                              <Button Content="Stop" Command="{Binding StopMiningCommand}" />
+                            </StackPanel>
+                            <SelectableTextBlock Text="{Binding StatusMining}" TextWrapping="Wrap" />
+                            <SelectableTextBlock Text="{Binding StateRoundLast}" TextWrapping="Wrap" />
+                          </StackPanel>
+                        </Border>
+                      </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                  </ContentControl>
                   <ItemsControl ItemsSource="{Binding Blocks}">
                     <ItemsControl.ItemTemplate>
                       <DataTemplate x:DataType="models:Blockchain+Block">

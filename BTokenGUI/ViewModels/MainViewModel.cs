@@ -25,7 +25,7 @@ public partial class MainViewModel : ObservableObject
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
   const int COUNT_BLOCKS_NEWEST = 6;
 
-  HttpClient HttpClient = new();
+  static HttpClient HttpClient = new();
 
 
   public MainViewModel()
@@ -85,7 +85,7 @@ public partial class MainViewModel : ObservableObject
     }
   }
 
-  async Task<JsonElement> SendRequest(string method, object parameters)
+  internal static async Task<JsonElement> SendRequest(string method, object parameters)
   {
     byte[] request = JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
     {

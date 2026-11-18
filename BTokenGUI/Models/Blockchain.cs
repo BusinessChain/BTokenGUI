@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BTokenGUI.Models;
 
-public class Blockchain
+public partial class Blockchain : ObservableObject
 {
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
+
+  [ObservableProperty]
+  public partial Miner MinerBlockchain { get; set; }
 
 
   public Blockchain(string name)
@@ -31,6 +35,12 @@ public class Blockchain
 
       if (!Blocks.Any(block => block.Hash == hash))
         Blocks.Insert(index, new Block(blocksJSON[index]));
+    }
+
+    if (snapshotState.TryGetProperty("miner", out JsonElement snapshotMiner))
+    {
+      MinerBlockchain ??= new Miner();
+      MinerBlockchain.Update(snapshotMiner);
     }
   }
 
