@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12210.168 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTokenGUI", "BTokenGUI\BTokenGUI.csproj", "{DD1B1320-082E-4B4E-AC04-C910FC6C058C}"
 EndProject
@@ -66,12 +66,14 @@ Global
 		{E5C8881D-6089-4D83-8F4C-BE96079DA5B8}.Release|x86.Build.0 = Release|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|x64.Build.0 = Debug|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Debug|x86.Build.0 = Debug|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Release|x64.ActiveCfg = Release|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Release|x64.Build.0 = Release|Any CPU
 		{A7DB5528-AD3F-428C-964A-2CA322FF8C2F}.Release|x86.ActiveCfg = Release|Any CPU
