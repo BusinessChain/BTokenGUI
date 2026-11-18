@@ -4,46 +4,50 @@
              xmlns:models="using:BTokenGUI.Models"
              x:Class="BTokenGUI.Views.NetworksView"
              x:DataType="vm:MainViewModel">
-  <DockPanel Margin="20">
-    <SelectableTextBlock DockPanel.Dock="Top" Text="Networks" FontWeight="Bold" Margin="0,0,0,10" />
-    <ScrollViewer>
-      <ItemsControl ItemsSource="{Binding Networks}">
-        <ItemsControl.ItemTemplate>
-          <DataTemplate x:DataType="models:Network">
-            <StackPanel Spacing="6" Margin="0,0,0,16">
-              <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-              <ItemsControl ItemsSource="{Binding Peers}">
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate x:DataType="models:Network+Peer">
-                    <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
-                      <Expander.Header>
-                        <SelectableTextBlock Text="{Binding IP}" FontWeight="SemiBold" />
-                      </Expander.Header>
-                      <StackPanel Spacing="4">
-                        <SelectableTextBlock Text="{Binding Connection, StringFormat='Connection: {0}'}" />
-                        <SelectableTextBlock Text="{Binding StateCurrent, StringFormat='State: {0}'}" />
-                        <SelectableTextBlock Text="{Binding IsDisposed, StringFormat='Disposed: {0}'}" />
-                        <SelectableTextBlock Text="{Binding TimeConnected, StringFormat='Connected since: {0:G}'}" />
-                        <ItemsControl ItemsSource="{Binding DOSMonitors}">
-                          <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:Network+Peer+DOSMonitor">
-                              <Grid ColumnDefinitions="120,*,60" Margin="0,2">
-                                <SelectableTextBlock Grid.Column="0" Text="{Binding Command}" VerticalAlignment="Center" />
-                                <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding LevelMax}" Value="{Binding Level}" VerticalAlignment="Center" />
-                                <SelectableTextBlock Grid.Column="2" Text="{Binding Level, StringFormat={}{0:F1}}" HorizontalAlignment="Right" VerticalAlignment="Center" />
-                              </Grid>
-                            </DataTemplate>
-                          </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                      </StackPanel>
-                    </Expander>
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
-            </StackPanel>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </ScrollViewer>
-  </DockPanel>
+  <Border Classes="Panel">
+    <DockPanel Margin="20">
+      <SelectableTextBlock DockPanel.Dock="Top" Text="Networks" FontWeight="Bold" Margin="0,0,0,10" />
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Networks}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Network">
+              <Border Classes="Panel">
+                <StackPanel Spacing="6" Margin="10">
+                  <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                  <ItemsControl ItemsSource="{Binding Peers}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="models:Network+Peer">
+                        <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
+                          <Expander.Header>
+                            <SelectableTextBlock Text="{Binding IP}" FontWeight="SemiBold" />
+                          </Expander.Header>
+                          <StackPanel Spacing="4">
+                            <SelectableTextBlock Text="{Binding Connection, StringFormat='Connection: {0}'}" />
+                            <SelectableTextBlock Text="{Binding StateCurrent, StringFormat='State: {0}'}" />
+                            <SelectableTextBlock Text="{Binding IsDisposed, StringFormat='Disposed: {0}'}" />
+                            <SelectableTextBlock Text="{Binding TimeConnected, StringFormat='Connected since: {0:G}'}" />
+                            <ItemsControl ItemsSource="{Binding DOSMonitors}">
+                              <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:Network+Peer+DOSMonitor">
+                                  <Grid ColumnDefinitions="120,*,60" Margin="0,2">
+                                    <SelectableTextBlock Grid.Column="0" Text="{Binding Command}" VerticalAlignment="Center" />
+                                    <ProgressBar Grid.Column="1" Minimum="0" Maximum="{Binding LevelMax}" Value="{Binding Level}" VerticalAlignment="Center" />
+                                    <SelectableTextBlock Grid.Column="2" Text="{Binding Level, StringFormat={}{0:F1}}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                  </Grid>
+                                </DataTemplate>
+                              </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                          </StackPanel>
+                        </Expander>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </DockPanel>
+  </Border>
 </UserControl>

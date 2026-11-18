@@ -3,8 +3,10 @@
              xmlns:vm="using:BTokenGUI.ViewModels"
              x:Class="BTokenGUI.Views.ChainView"
              x:DataType="vm:MainViewModel">
-  <StackPanel Spacing="10" Margin="20">
-    <SelectableTextBlock Text="Chain" FontWeight="Bold" />
-    <SelectableTextBlock Text="{Binding TipsBlockchain}" />
-  </StackPanel>
+  <Border Classes="Panel">
+    <StackPanel Spacing="10" Margin="20">
+      <SelectableTextBlock Text="Chain" FontWeight="Bold" />
+      <SelectableTextBlock Text="{Binding TipsBlockchain}" />
+    </StackPanel>
+  </Border>
 </UserControl>

@@ -45,7 +45,10 @@ public partial class MainViewModel : ObservableObject
         JsonElement blockchainsJSON = await SendRequest("getBlockchains", null).ConfigureAwait(false);
 
         string tipsBlockchain = string.Join("\n", blockchainsJSON.EnumerateObject().Select(blockchainJSON =>
-          $"{blockchainJSON.Name}: block {blockchainJSON.Value.GetProperty("height").GetInt32()}, {blockchainJSON.Value.GetProperty("hash").GetString()[..16]}"));
+        {
+          string hash = blockchainJSON.Value.GetProperty("hash").GetString();
+          return $"{blockchainJSON.Name}: block {blockchainJSON.Value.GetProperty("height").GetInt32()}, {hash[..8]} ... {hash[^8..]}";
+        }));
 
         Dispatcher.UIThread.Post(() =>
         {

@@ -3,8 +3,10 @@
              xmlns:vm="using:BTokenGUI.ViewModels"
              x:Class="BTokenGUI.Views.NodeView"
              x:DataType="vm:MainViewModel">
-  <StackPanel Spacing="10" Margin="20">
-    <SelectableTextBlock Text="Node" FontWeight="Bold" />
-    <SelectableTextBlock Text="{Binding StatusConnection}" />
-  </StackPanel>
+  <Border Classes="Panel">
+    <StackPanel Spacing="10" Margin="20">
+      <SelectableTextBlock Text="Node" FontWeight="Bold" />
+      <SelectableTextBlock Text="{Binding StatusConnection}" />
+    </StackPanel>
+  </Border>
 </UserControl>
