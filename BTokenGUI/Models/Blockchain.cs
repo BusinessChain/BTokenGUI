@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -46,7 +47,15 @@ public class Blockchain
       Hash = block.GetProperty("hash").GetString();
       Height = block.GetProperty("height").GetInt32();
       HashShort = $"{Hash[..8]} ... {Hash[^8..]}";
-      Fields = block.EnumerateObject().Select(property => new Field(property.Name, property.Value.ToString())).ToList();
+      Fields = [];
+
+      foreach (JsonProperty property in block.EnumerateObject())
+      {
+        Fields.Add(new Field(property.Name, property.Value.ToString()));
+
+        if (property.Name == "unixTimeSeconds")
+          Fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64()).ToLocalTime().ToString("G")));
+      }
     }
 
     public record Field(string Name, string Value);
