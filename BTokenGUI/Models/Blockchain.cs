@@ -17,9 +17,9 @@ public class Blockchain
     Name = name;
   }
 
-  public void Update(JsonElement blocks)
+  public void Update(JsonElement snapshotState)
   {
-    List<JsonElement> blocksJSON = blocks.EnumerateArray().ToList();
+    List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().ToList();
     HashSet<string> hashes = blocksJSON.Select(block => block.GetProperty("hash").GetString()).ToHashSet();
 
     foreach (Block block in Blocks.Where(block => !hashes.Contains(block.Hash)).ToList())
