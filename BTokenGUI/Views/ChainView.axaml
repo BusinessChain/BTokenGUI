@@ -4,7 +4,7 @@
              x:Class="BTokenGUI.Views.ChainView"
              x:DataType="vm:MainViewModel">
   <StackPanel Spacing="10" Margin="20">
-    <TextBlock Text="Chain" FontWeight="Bold" />
-    <TextBlock Text="{Binding TipsBlockchain}" />
+    <SelectableTextBlock Text="Chain" FontWeight="Bold" />
+    <SelectableTextBlock Text="{Binding TipsBlockchain}" />
   </StackPanel>
 </UserControl>
