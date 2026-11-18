@@ -41,8 +41,9 @@ public partial class MainViewModel : ObservableObject
 
       try
       {
-        JsonElement networksJSON = await SendRequest("getNetworks", null).ConfigureAwait(false);
-        JsonElement blockchainsJSON = await SendRequest("getBlockchains", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
+        JsonElement snapshotState = await SendRequest("getSnapshotState", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
+        JsonElement networksJSON = snapshotState.GetProperty("networks");
+        JsonElement blockchainsJSON = snapshotState.GetProperty("blockchains");
 
         Dispatcher.UIThread.Post(() =>
         {
