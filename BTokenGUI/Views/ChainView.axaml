@@ -27,6 +27,7 @@
                             <StackPanel Orientation="Horizontal" Spacing="6">
                               <Button Content="Start" Command="{Binding StartMiningCommand}" />
                               <Button Content="Stop" Command="{Binding StopMiningCommand}" />
+                              <SelectableTextBlock Text="{Binding HintSync}" VerticalAlignment="Center" />
                             </StackPanel>
                             <SelectableTextBlock Text="{Binding StatusMining}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding StateRoundLast}" TextWrapping="Wrap" />

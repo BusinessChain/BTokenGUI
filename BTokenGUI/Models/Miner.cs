@@ -22,6 +22,9 @@ public partial class Blockchain
     [ObservableProperty]
     public partial string StateRoundLast { get; set; }
 
+    [ObservableProperty]
+    public partial string HintSync { get; set; }
+
 
     public void Update(JsonElement snapshotMiner)
     {
@@ -30,6 +33,17 @@ public partial class Blockchain
         : "Stopped";
 
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
+
+      long minutesAgeTipBitcoin = snapshotMiner.GetProperty("secondsAgeTipBitcoin").GetInt64() / 60;
+
+      if (!snapshotMiner.GetProperty("isAccountsAtTip").GetBoolean())
+        HintSync = "Probably not synced: the accounts are not at the tip.";
+      else if (!snapshotMiner.GetProperty("isBlockTipAtHeaderTip").GetBoolean())
+        HintSync = "Probably not synced: the Bitcoin blocks are not at the Bitcoin header tip.";
+      else if (minutesAgeTipBitcoin >= 60)
+        HintSync = $"Probably not synced: the Bitcoin header tip is {minutesAgeTipBitcoin} minutes old.";
+      else
+        HintSync = "Probably synced.";
     }
 
     [RelayCommand]
