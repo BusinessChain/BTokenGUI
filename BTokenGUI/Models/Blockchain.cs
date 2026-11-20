@@ -52,7 +52,7 @@ public partial class Blockchain : ObservableObject
     if (snapshotState.TryGetProperty("miner", out JsonElement snapshotMiner))
     {
       MinerBlockchain ??= new Miner();
-      MinerBlockchain.Update(snapshotMiner);
+      MinerBlockchain.Update(snapshotMiner, snapshotState.GetProperty("isAccountsAtTip").GetBoolean());
     }
   }
 

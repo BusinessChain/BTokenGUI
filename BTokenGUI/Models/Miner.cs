@@ -26,7 +26,7 @@ public partial class Blockchain
     public partial string HintSync { get; set; }
 
 
-    public void Update(JsonElement snapshotMiner)
+    public void Update(JsonElement snapshotMiner, bool isAccountsAtTip)
     {
       StatusMining = snapshotMiner.GetProperty("isMining").GetBoolean()
         ? $"Mining with a budget of {snapshotMiner.GetProperty("budget").GetInt64()} satoshis per 10 minutes, anchor fee {snapshotMiner.GetProperty("feeAnchor").GetInt64()}"
@@ -36,7 +36,7 @@ public partial class Blockchain
 
       long minutesAgeTipBitcoin = snapshotMiner.GetProperty("secondsAgeTipBitcoin").GetInt64() / 60;
 
-      if (!snapshotMiner.GetProperty("isAccountsAtTip").GetBoolean())
+      if (!isAccountsAtTip)
         HintSync = "Probably not synced: the accounts are not at the tip.";
       else if (!snapshotMiner.GetProperty("isBlockTipAtHeaderTip").GetBoolean())
         HintSync = "Probably not synced: the Bitcoin blocks are not at the Bitcoin header tip.";
