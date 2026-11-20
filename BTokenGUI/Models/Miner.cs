@@ -29,7 +29,7 @@ public partial class Blockchain
     public void Update(JsonElement snapshotMiner)
     {
       StatusMining = snapshotMiner.GetProperty("isMining").GetBoolean()
-        ? $"Mining with a budget of {snapshotMiner.GetProperty("budget").GetInt64()} satoshis per 10 minutes, anchor fee {snapshotMiner.GetProperty("feeAnchor").GetInt64()}, savings {snapshotMiner.GetProperty("savings").GetInt64()}"
+        ? $"Mining with a budget of {snapshotMiner.GetProperty("budget").GetInt64()} satoshis per 10 minutes, anchor fee {snapshotMiner.GetProperty("feeAnchor").GetInt64()}"
         : "Stopped";
 
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
