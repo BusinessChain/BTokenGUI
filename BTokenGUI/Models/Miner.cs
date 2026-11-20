@@ -25,6 +25,9 @@ public partial class Blockchain
     [ObservableProperty]
     public partial string HintSync { get; set; }
 
+    [ObservableProperty]
+    public partial long Funds { get; set; }
+
 
     public void Update(JsonElement snapshotMiner, bool isAccountsAtTip)
     {
@@ -33,6 +36,7 @@ public partial class Blockchain
         : "Stopped";
 
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
+      Funds = snapshotMiner.GetProperty("funds").GetInt64();
 
       long minutesAgeTipBitcoin = snapshotMiner.GetProperty("secondsAgeTipBitcoin").GetInt64() / 60;
 

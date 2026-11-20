@@ -43,11 +43,10 @@ public partial class Blockchain : ObservableObject
         Blocks.Insert(index, new Block(blocksJSON[index]));
     }
 
-    JsonElement snapshotWallet = snapshotState.GetProperty("wallet");
-    JsonElement balance = snapshotWallet.GetProperty("balance");
+    AddressReceiving = snapshotState.GetProperty("wallet").GetProperty("addressReceiving").GetString();
 
-    AddressReceiving = snapshotWallet.GetProperty("addressReceiving").GetString();
-    BalanceWallet = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString();
+    if (snapshotState.TryGetProperty("balanceWallet", out JsonElement balance))
+      BalanceWallet = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString();
 
     if (snapshotState.TryGetProperty("miner", out JsonElement snapshotMiner))
     {
