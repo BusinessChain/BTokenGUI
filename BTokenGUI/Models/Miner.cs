@@ -26,6 +26,9 @@ public partial class Blockchain
     public partial string HintSync { get; set; }
 
     [ObservableProperty]
+    public partial string AgeHeaderTipParent { get; set; }
+
+    [ObservableProperty]
     public partial long Funds { get; set; }
 
 
@@ -38,14 +41,16 @@ public partial class Blockchain
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
 
-      long minutesAgeTipBitcoin = snapshotMiner.GetProperty("secondsAgeTipBitcoin").GetInt64() / 60;
+      string nameTokenParent = snapshotMiner.GetProperty("nameTokenParent").GetString();
+
+      AgeHeaderTipParent = $"The {nameTokenParent} header tip is {snapshotMiner.GetProperty("secondsAgeTipParent").GetInt64() / 60} minutes old.";
 
       if (!isAccountsAtTip)
         HintSync = "Probably not synced: the accounts are not at the tip.";
       else if (!snapshotMiner.GetProperty("isBlockTipAtHeaderTip").GetBoolean())
-        HintSync = "Probably not synced: the Bitcoin blocks are not at the Bitcoin header tip.";
-      else if (minutesAgeTipBitcoin >= 60)
-        HintSync = $"Probably not synced: the Bitcoin header tip is {minutesAgeTipBitcoin} minutes old.";
+        HintSync = $"Probably not synced: the {nameTokenParent} blocks are not at the {nameTokenParent} header tip.";
+      else if (!snapshotMiner.GetProperty("isPeerConnected").GetBoolean())
+        HintSync = $"Probably not synced: no {nameTokenParent} peer is connected.";
       else
         HintSync = "Probably synced.";
     }
