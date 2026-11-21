@@ -30,6 +30,7 @@
                               <SelectableTextBlock Text="{Binding HintSync}" VerticalAlignment="Center" />
                             </StackPanel>
                             <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" TextWrapping="Wrap" />
+                            <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding StatusMining}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding StateRoundLast}" TextWrapping="Wrap" />
                           </StackPanel>
@@ -37,7 +38,7 @@
                       </DataTemplate>
                     </ContentControl.ContentTemplate>
                   </ContentControl>
-                  <Border Classes="Panel">
+                  <Border Classes="Panel" IsVisible="{Binding AddressReceiving, Converter={x:Static ObjectConverters.IsNotNull}}">
                     <StackPanel Spacing="6" Margin="10">
                       <SelectableTextBlock Text="Wallet" FontWeight="Bold" />
                       <SelectableTextBlock Text="{Binding AddressReceiving, StringFormat='Receiving address: {0}'}" TextWrapping="Wrap" />

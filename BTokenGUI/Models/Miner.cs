@@ -28,6 +28,9 @@ public partial class Blockchain
     [ObservableProperty]
     public partial long Funds { get; set; }
 
+    [ObservableProperty]
+    public partial string AddressFunding { get; set; }
+
 
     public void Update(JsonElement snapshotMiner, bool isAccountsAtTip)
     {
@@ -37,6 +40,7 @@ public partial class Blockchain
 
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
+      AddressFunding = snapshotMiner.GetProperty("addressFunding").GetString();
 
       string nameTokenParent = snapshotMiner.GetProperty("nameTokenParent").GetString();
 
