@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.10.12210.168 stable
+VisualStudioVersion = 18.10.12210.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTokenGUI", "BTokenGUI\BTokenGUI.csproj", "{DD1B1320-082E-4B4E-AC04-C910FC6C058C}"
 EndProject
@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		SolutionBTokenGUI.xlsx = SolutionBTokenGUI.xlsx
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BTokenSigner", "..\BTokenCore\BTokenSigner\BTokenSigner.csproj", "{C0741846-9B5E-4B18-B331-3B7867B2FD70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,18 @@ Global
 		{372DEBD5-B6F0-4312-9EF9-EFB05EB3CAA1}.Release|x64.Build.0 = Release|Any CPU
 		{372DEBD5-B6F0-4312-9EF9-EFB05EB3CAA1}.Release|x86.ActiveCfg = Release|Any CPU
 		{372DEBD5-B6F0-4312-9EF9-EFB05EB3CAA1}.Release|x86.Build.0 = Release|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Debug|x64.Build.0 = Debug|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Debug|x86.Build.0 = Debug|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Release|x64.ActiveCfg = Release|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Release|x64.Build.0 = Release|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Release|x86.ActiveCfg = Release|Any CPU
+		{C0741846-9B5E-4B18-B331-3B7867B2FD70}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
