@@ -4,25 +4,46 @@
              xmlns:models="using:BTokenGUI.Models"
              x:Class="BTokenGUI.Views.WithdrawalView"
              x:DataType="vm:MainViewModel">
-  <Grid IsVisible="{Binding MinerWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}">
-    <Border Background="#99000000" />
-    <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-      <StackPanel Spacing="12" Margin="16">
-        <SelectableTextBlock Text="Withdraw bitcoin" FontWeight="Bold" />
-        <Grid DataContext="{Binding MinerWithdrawal}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
-          <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Bitcoin address" VerticalAlignment="Center" />
-          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
-          <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Value in satoshis" VerticalAlignment="Center" />
-          <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding ValueWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
-          <SelectableTextBlock Grid.Row="2" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
-          <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
-        </Grid>
-        <SelectableTextBlock Text="{Binding MinerWithdrawal.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawal.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
-        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
-          <Button Content="Send" Command="{Binding WithdrawBitcoinCommand}" />
-          <Button Content="Cancel" Command="{Binding CancelWithdrawalCommand}" />
+  <Panel>
+    <Grid IsVisible="{Binding MinerWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <Border Background="#99000000" />
+      <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+        <StackPanel Spacing="12" Margin="16">
+          <SelectableTextBlock Text="Withdraw bitcoin" FontWeight="Bold" />
+          <Grid DataContext="{Binding MinerWithdrawal}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+            <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Bitcoin address" VerticalAlignment="Center" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
+            <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Value in satoshis" VerticalAlignment="Center" />
+            <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding ValueWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+            <SelectableTextBlock Grid.Row="2" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
+            <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+          </Grid>
+          <SelectableTextBlock Text="{Binding MinerWithdrawal.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawal.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
+          <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
+            <Button Content="Send" Command="{Binding WithdrawBitcoinCommand}" />
+            <Button Content="Cancel" Command="{Binding CancelWithdrawalCommand}" />
+          </StackPanel>
         </StackPanel>
-      </StackPanel>
-    </Border>
-  </Grid>
+      </Border>
+    </Grid>
+    <Grid IsVisible="{Binding MinerWithdrawalRevenue, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <Border Background="#99000000" />
+      <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+        <StackPanel Spacing="12" Margin="16">
+          <SelectableTextBlock Text="Withdraw Miner revenue" FontWeight="Bold" />
+          <SelectableTextBlock Text="{Binding MinerWithdrawalRevenue.Revenue, StringFormat='Revenue: {0}'}" TextWrapping="Wrap" />
+          <SelectableTextBlock Text="{Binding Wallet.Address, StringFormat='To address: {0}'}" TextWrapping="Wrap" />
+          <Grid DataContext="{Binding MinerWithdrawalRevenue}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto" RowSpacing="6" ColumnSpacing="12">
+            <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Fee per payment" VerticalAlignment="Center" />
+            <NumericUpDown Grid.Row="0" Grid.Column="1" Value="{Binding FeeRevenue}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+          </Grid>
+          <SelectableTextBlock Text="{Binding MinerWithdrawalRevenue.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawalRevenue.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
+          <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
+            <Button Content="Send" Command="{Binding WithdrawRevenueMinerCommand}" />
+            <Button Content="Cancel" Command="{Binding CancelWithdrawalCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Panel>
 </UserControl>

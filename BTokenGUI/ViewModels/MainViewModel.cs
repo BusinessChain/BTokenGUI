@@ -21,6 +21,9 @@ public partial class MainViewModel : ObservableObject
   [ObservableProperty]
   public partial Blockchain.Miner MinerWithdrawal { get; set; }
 
+  [ObservableProperty]
+  public partial Blockchain.Miner MinerWithdrawalRevenue { get; set; }
+
   public ObservableCollection<Network> Networks { get; } = [];
 
   public ObservableCollection<Blockchain> Blockchains { get; } = [];
@@ -109,9 +112,17 @@ public partial class MainViewModel : ObservableObject
   }
 
   [RelayCommand]
+  void OpenWithdrawalRevenue(Blockchain.Miner miner)
+  {
+    miner.ClearErrors();
+    MinerWithdrawalRevenue = miner;
+  }
+
+  [RelayCommand]
   void CancelWithdrawal()
   {
     MinerWithdrawal = null;
+    MinerWithdrawalRevenue = null;
   }
 
   [RelayCommand]
@@ -141,8 +152,12 @@ public partial class MainViewModel : ObservableObject
   }
 
   [RelayCommand]
-  async Task WithdrawRevenueMiner(Blockchain.Miner miner)
+  async Task WithdrawRevenueMiner()
   {
+    Blockchain.Miner miner = MinerWithdrawalRevenue;
+
+    miner.ClearErrors();
+
     try
     {
       JsonElement transfer = await SendRequest("withdrawRevenueMiner", new Dictionary<string, object>
@@ -152,10 +167,11 @@ public partial class MainViewModel : ObservableObject
       });
 
       miner.StateWithdrawalLast = $"The Miner sent {transfer.GetProperty("countPayments").GetInt32()} payments of {transfer.GetProperty("value").GetInt64()} in total.";
+      MinerWithdrawalRevenue = null;
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
-      miner.StateWithdrawalLast = exception.Message;
+      miner.ErrorWithdrawal = exception.Message;
     }
   }
 
