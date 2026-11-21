@@ -15,9 +15,6 @@ public partial class Blockchain : ObservableObject
   [ObservableProperty]
   public partial Miner MinerBlockchain { get; set; }
 
-  [ObservableProperty]
-  public partial string AddressReceiving { get; set; }
-
 
   public Blockchain(string name)
   {
@@ -39,9 +36,6 @@ public partial class Blockchain : ObservableObject
       if (!Blocks.Any(block => block.Hash == hash))
         Blocks.Insert(index, new Block(blocksJSON[index]));
     }
-
-    if (snapshotState.TryGetProperty("wallet", out JsonElement wallet))
-      AddressReceiving = wallet.GetProperty("addressReceiving").GetString();
 
     if (snapshotState.TryGetProperty("miner", out JsonElement snapshotMiner))
     {

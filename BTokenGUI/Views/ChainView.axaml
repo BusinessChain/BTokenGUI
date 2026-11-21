@@ -38,12 +38,6 @@
                       </DataTemplate>
                     </ContentControl.ContentTemplate>
                   </ContentControl>
-                  <Border Classes="Panel" IsVisible="{Binding AddressReceiving, Converter={x:Static ObjectConverters.IsNotNull}}">
-                    <StackPanel Spacing="6" Margin="10">
-                      <SelectableTextBlock Text="Wallet" FontWeight="Bold" />
-                      <SelectableTextBlock Text="{Binding AddressReceiving, StringFormat='Receiving address: {0}'}" TextWrapping="Wrap" />
-                    </StackPanel>
-                  </Border>
                   <ItemsControl ItemsSource="{Binding Blocks}">
                     <ItemsControl.ItemTemplate>
                       <DataTemplate x:DataType="models:Blockchain+Block">
