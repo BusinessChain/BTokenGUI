@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:models="using:BTokenGUI.Models"
+             x:Class="BTokenGUI.Views.WalletView"
+             x:DataType="vm:MainViewModel">
+  <Border Classes="Panel">
+    <StackPanel Spacing="6" Margin="20" DataContext="{Binding Wallet}" x:DataType="models:Wallet">
+      <SelectableTextBlock Text="Wallet" FontWeight="Bold" Margin="0,0,0,4" />
+      <SelectableTextBlock Text="{Binding Address, StringFormat='Address: {0}'}" TextWrapping="Wrap" />
+      <SelectableTextBlock Text="{Binding Balance, StringFormat='Balance: {0}'}" TextWrapping="Wrap" />
+    </StackPanel>
+  </Border>
+</UserControl>

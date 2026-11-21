@@ -21,6 +21,8 @@ public partial class MainViewModel : ObservableObject
 
   public ObservableCollection<Blockchain> Blockchains { get; } = [];
 
+  public Wallet Wallet { get; } = new();
+
   const string URL_RPC = "http://127.0.0.1:8778/";
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
   const int COUNT_BLOCKS_NEWEST = 6;
@@ -75,6 +77,11 @@ public partial class MainViewModel : ObservableObject
 
           StatusConnection = "Connected to node";
         });
+
+        JsonElement balance = await SendRequest("getBalanceAccount", new Dictionary<string, object> { ["address"] = Wallet.Address }).ConfigureAwait(false);
+
+        Dispatcher.UIThread.Post(() =>
+          Wallet.Balance = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString());
       }
       catch (Exception exception)
       {

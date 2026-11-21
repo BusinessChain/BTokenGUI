@@ -17,4 +17,8 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BTokenCore\BTokenSigner\BTokenSigner.csproj" />
+  </ItemGroup>
+
 </Project>

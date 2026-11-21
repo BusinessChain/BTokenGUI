@@ -17,5 +17,8 @@
     <TabItem Header="Networks">
       <views:NetworksView />
     </TabItem>
+    <TabItem Header="Wallet">
+      <views:WalletView />
+    </TabItem>
   </TabControl>
 </UserControl>
