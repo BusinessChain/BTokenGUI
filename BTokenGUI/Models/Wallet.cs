@@ -113,11 +113,11 @@ public partial class Wallet : ObservableObject
   }
 
   [RelayCommand]
-  async Task TransferRevenueMiner()
+  async Task WithdrawRevenueMiner()
   {
     try
     {
-      JsonElement transfer = await MainViewModel.SendRequest("transferRevenueMiner", new Dictionary<string, object>
+      JsonElement transfer = await MainViewModel.SendRequest("withdrawRevenueMiner", new Dictionary<string, object>
       {
         ["address"] = Address,
         ["fee"] = FeePayment
