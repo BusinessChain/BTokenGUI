@@ -146,7 +146,7 @@ public partial class MainViewModel : ObservableObject
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
-      if (!miner.MarkErrors(exception))
+      if (!miner.MarkErrors("withdrawBitcoin", exception))
         miner.ErrorWithdrawal = exception.Message;
     }
   }
@@ -162,7 +162,7 @@ public partial class MainViewModel : ObservableObject
     {
       JsonElement transfer = await SendRequest("withdrawRevenueMiner", new Dictionary<string, object>
       {
-        ["address"] = Wallet.Address,
+        ["address"] = miner.AddressRevenue,
         ["fee"] = miner.FeeRevenue
       });
 
@@ -171,7 +171,8 @@ public partial class MainViewModel : ObservableObject
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
-      miner.ErrorWithdrawal = exception.Message;
+      if (!miner.MarkErrors("withdrawRevenueMiner", exception))
+        miner.ErrorWithdrawal = exception.Message;
     }
   }
 

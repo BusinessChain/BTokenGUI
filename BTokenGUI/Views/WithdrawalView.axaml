@@ -32,10 +32,11 @@
         <StackPanel Spacing="12" Margin="16">
           <SelectableTextBlock Text="Withdraw Miner revenue" FontWeight="Bold" />
           <SelectableTextBlock Text="{Binding MinerWithdrawalRevenue.Revenue, StringFormat='Revenue: {0}'}" TextWrapping="Wrap" />
-          <SelectableTextBlock Text="{Binding Wallet.Address, StringFormat='To address: {0}'}" TextWrapping="Wrap" />
-          <Grid DataContext="{Binding MinerWithdrawalRevenue}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto" RowSpacing="6" ColumnSpacing="12">
-            <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Fee per payment" VerticalAlignment="Center" />
-            <NumericUpDown Grid.Row="0" Grid.Column="1" Value="{Binding FeeRevenue}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+          <Grid DataContext="{Binding MinerWithdrawalRevenue}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+            <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="BToken address" VerticalAlignment="Center" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressRevenue}" />
+            <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Fee per payment" VerticalAlignment="Center" />
+            <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding FeeRevenue}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
           </Grid>
           <SelectableTextBlock Text="{Binding MinerWithdrawalRevenue.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawalRevenue.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
           <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
