@@ -20,7 +20,6 @@
       </Grid>
       <StackPanel Orientation="Horizontal" Spacing="6">
         <Button Content="Send" Command="{Binding SendPaymentCommand}" />
-        <Button Content="Withdraw Miner revenue" Command="{Binding WithdrawRevenueMinerCommand}" />
       </StackPanel>
       <SelectableTextBlock Text="{Binding StatePaymentLast}" TextWrapping="Wrap" />
       <SelectableTextBlock Text="Keys" FontWeight="Bold" Margin="0,10,0,4" />

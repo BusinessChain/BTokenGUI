@@ -112,25 +112,6 @@ public partial class Wallet : ObservableObject
     }
   }
 
-  [RelayCommand]
-  async Task WithdrawRevenueMiner()
-  {
-    try
-    {
-      JsonElement transfer = await MainViewModel.SendRequest("withdrawRevenueMiner", new Dictionary<string, object>
-      {
-        ["address"] = Address,
-        ["fee"] = FeePayment
-      });
-
-      StatePaymentLast = $"The Miner sent {transfer.GetProperty("countPayments").GetInt32()} payments of {transfer.GetProperty("value").GetInt64()} in total.";
-    }
-    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
-    {
-      StatePaymentLast = exception.Message;
-    }
-  }
-
   internal async Task WriteBackup(Stream stream, string nameFile)
   {
     try

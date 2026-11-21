@@ -46,6 +46,9 @@ public partial class Blockchain
     public partial string Revenue { get; set; }
 
     [ObservableProperty]
+    public partial decimal? FeeRevenue { get; set; }
+
+    [ObservableProperty]
     public partial string AddressFunding { get; set; }
 
     [ObservableProperty]

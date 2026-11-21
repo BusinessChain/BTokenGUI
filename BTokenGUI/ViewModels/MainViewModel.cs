@@ -140,6 +140,25 @@ public partial class MainViewModel : ObservableObject
     }
   }
 
+  [RelayCommand]
+  async Task WithdrawRevenueMiner(Blockchain.Miner miner)
+  {
+    try
+    {
+      JsonElement transfer = await SendRequest("withdrawRevenueMiner", new Dictionary<string, object>
+      {
+        ["address"] = Wallet.Address,
+        ["fee"] = miner.FeeRevenue
+      });
+
+      miner.StateWithdrawalLast = $"The Miner sent {transfer.GetProperty("countPayments").GetInt32()} payments of {transfer.GetProperty("value").GetInt64()} in total.";
+    }
+    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
+    {
+      miner.StateWithdrawalLast = exception.Message;
+    }
+  }
+
   internal static async Task<JsonElement> SendRequest(string method, object parameters)
   {
     byte[] request = JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
