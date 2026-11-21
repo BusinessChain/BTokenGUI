@@ -22,7 +22,7 @@
                             <SelectableTextBlock Text="Miner" FontWeight="Bold" />
                             <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" RowSpacing="6" ColumnSpacing="12">
                               <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
-                              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Budget}" />
+                              <NumericUpDown Grid.Row="0" Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
                             </Grid>
                             <StackPanel Orientation="Horizontal" Spacing="6">
                               <Button Content="Start" Command="{Binding StartMiningCommand}" />

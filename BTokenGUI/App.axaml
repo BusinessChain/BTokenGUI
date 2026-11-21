@@ -4,12 +4,22 @@
              RequestedThemeVariant="Dark">
 
   <Application.Styles>
-    <FluentTheme />
+    <FluentTheme>
+      <FluentTheme.Palettes>
+        <ColorPaletteResources x:Key="Dark" ErrorText="#FF4040" />
+      </FluentTheme.Palettes>
+    </FluentTheme>
     <Style Selector="Border.Panel">
       <Setter Property="BorderBrush" Value="Gray" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="4" />
       <Setter Property="Margin" Value="4" />
+    </Style>
+    <Style Selector="TextBox:error, TextBox:error /template/ DataValidationErrors, NumericUpDown:error, NumericUpDown:error /template/ DataValidationErrors, NumericUpDown:error /template/ ButtonSpinner, NumericUpDown:error /template/ ButtonSpinner /template/ DataValidationErrors">
+      <Setter Property="ClipToBounds" Value="False" />
+    </Style>
+    <Style Selector="TextBox:error /template/ Border#PART_BorderElement, NumericUpDown:error /template/ ButtonSpinner /template/ Border">
+      <Setter Property="BoxShadow" Value="0 0 8 2 #FF4040, inset 0 0 20 4 #FF4040" />
     </Style>
   </Application.Styles>
 </Application>

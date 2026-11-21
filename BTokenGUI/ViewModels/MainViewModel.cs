@@ -104,7 +104,7 @@ public partial class MainViewModel : ObservableObject
   [RelayCommand]
   void OpenWithdrawal(Blockchain.Miner miner)
   {
-    miner.ClearErrorsWithdrawal();
+    miner.ClearErrors();
     MinerWithdrawal = miner;
   }
 
@@ -119,7 +119,7 @@ public partial class MainViewModel : ObservableObject
   {
     Blockchain.Miner miner = MinerWithdrawal;
 
-    miner.ClearErrorsWithdrawal();
+    miner.ClearErrors();
 
     try
     {
@@ -135,7 +135,8 @@ public partial class MainViewModel : ObservableObject
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
-      miner.MarkErrorsWithdrawal(exception.Message, (exception as RPCException)?.Parameters ?? []);
+      if (!miner.MarkErrors(exception))
+        miner.ErrorWithdrawal = exception.Message;
     }
   }
 

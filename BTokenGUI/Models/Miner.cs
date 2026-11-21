@@ -19,7 +19,8 @@ public partial class Blockchain
     {
       ["address"] = nameof(AddressWithdrawal),
       ["value"] = nameof(ValueWithdrawal),
-      ["fee"] = nameof(FeeWithdrawal)
+      ["fee"] = nameof(FeeWithdrawal),
+      ["budget"] = nameof(Budget)
     };
 
     Dictionary<string, string> ErrorsProperty = [];
@@ -30,7 +31,7 @@ public partial class Blockchain
     public partial string ErrorWithdrawal { get; set; }
 
     [ObservableProperty]
-    public partial long Budget { get; set; }
+    public partial decimal? Budget { get; set; }
 
     [ObservableProperty]
     public partial string StatusMining { get; set; }
@@ -48,10 +49,10 @@ public partial class Blockchain
     public partial string AddressWithdrawal { get; set; }
 
     [ObservableProperty]
-    public partial long ValueWithdrawal { get; set; }
+    public partial decimal? ValueWithdrawal { get; set; }
 
     [ObservableProperty]
-    public partial long FeeWithdrawal { get; set; }
+    public partial decimal? FeeWithdrawal { get; set; }
 
     [ObservableProperty]
     public partial string StateWithdrawalLast { get; set; }
@@ -73,19 +74,19 @@ public partial class Blockchain
       return Array.Empty<string>();
     }
 
-    internal void MarkErrorsWithdrawal(string message, List<string> parameters)
+    internal bool MarkErrors(Exception exception)
     {
-      ErrorWithdrawal = message;
-
-      foreach (string parameter in parameters)
+      foreach (string parameter in (exception as RPCException)?.Parameters ?? [])
         if (PropertiesParameter.TryGetValue(parameter, out string property))
         {
-          ErrorsProperty[property] = message;
+          ErrorsProperty[property] = exception.Message;
           ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
         }
+
+      return ErrorsProperty.Count > 0;
     }
 
-    internal void ClearErrorsWithdrawal()
+    internal void ClearErrors()
     {
       ErrorWithdrawal = null;
 
@@ -123,13 +124,16 @@ public partial class Blockchain
 
     async Task SendRequestMiner(string method, object parameters)
     {
+      ClearErrors();
+
       try
       {
         await MainViewModel.SendRequest(method, parameters);
       }
       catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
       {
-        StateRoundLast = exception.Message;
+        if (!MarkErrors(exception))
+          StateRoundLast = exception.Message;
       }
     }
   }
