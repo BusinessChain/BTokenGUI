@@ -18,9 +18,6 @@ public partial class Blockchain : ObservableObject
   [ObservableProperty]
   public partial string AddressReceiving { get; set; }
 
-  [ObservableProperty]
-  public partial string BalanceWallet { get; set; }
-
 
   public Blockchain(string name)
   {
@@ -45,9 +42,6 @@ public partial class Blockchain : ObservableObject
 
     if (snapshotState.TryGetProperty("wallet", out JsonElement wallet))
       AddressReceiving = wallet.GetProperty("addressReceiving").GetString();
-
-    if (snapshotState.TryGetProperty("balanceWallet", out JsonElement balance))
-      BalanceWallet = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString();
 
     if (snapshotState.TryGetProperty("miner", out JsonElement snapshotMiner))
     {
