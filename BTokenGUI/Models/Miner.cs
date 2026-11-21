@@ -43,6 +43,9 @@ public partial class Blockchain
     public partial long Funds { get; set; }
 
     [ObservableProperty]
+    public partial string Revenue { get; set; }
+
+    [ObservableProperty]
     public partial string AddressFunding { get; set; }
 
     [ObservableProperty]
@@ -104,6 +107,10 @@ public partial class Blockchain
 
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
+
+      JsonElement revenue = snapshotMiner.GetProperty("revenue");
+      Revenue = revenue.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : revenue.GetInt64().ToString();
+
       AddressFunding = snapshotMiner.GetProperty("addressFunding").GetString();
     }
 
