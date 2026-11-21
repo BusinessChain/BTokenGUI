@@ -31,6 +31,18 @@ public partial class Blockchain
     [ObservableProperty]
     public partial string AddressFunding { get; set; }
 
+    [ObservableProperty]
+    public partial string AddressWithdrawal { get; set; }
+
+    [ObservableProperty]
+    public partial long ValueWithdrawal { get; set; }
+
+    [ObservableProperty]
+    public partial long FeeWithdrawal { get; set; }
+
+    [ObservableProperty]
+    public partial string StateWithdrawalLast { get; set; }
+
 
     public void Update(JsonElement snapshotMiner, bool isAccountsAtTip)
     {
@@ -67,6 +79,26 @@ public partial class Blockchain
     async Task StopMining()
     {
       await SendRequestMiner("stopMining", null);
+    }
+
+    [RelayCommand]
+    async Task WithdrawBitcoin()
+    {
+      try
+      {
+        JsonElement withdrawal = await MainViewModel.SendRequest("withdrawBitcoin", new Dictionary<string, object>
+        {
+          ["address"] = AddressWithdrawal,
+          ["value"] = ValueWithdrawal,
+          ["fee"] = FeeWithdrawal
+        });
+
+        StateWithdrawalLast = $"Sent withdrawal {withdrawal.GetProperty("hash").GetString()}.";
+      }
+      catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
+      {
+        StateWithdrawalLast = exception.Message;
+      }
     }
 
     async Task SendRequestMiner(string method, object parameters)
