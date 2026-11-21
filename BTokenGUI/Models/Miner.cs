@@ -26,9 +26,6 @@ public partial class Blockchain
     public partial string HintSync { get; set; }
 
     [ObservableProperty]
-    public partial string AgeHeaderTipParent { get; set; }
-
-    [ObservableProperty]
     public partial long Funds { get; set; }
 
 
@@ -42,8 +39,6 @@ public partial class Blockchain
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
 
       string nameTokenParent = snapshotMiner.GetProperty("nameTokenParent").GetString();
-
-      AgeHeaderTipParent = $"The {nameTokenParent} header tip is {snapshotMiner.GetProperty("secondsAgeTipParent").GetInt64() / 60} minutes old.";
 
       if (!isAccountsAtTip)
         HintSync = "Probably not synced: the accounts are not at the tip.";
