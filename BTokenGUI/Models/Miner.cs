@@ -23,9 +23,6 @@ public partial class Blockchain
     public partial string StateRoundLast { get; set; }
 
     [ObservableProperty]
-    public partial string HintSync { get; set; }
-
-    [ObservableProperty]
     public partial long Funds { get; set; }
 
     [ObservableProperty]
@@ -44,7 +41,7 @@ public partial class Blockchain
     public partial string StateWithdrawalLast { get; set; }
 
 
-    public void Update(JsonElement snapshotMiner, bool isAccountsAtTip)
+    public void Update(JsonElement snapshotMiner)
     {
       StatusMining = snapshotMiner.GetProperty("isMining").GetBoolean()
         ? $"Mining with a budget of {snapshotMiner.GetProperty("budget").GetInt64()} satoshis per 10 minutes, anchor fee {snapshotMiner.GetProperty("feeAnchor").GetInt64()}"
@@ -53,17 +50,6 @@ public partial class Blockchain
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
       AddressFunding = snapshotMiner.GetProperty("addressFunding").GetString();
-
-      string nameTokenParent = snapshotMiner.GetProperty("nameTokenParent").GetString();
-
-      if (!isAccountsAtTip)
-        HintSync = "Probably not synced: the accounts are not at the tip.";
-      else if (!snapshotMiner.GetProperty("isBlockTipAtHeaderTip").GetBoolean())
-        HintSync = $"Probably not synced: the {nameTokenParent} blocks are not at the {nameTokenParent} header tip.";
-      else if (!snapshotMiner.GetProperty("isPeerConnected").GetBoolean())
-        HintSync = $"Probably not synced: no {nameTokenParent} peer is connected.";
-      else
-        HintSync = "Probably synced.";
     }
 
     [RelayCommand]

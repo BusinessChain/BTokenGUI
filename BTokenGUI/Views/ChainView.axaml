@@ -27,7 +27,6 @@
                             <StackPanel Orientation="Horizontal" Spacing="6">
                               <Button Content="Start" Command="{Binding StartMiningCommand}" />
                               <Button Content="Stop" Command="{Binding StopMiningCommand}" />
-                              <SelectableTextBlock Text="{Binding HintSync}" VerticalAlignment="Center" />
                             </StackPanel>
                             <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
