@@ -8,10 +8,13 @@
         x:Class="BTokenGUI.Views.MainWindow"
         x:DataType="vm:MainViewModel"
         Title="BToken">
-  <Grid ColumnDefinitions="7*,7*,6*,6*">
-    <views:NodeView Grid.Column="0" />
-    <views:ChainView Grid.Column="1" />
-    <views:NetworksView Grid.Column="2" />
-    <views:WalletView Grid.Column="3" />
+  <Grid>
+    <Grid ColumnDefinitions="7*,7*,6*,6*">
+      <views:NodeView Grid.Column="0" />
+      <views:ChainView Grid.Column="1" />
+      <views:NetworksView Grid.Column="2" />
+      <views:WalletView Grid.Column="3" />
+    </Grid>
+    <views:WithdrawalView />
   </Grid>
 </Window>

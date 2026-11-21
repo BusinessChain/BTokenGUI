@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using BTokenGUI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BTokenGUI.ViewModels;
 
@@ -16,6 +17,9 @@ public partial class MainViewModel : ObservableObject
 {
   [ObservableProperty]
   public partial string StatusConnection { get; set; } = "Connecting to node";
+
+  [ObservableProperty]
+  public partial Blockchain.Miner MinerWithdrawal { get; set; }
 
   public ObservableCollection<Network> Networks { get; } = [];
 
@@ -94,6 +98,41 @@ public partial class MainViewModel : ObservableObject
 
         Dispatcher.UIThread.Post(() => StatusConnection = "Connecting to node");
       }
+    }
+  }
+
+  [RelayCommand]
+  void OpenWithdrawal(Blockchain.Miner miner)
+  {
+    MinerWithdrawal = miner;
+  }
+
+  [RelayCommand]
+  void CancelWithdrawal()
+  {
+    MinerWithdrawal = null;
+  }
+
+  [RelayCommand]
+  async Task WithdrawBitcoin()
+  {
+    Blockchain.Miner miner = MinerWithdrawal;
+
+    try
+    {
+      JsonElement withdrawal = await SendRequest("withdrawBitcoin", new Dictionary<string, object>
+      {
+        ["address"] = miner.AddressWithdrawal,
+        ["value"] = miner.ValueWithdrawal,
+        ["fee"] = miner.FeeWithdrawal
+      });
+
+      miner.StateWithdrawalLast = $"Sent withdrawal {withdrawal.GetProperty("hash").GetString()}.";
+      MinerWithdrawal = null;
+    }
+    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
+    {
+      miner.StateWithdrawalLast = exception.Message;
     }
   }
 

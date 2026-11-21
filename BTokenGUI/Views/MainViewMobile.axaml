@@ -7,18 +7,21 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
              x:Class="BTokenGUI.Views.MainViewMobile"
              x:DataType="vm:MainViewModel">
-  <TabControl TabStripPlacement="Bottom">
-    <TabItem Header="Node">
-      <views:NodeView />
-    </TabItem>
-    <TabItem Header="Chain">
-      <views:ChainView />
-    </TabItem>
-    <TabItem Header="Networks">
-      <views:NetworksView />
-    </TabItem>
-    <TabItem Header="Wallet">
-      <views:WalletView />
-    </TabItem>
-  </TabControl>
+  <Grid>
+    <TabControl TabStripPlacement="Bottom">
+      <TabItem Header="Node">
+        <views:NodeView />
+      </TabItem>
+      <TabItem Header="Chain">
+        <views:ChainView />
+      </TabItem>
+      <TabItem Header="Networks">
+        <views:NetworksView />
+      </TabItem>
+      <TabItem Header="Wallet">
+        <views:WalletView />
+      </TabItem>
+    </TabControl>
+    <views:WithdrawalView />
+  </Grid>
 </UserControl>

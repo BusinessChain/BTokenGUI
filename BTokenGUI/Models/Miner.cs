@@ -67,26 +67,6 @@ public partial class Blockchain
       await SendRequestMiner("stopMining", null);
     }
 
-    [RelayCommand]
-    async Task WithdrawBitcoin()
-    {
-      try
-      {
-        JsonElement withdrawal = await MainViewModel.SendRequest("withdrawBitcoin", new Dictionary<string, object>
-        {
-          ["address"] = AddressWithdrawal,
-          ["value"] = ValueWithdrawal,
-          ["fee"] = FeeWithdrawal
-        });
-
-        StateWithdrawalLast = $"Sent withdrawal {withdrawal.GetProperty("hash").GetString()}.";
-      }
-      catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
-      {
-        StateWithdrawalLast = exception.Message;
-      }
-    }
-
     async Task SendRequestMiner(string method, object parameters)
     {
       try

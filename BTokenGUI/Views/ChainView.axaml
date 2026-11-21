@@ -30,15 +30,7 @@
                             </StackPanel>
                             <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
-                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
-                              <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Bitcoin address" VerticalAlignment="Center" />
-                              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
-                              <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Value in satoshis" VerticalAlignment="Center" />
-                              <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ValueWithdrawal}" />
-                              <SelectableTextBlock Grid.Row="2" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
-                              <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FeeWithdrawal}" />
-                            </Grid>
-                            <Button Content="Withdraw bitcoin" Command="{Binding WithdrawBitcoinCommand}" />
+                            <Button Content="Withdraw bitcoin" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
                             <SelectableTextBlock Text="{Binding StateWithdrawalLast}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding StatusMining}" TextWrapping="Wrap" />
                             <SelectableTextBlock Text="{Binding StateRoundLast}" TextWrapping="Wrap" />
