@@ -33,9 +33,6 @@ public partial class Blockchain
     public partial decimal? Budget { get; set; }
 
     [ObservableProperty]
-    public partial string StatusMining { get; set; }
-
-    [ObservableProperty]
     public partial string StateRoundLast { get; set; }
 
     [ObservableProperty]
@@ -97,10 +94,6 @@ public partial class Blockchain
 
     public void Update(JsonElement snapshotMiner)
     {
-      StatusMining = snapshotMiner.GetProperty("isMining").GetBoolean()
-        ? $"Mining with a budget of {snapshotMiner.GetProperty("budget").GetInt64()} satoshis per 10 minutes, anchor fee {snapshotMiner.GetProperty("feeAnchor").GetInt64()}"
-        : "Stopped";
-
       StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
 
