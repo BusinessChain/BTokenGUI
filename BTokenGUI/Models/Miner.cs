@@ -15,19 +15,11 @@ public partial class Blockchain
 {
   public partial class Miner : ObservableObject, INotifyDataErrorInfo
   {
-    static readonly Dictionary<string, Dictionary<string, string>> PropertiesParameterByMethod = new()
+    static readonly Dictionary<string, string> PropertiesParameter = new()
     {
-      ["startMining"] = new() { ["budget"] = nameof(Budget) },
-      ["withdrawBitcoin"] = new()
-      {
-        ["address"] = nameof(AddressWithdrawal),
-        ["fee"] = nameof(FeeWithdrawal)
-      },
-      ["withdrawRevenueMiner"] = new()
-      {
-        ["address"] = nameof(AddressRevenue),
-        ["fee"] = nameof(FeeRevenue)
-      }
+      ["address"] = nameof(AddressWithdrawal),
+      ["fee"] = nameof(FeeWithdrawal),
+      ["budget"] = nameof(Budget)
     };
 
     Dictionary<string, string> ErrorsProperty = [];
@@ -51,12 +43,6 @@ public partial class Blockchain
 
     [ObservableProperty]
     public partial string Revenue { get; set; }
-
-    [ObservableProperty]
-    public partial string AddressRevenue { get; set; }
-
-    [ObservableProperty]
-    public partial decimal? FeeRevenue { get; set; }
 
     [ObservableProperty]
     public partial string AddressFunding { get; set; }
@@ -87,10 +73,10 @@ public partial class Blockchain
       return Array.Empty<string>();
     }
 
-    internal bool MarkErrors(string method, Exception exception)
+    internal bool MarkErrors(Exception exception)
     {
       foreach (string parameter in (exception as RPCException)?.Parameters ?? [])
-        if (PropertiesParameterByMethod.GetValueOrDefault(method)?.TryGetValue(parameter, out string property) == true)
+        if (PropertiesParameter.TryGetValue(parameter, out string property))
         {
           ErrorsProperty[property] = exception.Message;
           ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
@@ -149,7 +135,7 @@ public partial class Blockchain
       }
       catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
       {
-        if (!MarkErrors(method, exception))
+        if (!MarkErrors(exception))
           StateRoundLast = exception.Message;
       }
     }
