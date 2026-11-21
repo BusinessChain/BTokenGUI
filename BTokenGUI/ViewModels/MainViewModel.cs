@@ -104,6 +104,7 @@ public partial class MainViewModel : ObservableObject
   [RelayCommand]
   void OpenWithdrawal(Blockchain.Miner miner)
   {
+    miner.ClearErrorsWithdrawal();
     MinerWithdrawal = miner;
   }
 
@@ -117,6 +118,8 @@ public partial class MainViewModel : ObservableObject
   async Task WithdrawBitcoin()
   {
     Blockchain.Miner miner = MinerWithdrawal;
+
+    miner.ClearErrorsWithdrawal();
 
     try
     {
@@ -132,7 +135,7 @@ public partial class MainViewModel : ObservableObject
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
-      miner.StateWithdrawalLast = exception.Message;
+      miner.MarkErrorsWithdrawal(exception.Message, (exception as RPCException)?.Parameters ?? []);
     }
   }
 
@@ -153,7 +156,14 @@ public partial class MainViewModel : ObservableObject
     JsonElement root = document.RootElement;
 
     if (root.TryGetProperty("error", out JsonElement error))
-      throw new InvalidOperationException(error.GetProperty("message").GetString());
+    {
+      List<string> parametersFaulty = [];
+
+      if (error.TryGetProperty("data", out JsonElement data) && data.TryGetProperty("parameters", out JsonElement parametersJSON))
+        parametersFaulty = parametersJSON.EnumerateArray().Select(p => p.GetString()).ToList();
+
+      throw new RPCException(error.GetProperty("message").GetString(), parametersFaulty);
+    }
 
     return root.GetProperty("result").Clone();
   }

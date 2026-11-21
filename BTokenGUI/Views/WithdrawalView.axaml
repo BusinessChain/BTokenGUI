@@ -17,6 +17,7 @@
           <SelectableTextBlock Grid.Row="2" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
           <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FeeWithdrawal}" />
         </Grid>
+        <SelectableTextBlock Text="{Binding MinerWithdrawal.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawal.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
           <Button Content="Send" Command="{Binding WithdrawBitcoinCommand}" />
           <Button Content="Cancel" Command="{Binding CancelWithdrawalCommand}" />

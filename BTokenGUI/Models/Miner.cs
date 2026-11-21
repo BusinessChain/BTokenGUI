@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,8 +13,22 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain
 {
-  public partial class Miner : ObservableObject
+  public partial class Miner : ObservableObject, INotifyDataErrorInfo
   {
+    static readonly Dictionary<string, string> PropertiesParameter = new()
+    {
+      ["address"] = nameof(AddressWithdrawal),
+      ["value"] = nameof(ValueWithdrawal),
+      ["fee"] = nameof(FeeWithdrawal)
+    };
+
+    Dictionary<string, string> ErrorsProperty = [];
+
+    public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+    [ObservableProperty]
+    public partial string ErrorWithdrawal { get; set; }
+
     [ObservableProperty]
     public partial long Budget { get; set; }
 
@@ -40,6 +56,44 @@ public partial class Blockchain
     [ObservableProperty]
     public partial string StateWithdrawalLast { get; set; }
 
+
+    public bool HasErrors
+    {
+      get
+      {
+        return ErrorsProperty.Count > 0;
+      }
+    }
+
+    public IEnumerable GetErrors(string propertyName)
+    {
+      if (propertyName != null && ErrorsProperty.TryGetValue(propertyName, out string error))
+        return new[] { error };
+
+      return Array.Empty<string>();
+    }
+
+    internal void MarkErrorsWithdrawal(string message, List<string> parameters)
+    {
+      ErrorWithdrawal = message;
+
+      foreach (string parameter in parameters)
+        if (PropertiesParameter.TryGetValue(parameter, out string property))
+        {
+          ErrorsProperty[property] = message;
+          ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
+        }
+    }
+
+    internal void ClearErrorsWithdrawal()
+    {
+      ErrorWithdrawal = null;
+
+      List<string> properties = [.. ErrorsProperty.Keys];
+      ErrorsProperty.Clear();
+
+      properties.ForEach(p => ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(p)));
+    }
 
     public void Update(JsonElement snapshotMiner)
     {
