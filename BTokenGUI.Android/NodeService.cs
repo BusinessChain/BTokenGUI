@@ -47,8 +47,6 @@ public class NodeService : Service
 
     Node node = new(new CommunicationTCP());
 
-    await node.Start();
-
-    await new RPCServer(node, PORT_RPC).Start();
+    await node.Start(PORT_RPC);
   }
 }
