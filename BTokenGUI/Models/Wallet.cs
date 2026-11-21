@@ -34,6 +34,7 @@ public partial class Wallet : ObservableObject
   string KeyPrivate;
   byte[] KeyPublic;
   ILiteCollection<BsonDocument> TXsStored;
+  string HashTipLast;
 
 
   public Wallet()
@@ -71,11 +72,7 @@ public partial class Wallet : ObservableObject
       string hash = tXUnsigned.GetProperty("hash").GetString();
       string signature = Convert.ToHexString(Crypto.GetSignature(KeyPrivate, Convert.FromHexString(tXUnsigned.GetProperty("dataToBeSigned").GetString())));
 
-      await MainViewModel.SendRequest("submitTXBTokenSigned", new Dictionary<string, object>
-      {
-        ["tXUnsigned"] = tXUnsigned.GetProperty("tXUnsigned").GetString(),
-        ["signature"] = signature
-      });
+      await SubmitPayment(tXUnsigned.GetProperty("tXUnsigned").GetString(), signature);
 
       TXsStored.Insert(new BsonDocument
       {
@@ -96,5 +93,35 @@ public partial class Wallet : ObservableObject
     {
       StatePaymentLast = exception.Message;
     }
+  }
+
+  internal async Task ProcessTip(string hashTip)
+  {
+    if (hashTip == HashTipLast)
+      return;
+
+    JsonElement account = await MainViewModel.SendRequest("getAccount", new Dictionary<string, object> { ["address"] = Address }).ConfigureAwait(false);
+
+    if (account.ValueKind != JsonValueKind.Null)
+      foreach (BsonDocument payment in TXsStored.Find(Query.And(
+        Query.EQ("heightAccountCreated", account.GetProperty("heightAccountCreated").GetInt32()),
+        Query.GTE("nonce", account.GetProperty("nonce").GetInt32()))))
+        try
+        {
+          await SubmitPayment(payment["tXUnsigned"].AsString, payment["signature"].AsString).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException)
+        { }
+
+    HashTipLast = hashTip;
+  }
+
+  static async Task SubmitPayment(string tXUnsigned, string signature)
+  {
+    await MainViewModel.SendRequest("submitTXBTokenSigned", new Dictionary<string, object>
+    {
+      ["tXUnsigned"] = tXUnsigned,
+      ["signature"] = signature
+    });
   }
 }
