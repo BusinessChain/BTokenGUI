@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -34,7 +35,11 @@ public partial class Wallet : ObservableObject
   string KeyPrivate;
   byte[] KeyPublic;
   ILiteCollection<BsonDocument> TXsStored;
+  ILiteCollection<BsonDocument> StateStored;
   string HashTipLast;
+
+  const string ID_HEIGHT_SCANNED_LAST = "heightScannedLast";
+  const string NAME_FIELD_VALUE = "value";
 
 
   public Wallet()
@@ -55,6 +60,7 @@ public partial class Wallet : ObservableObject
     AppDomain.CurrentDomain.ProcessExit += (s, e) => { liteDatabase.Dispose(); };
 
     TXsStored = liteDatabase.GetCollection<BsonDocument>("transactions");
+    StateStored = liteDatabase.GetCollection<BsonDocument>("state");
   }
 
   [RelayCommand]
@@ -95,10 +101,40 @@ public partial class Wallet : ObservableObject
     }
   }
 
-  internal async Task ProcessTip(string hashTip)
+  internal async Task ProcessTip(string hashTip, int heightTip)
   {
     if (hashTip == HashTipLast)
       return;
+
+    int heightScannedLast = Math.Min(StateStored.FindById(ID_HEIGHT_SCANNED_LAST)?[NAME_FIELD_VALUE].AsInt32 ?? heightTip, heightTip);
+
+    for (int height = heightScannedLast + 1; height <= heightTip; height++)
+    {
+      JsonElement blockTXs = await MainViewModel.SendRequest("getTXsAccount", new Dictionary<string, object> { ["address"] = Address, ["height"] = height }).ConfigureAwait(false);
+
+      if (blockTXs.ValueKind != JsonValueKind.Null)
+        foreach (JsonElement tX in blockTXs.GetProperty("tXs").EnumerateArray())
+        {
+          BsonDocument document = TXsStored.FindById(tX.GetProperty("hash").GetString()) ?? new BsonDocument
+          {
+            ["_id"] = tX.GetProperty("hash").GetString(),
+            ["addressSource"] = tX.GetProperty("addressSource").GetString(),
+            ["fee"] = tX.GetProperty("fee").GetInt64(),
+            ["outputs"] = new BsonArray(tX.GetProperty("outputs").EnumerateArray().Select(o => new BsonDocument
+            {
+              ["address"] = o.GetProperty("address").GetString(),
+              ["value"] = o.GetProperty("value").GetInt64()
+            }))
+          };
+
+          document["height"] = height;
+          TXsStored.Upsert(document);
+        }
+
+      heightScannedLast = height;
+    }
+
+    StateStored.Upsert(new BsonDocument { ["_id"] = ID_HEIGHT_SCANNED_LAST, [NAME_FIELD_VALUE] = heightScannedLast });
 
     JsonElement account = await MainViewModel.SendRequest("getAccount", new Dictionary<string, object> { ["address"] = Address }).ConfigureAwait(false);
 

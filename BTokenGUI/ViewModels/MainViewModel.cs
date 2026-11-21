@@ -83,7 +83,9 @@ public partial class MainViewModel : ObservableObject
         Dispatcher.UIThread.Post(() =>
           Wallet.Balance = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString());
 
-        await Wallet.ProcessTip(blockchainsJSON.GetProperty("BToken").GetProperty("headers")[0].GetProperty("hash").GetString()).ConfigureAwait(false);
+        JsonElement headerTipBToken = blockchainsJSON.GetProperty("BToken").GetProperty("headers")[0];
+
+        await Wallet.ProcessTip(headerTipBToken.GetProperty("hash").GetString(), headerTipBToken.GetProperty("height").GetInt32()).ConfigureAwait(false);
       }
       catch (Exception exception)
       {
