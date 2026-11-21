@@ -21,7 +21,6 @@ public partial class Blockchain
       ["withdrawBitcoin"] = new()
       {
         ["address"] = nameof(AddressWithdrawal),
-        ["value"] = nameof(ValueWithdrawal),
         ["fee"] = nameof(FeeWithdrawal)
       },
       ["withdrawRevenueMiner"] = new()
@@ -64,9 +63,6 @@ public partial class Blockchain
 
     [ObservableProperty]
     public partial string AddressWithdrawal { get; set; }
-
-    [ObservableProperty]
-    public partial decimal? ValueWithdrawal { get; set; }
 
     [ObservableProperty]
     public partial decimal? FeeWithdrawal { get; set; }

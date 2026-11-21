@@ -137,7 +137,6 @@ public partial class MainViewModel : ObservableObject
       JsonElement withdrawal = await SendRequest("withdrawBitcoin", new Dictionary<string, object>
       {
         ["address"] = miner.AddressWithdrawal,
-        ["value"] = miner.ValueWithdrawal,
         ["fee"] = miner.FeeWithdrawal
       });
 

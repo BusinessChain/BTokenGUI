@@ -10,13 +10,11 @@
       <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
         <StackPanel Spacing="12" Margin="16">
           <SelectableTextBlock Text="Withdraw bitcoin" FontWeight="Bold" />
-          <Grid DataContext="{Binding MinerWithdrawal}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+          <Grid DataContext="{Binding MinerWithdrawal}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
             <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Bitcoin address" VerticalAlignment="Center" />
             <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
-            <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Value in satoshis" VerticalAlignment="Center" />
-            <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding ValueWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
-            <SelectableTextBlock Grid.Row="2" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
-            <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+            <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
+            <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
           </Grid>
           <SelectableTextBlock Text="{Binding MinerWithdrawal.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawal.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
           <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
