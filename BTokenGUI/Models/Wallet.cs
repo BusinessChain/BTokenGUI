@@ -10,6 +10,7 @@ using BTokenSigner;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiteDB;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BTokenGUI.Models;
 
@@ -31,6 +32,9 @@ public partial class Wallet : ObservableObject
 
   [ObservableProperty]
   public partial string StatePaymentLast { get; set; }
+
+  [ObservableProperty]
+  public partial string StateBackupLast { get; set; }
 
   string KeyPrivate;
   byte[] KeyPublic;
@@ -98,6 +102,27 @@ public partial class Wallet : ObservableObject
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
       StatePaymentLast = exception.Message;
+    }
+  }
+
+  internal async Task WriteBackup(Stream stream, string nameFile)
+  {
+    try
+    {
+      JsonElement keysMiner = await MainViewModel.SendRequest("getKeysMiner", null);
+
+      await JsonSerializer.SerializeAsync(stream, new Dictionary<string, object>
+      {
+        ["wallet"] = KeyPrivate,
+        ["minerBitcoin"] = keysMiner.GetProperty("bitcoin"),
+        ["minerBToken"] = keysMiner.GetProperty("bToken")
+      }, new JsonSerializerOptions { WriteIndented = true });
+
+      StateBackupLast = $"Wrote the backup of all keys to {nameFile}.";
+    }
+    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException or IOException)
+    {
+      StateBackupLast = exception.Message;
     }
   }
 
