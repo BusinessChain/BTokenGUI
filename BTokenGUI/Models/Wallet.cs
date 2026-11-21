@@ -16,7 +16,8 @@ namespace BTokenGUI.Models;
 
 public partial class Wallet : ObservableObject
 {
-  public string Address { get; }
+  [ObservableProperty]
+  public partial string Address { get; set; }
 
   [ObservableProperty]
   public partial string Balance { get; set; }
@@ -36,6 +37,7 @@ public partial class Wallet : ObservableObject
   [ObservableProperty]
   public partial string StateBackupLast { get; set; }
 
+  string PathKey;
   string KeyPrivate;
   byte[] KeyPublic;
   ILiteCollection<BsonDocument> TXsStored;
@@ -49,22 +51,27 @@ public partial class Wallet : ObservableObject
   public Wallet()
   {
     string directoryWallet = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WalletGUI");
-    string pathKey = Path.Combine(directoryWallet, "key");
+    PathKey = Path.Combine(directoryWallet, "key");
 
     Directory.CreateDirectory(directoryWallet);
 
-    if (!File.Exists(pathKey))
-      File.WriteAllText(pathKey, Crypto.GenerateKeyPrivate());
+    if (!File.Exists(PathKey))
+      File.WriteAllText(PathKey, Crypto.GenerateKeyPrivate());
 
-    KeyPrivate = File.ReadAllText(pathKey).Trim();
-    KeyPublic = Crypto.GetKeyPublic(KeyPrivate);
-    Address = Crypto.ComputeHash160(KeyPublic).BinaryToBase58Check();
+    SetKeyPrivate(File.ReadAllText(PathKey).Trim());
 
     LiteDatabase liteDatabase = new(Path.Combine(directoryWallet, "wallet.db"));
     AppDomain.CurrentDomain.ProcessExit += (s, e) => { liteDatabase.Dispose(); };
 
     TXsStored = liteDatabase.GetCollection<BsonDocument>("transactions");
     StateStored = liteDatabase.GetCollection<BsonDocument>("state");
+  }
+
+  void SetKeyPrivate(string keyPrivate)
+  {
+    KeyPrivate = keyPrivate;
+    KeyPublic = Crypto.GetKeyPublic(KeyPrivate);
+    Address = Crypto.ComputeHash160(KeyPublic).BinaryToBase58Check();
   }
 
   [RelayCommand]
@@ -121,6 +128,47 @@ public partial class Wallet : ObservableObject
       StateBackupLast = $"Wrote the backup of all keys to {nameFile}.";
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException or IOException)
+    {
+      StateBackupLast = exception.Message;
+    }
+  }
+
+  internal async Task ImportBackup(string backup, string nameFile)
+  {
+    try
+    {
+      using JsonDocument document = JsonDocument.Parse(backup);
+      JsonElement root = document.RootElement;
+
+      await MainViewModel.SendRequest("importKeysMiner", new Dictionary<string, object>
+      {
+        ["bitcoin"] = root.GetProperty("minerBitcoin"),
+        ["bToken"] = root.GetProperty("minerBToken")
+      });
+
+      string keyWallet = root.GetProperty("wallet").GetString();
+
+      if (keyWallet == KeyPrivate)
+      {
+        StateBackupLast = $"Imported the Miner's keys from {nameFile}.";
+        return;
+      }
+
+      if (Balance != "0" || TXsStored.Count() > 0)
+      {
+        StateBackupLast = $"Imported the Miner's keys from {nameFile}, but kept the Wallet's key, because it has a balance or transactions.";
+        return;
+      }
+
+      File.WriteAllText(PathKey, keyWallet);
+      SetKeyPrivate(keyWallet);
+
+      StateStored.Upsert(new BsonDocument { ["_id"] = ID_HEIGHT_SCANNED_LAST, [NAME_FIELD_VALUE] = 0 });
+      HashTipLast = null;
+
+      StateBackupLast = $"Imported all keys from {nameFile}.";
+    }
+    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException or JsonException or KeyNotFoundException or IOException)
     {
       StateBackupLast = exception.Message;
     }
