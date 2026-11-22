@@ -68,14 +68,16 @@
       </Button>
     </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Mining+Anchor">
-      <Panel Width="28" Height="28" Margin="2" Classes.glowing="{Binding !IsMissed}">
-        <Path Classes="glow" Data="M6,2 L22,2 L27,10 L14,26 L1,10 Z" Fill="DarkOrange" Opacity="0" IsHitTestVisible="False">
-          <Path.Effect>
-            <BlurEffect Radius="6" />
-          </Path.Effect>
-        </Path>
-        <Path Classes="gem" Classes.missed="{Binding IsMissed}" Data="F1 M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
-      </Panel>
+      <Button Command="{Binding OpenPanelCommand}" Padding="0" Background="Transparent" BorderThickness="0" Margin="2">
+        <Panel Width="28" Height="28" Classes.glowing="{Binding !IsMissed}">
+          <Path Classes="glow" Data="M6,2 L22,2 L27,10 L14,26 L1,10 Z" Fill="DarkOrange" Opacity="0" IsHitTestVisible="False">
+            <Path.Effect>
+              <BlurEffect Radius="6" />
+            </Path.Effect>
+          </Path>
+          <Path Classes="gem" Classes.missed="{Binding IsMissed}" Data="F1 M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+        </Panel>
+      </Button>
     </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">
