@@ -146,15 +146,11 @@ public partial class MainViewModel : ObservableObject
 
     try
     {
-      JsonElement withdrawal = await SendRequest(MethodWithdrawal, new Dictionary<string, object>
+      await SendRequest(MethodWithdrawal, new Dictionary<string, object>
       {
         ["address"] = miner.AddressWithdrawal,
         ["fee"] = miner.FeeWithdrawal
       });
-
-      miner.StateWithdrawalLast = MethodWithdrawal == "withdrawBitcoin"
-        ? $"Sent withdrawal {withdrawal.GetProperty("hash").GetString()}."
-        : $"The Miner sent {withdrawal.GetProperty("countPayments").GetInt32()} payments of {withdrawal.GetProperty("value").GetInt64()} in total.";
 
       MinerWithdrawal = null;
     }

@@ -50,9 +50,6 @@ public partial class Blockchain
     [ObservableProperty]
     public partial decimal? FeeWithdrawal { get; set; }
 
-    [ObservableProperty]
-    public partial string StateWithdrawalLast { get; set; }
-
 
     public bool HasErrors
     {
