@@ -37,13 +37,7 @@
       </Border>
     </DataTemplate>
     <DataTemplate x:Key="TemplateWallet" x:DataType="models:Mining+Wallet">
-      <StackPanel Spacing="6">
-        <SelectableTextBlock Text="{Binding Address, StringFormat='Funding address: {0}'}" IsVisible="{Binding Address, Converter={x:Static ObjectConverters.IsNotNull}}" TextWrapping="Wrap" />
-        <StackPanel Orientation="Horizontal" Spacing="12">
-          <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
-          <Button Content="Withdraw" Command="{Binding OpenWithdrawalCommand}" />
-        </StackPanel>
-      </StackPanel>
+      <Button Content="Withdraw" Command="{Binding OpenWithdrawalCommand}" />
     </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">

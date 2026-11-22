@@ -9,7 +9,8 @@
     <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
       <StackPanel Spacing="12" Margin="16">
         <SelectableTextBlock Text="{Binding WalletWithdrawal.TitleWithdrawal}" FontWeight="Bold" />
-        <SelectableTextBlock Text="{Binding WalletWithdrawal.Funds, StringFormat='Funds: {0}'}" TextWrapping="Wrap" />
+        <SelectableTextBlock Text="{Binding WalletWithdrawal.Address, StringFormat='Funding address: {0}'}" IsVisible="{Binding WalletWithdrawal.Address, Converter={x:Static ObjectConverters.IsNotNull}}" TextWrapping="Wrap" />
+        <SelectableTextBlock Text="{Binding WalletWithdrawal.Funds, StringFormat='Funds: {0}', TargetNullValue='Funds: unknown while the accounts synchronize'}" TextWrapping="Wrap" />
         <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
           <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Address" VerticalAlignment="Center" />
           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
@@ -19,7 +20,7 @@
         <SelectableTextBlock Text="{Binding ErrorWithdrawal}" IsVisible="{Binding ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
           <Button Content="Send" Command="{Binding WithdrawCommand}" />
-          <Button Content="Cancel" Command="{Binding CancelWithdrawalCommand}" />
+          <Button Content="Close" Command="{Binding CancelWithdrawalCommand}" />
         </StackPanel>
       </StackPanel>
     </Border>

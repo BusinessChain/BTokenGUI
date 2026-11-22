@@ -17,7 +17,10 @@ public partial class Mining
     public partial string Address { get; set; }
 
     [ObservableProperty]
-    public partial string Funds { get; set; }
+    public partial long? Funds { get; set; }
+
+    [ObservableProperty]
+    public partial double Filling { get; set; }
 
 
     public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal)
@@ -28,7 +31,7 @@ public partial class Mining
     }
 
     [RelayCommand]
-    void OpenWithdrawal()
+    void OpenPanel()
     {
       Mining.OpenFormWithdrawal(this);
     }

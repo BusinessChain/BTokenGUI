@@ -19,6 +19,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     ["budget"] = nameof(Budget)
   };
 
+  const int COUNT_PERIODS_BUDGET_DAY = 144;
+
   Dictionary<string, string> ErrorsProperty = [];
 
   public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -95,14 +97,27 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   public void Update(JsonElement snapshotAnchorer, JsonElement snapshotMiner)
   {
-    WalletBitcoin.Funds = snapshotAnchorer.GetProperty("funds").GetInt64().ToString();
+    WalletBitcoin.Funds = snapshotAnchorer.GetProperty("funds").GetInt64();
     WalletBitcoin.Address = snapshotAnchorer.GetProperty("addressFunding").GetString();
 
     IsMining = snapshotMiner.GetProperty("isMining").GetBoolean();
     StateMiner = snapshotMiner.GetProperty("stateMiner").GetString();
 
     JsonElement revenue = snapshotMiner.GetProperty("revenue");
-    WalletBToken.Funds = revenue.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : revenue.GetInt64().ToString();
+    WalletBToken.Funds = revenue.ValueKind == JsonValueKind.Null ? null : revenue.GetInt64();
+
+    long fundsBitcoin = WalletBitcoin.Funds.Value;
+    long scaleBitcoin = COUNT_PERIODS_BUDGET_DAY * snapshotMiner.GetProperty("budget").GetInt64();
+    WalletBitcoin.Filling = fundsBitcoin == 0 ? 0 : (double)fundsBitcoin / (fundsBitcoin + scaleBitcoin);
+
+    JsonElement levelWithdrawalAuto = snapshotMiner.GetProperty("levelWithdrawalAuto");
+
+    if (WalletBToken.Funds is not long fundsBToken || fundsBToken == 0)
+      WalletBToken.Filling = 0;
+    else if (levelWithdrawalAuto.ValueKind == JsonValueKind.Null)
+      WalletBToken.Filling = 1;
+    else
+      WalletBToken.Filling = Math.Min(1, (double)fundsBToken / levelWithdrawalAuto.GetInt64());
   }
 
   [RelayCommand]
