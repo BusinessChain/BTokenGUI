@@ -33,6 +33,9 @@ public partial class Blockchain
     public partial decimal? Budget { get; set; }
 
     [ObservableProperty]
+    public partial bool IsMining { get; set; }
+
+    [ObservableProperty]
     public partial string StateMiner { get; set; }
 
     [ObservableProperty]
@@ -91,6 +94,7 @@ public partial class Blockchain
 
     public void Update(JsonElement snapshotMiner)
     {
+      IsMining = snapshotMiner.GetProperty("isMining").GetBoolean();
       StateMiner = snapshotMiner.GetProperty("stateMiner").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
 
@@ -101,18 +105,15 @@ public partial class Blockchain
     }
 
     [RelayCommand]
-    async Task StartMining()
+    async Task ToggleMining()
     {
-      await SendRequestMiner("startMining", new Dictionary<string, object>
-      {
-        ["budget"] = Budget
-      });
-    }
-
-    [RelayCommand]
-    async Task StopMining()
-    {
-      await SendRequestMiner("stopMining", null);
+      if (IsMining)
+        await SendRequestMiner("stopMining", null);
+      else
+        await SendRequestMiner("startMining", new Dictionary<string, object>
+        {
+          ["budget"] = Budget
+        });
     }
 
     async Task SendRequestMiner(string method, object parameters)
