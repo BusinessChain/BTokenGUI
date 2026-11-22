@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:models="using:BTokenGUI.Models"
+             x:Class="BTokenGUI.Views.ConverterView"
+             x:DataType="vm:MainViewModel">
+  <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" IsVisible="{Binding IsFormConverterOpen}">
+    <Border Background="#99000000" />
+    <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+      <StackPanel Spacing="12" Margin="16">
+        <SelectableTextBlock Text="Converter" FontWeight="Bold" />
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+          <SelectableTextBlock Grid.Column="1" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
+          <NumericUpDown Grid.Column="0" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+        </Grid>
+        <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
+          <Button Command="{Binding ToggleMiningCommand}">
+            <Panel>
+              <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
+              <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
+            </Panel>
+          </Button>
+          <Button Content="Close" Command="{Binding CloseFormConverterCommand}" />
+        </StackPanel>
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>

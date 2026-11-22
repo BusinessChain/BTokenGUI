@@ -16,5 +16,6 @@
       <views:WalletView Grid.Column="3" />
     </Grid>
     <views:WithdrawalView />
+    <views:ConverterView />
   </Grid>
 </Window>

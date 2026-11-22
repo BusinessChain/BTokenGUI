@@ -42,6 +42,9 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public partial bool IsMining { get; set; }
 
   [ObservableProperty]
+  public partial bool IsFormConverterOpen { get; set; }
+
+  [ObservableProperty]
   public partial string StateMiner { get; set; }
 
   [ObservableProperty]
@@ -150,6 +153,19 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
       {
         ["budget"] = Budget
       });
+  }
+
+  [RelayCommand]
+  void OpenFormConverter()
+  {
+    ClearErrors();
+    IsFormConverterOpen = true;
+  }
+
+  [RelayCommand]
+  void CloseFormConverter()
+  {
+    IsFormConverterOpen = false;
   }
 
   async Task SendRequestMiner(string method, object parameters)

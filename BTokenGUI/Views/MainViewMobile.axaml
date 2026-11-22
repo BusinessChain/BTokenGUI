@@ -23,5 +23,6 @@
       </TabItem>
     </TabControl>
     <views:WithdrawalView />
+    <views:ConverterView />
   </Grid>
 </UserControl>
