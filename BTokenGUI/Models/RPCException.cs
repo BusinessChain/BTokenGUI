@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BTokenGUI.ViewModels;
+namespace BTokenGUI.Models;
 
 public class RPCException : InvalidOperationException
 {
