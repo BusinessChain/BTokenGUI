@@ -23,11 +23,9 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
-  [ObservableProperty]
-  public partial long Funds { get; set; }
+  public Wallet WalletBitcoin { get; }
 
-  [ObservableProperty]
-  public partial string AddressFunding { get; set; }
+  public Wallet WalletBToken { get; }
 
   [ObservableProperty]
   public partial decimal? Budget { get; set; }
@@ -39,9 +37,6 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public partial string StateMiner { get; set; }
 
   [ObservableProperty]
-  public partial string Revenue { get; set; }
-
-  [ObservableProperty]
   public partial string AddressWithdrawal { get; set; }
 
   [ObservableProperty]
@@ -51,17 +46,14 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public partial string ErrorWithdrawal { get; set; }
 
   [ObservableProperty]
-  public partial string MethodWithdrawal { get; set; }
+  public partial Wallet WalletWithdrawal { get; set; }
 
-  [ObservableProperty]
-  public partial string TitleWithdrawal { get; set; }
 
-  [ObservableProperty]
-  public partial string BalanceWithdrawal { get; set; }
-
-  [ObservableProperty]
-  public partial bool IsWithdrawalOpen { get; set; }
-
+  public Mining()
+  {
+    WalletBitcoin = new(this, "withdrawBitcoin", "Withdraw bitcoin");
+    WalletBToken = new(this, "withdrawRevenueMiner", "Withdraw Miner revenue");
+  }
 
   public bool HasErrors
   {
@@ -103,14 +95,14 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   public void Update(JsonElement snapshotAnchorer, JsonElement snapshotMiner)
   {
-    Funds = snapshotAnchorer.GetProperty("funds").GetInt64();
-    AddressFunding = snapshotAnchorer.GetProperty("addressFunding").GetString();
+    WalletBitcoin.Funds = snapshotAnchorer.GetProperty("funds").GetInt64().ToString();
+    WalletBitcoin.Address = snapshotAnchorer.GetProperty("addressFunding").GetString();
 
     IsMining = snapshotMiner.GetProperty("isMining").GetBoolean();
     StateMiner = snapshotMiner.GetProperty("stateMiner").GetString();
 
     JsonElement revenue = snapshotMiner.GetProperty("revenue");
-    Revenue = revenue.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : revenue.GetInt64().ToString();
+    WalletBToken.Funds = revenue.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : revenue.GetInt64().ToString();
   }
 
   [RelayCommand]
@@ -140,31 +132,16 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     }
   }
 
-  [RelayCommand]
-  void OpenWithdrawal()
-  {
-    OpenFormWithdrawal("withdrawBitcoin", "Withdraw bitcoin", $"Funds: {Funds}");
-  }
-
-  [RelayCommand]
-  void OpenWithdrawalRevenue()
-  {
-    OpenFormWithdrawal("withdrawRevenueMiner", "Withdraw Miner revenue", $"Revenue: {Revenue}");
-  }
-
-  void OpenFormWithdrawal(string method, string title, string balance)
+  void OpenFormWithdrawal(Wallet wallet)
   {
     ClearErrors();
-    MethodWithdrawal = method;
-    TitleWithdrawal = title;
-    BalanceWithdrawal = balance;
-    IsWithdrawalOpen = true;
+    WalletWithdrawal = wallet;
   }
 
   [RelayCommand]
   void CancelWithdrawal()
   {
-    IsWithdrawalOpen = false;
+    WalletWithdrawal = null;
   }
 
   [RelayCommand]
@@ -174,13 +151,13 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
     try
     {
-      await Node.SendRequest(MethodWithdrawal, new Dictionary<string, object>
+      await Node.SendRequest(WalletWithdrawal.MethodWithdrawal, new Dictionary<string, object>
       {
         ["address"] = AddressWithdrawal,
         ["fee"] = FeeWithdrawal
       });
 
-      IsWithdrawalOpen = false;
+      WalletWithdrawal = null;
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {

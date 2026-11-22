@@ -36,6 +36,15 @@
         </StackPanel>
       </Border>
     </DataTemplate>
+    <DataTemplate x:Key="TemplateWallet" x:DataType="models:Mining+Wallet">
+      <StackPanel Spacing="6">
+        <SelectableTextBlock Text="{Binding Address, StringFormat='Funding address: {0}'}" IsVisible="{Binding Address, Converter={x:Static ObjectConverters.IsNotNull}}" TextWrapping="Wrap" />
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
+          <Button Content="Withdraw" Command="{Binding OpenWithdrawalCommand}" />
+        </StackPanel>
+      </StackPanel>
+    </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">
     <DockPanel Margin="20">
@@ -51,13 +60,7 @@
                 <Border Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
                 <Path Grid.Row="1" Grid.Column="0" Data="M0,0 L16,0 L8,8 Z M0,16 L16,16 L8,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Path Grid.Row="2" Grid.Column="0" Data="M0,0 L14,0 L7,10 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" />
-                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="6">
-                  <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
-                  <StackPanel Orientation="Horizontal" Spacing="12">
-                    <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
-                    <Button Content="Withdraw" Command="{Binding OpenWithdrawalCommand}" />
-                  </StackPanel>
-                </StackPanel>
+                <ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding WalletBitcoin}" ContentTemplate="{StaticResource TemplateWallet}" />
                 <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="12">
                   <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
                   <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
@@ -71,10 +74,7 @@
                   </Button>
                   <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
                 </StackPanel>
-                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                  <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
-                  <Button Content="Withdraw" Command="{Binding OpenWithdrawalRevenueCommand}" />
-                </StackPanel>
+                <ContentControl Grid.Row="3" Grid.Column="1" Content="{Binding WalletBToken}" ContentTemplate="{StaticResource TemplateWallet}" />
               </Grid>
             </StackPanel>
           </Border>
