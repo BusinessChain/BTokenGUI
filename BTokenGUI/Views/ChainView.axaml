@@ -60,8 +60,17 @@
               <SelectableTextBlock Text="Mining" FontWeight="Bold" HorizontalAlignment="Center" />
               <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="20">
                 <Border Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-                <Path Grid.Row="1" Grid.Column="0" Data="M0,0 L16,0 L8,8 Z M0,16 L16,16 L8,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Path Grid.Row="2" Grid.Column="0" Data="M0,0 L14,0 L7,10 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                <Panel Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Width="32" Height="28" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <Panel Clip="M0,0 L32,0 L16,28 Z">
+                    <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
+                    <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="0.5,1">
+                      <Border.RenderTransform>
+                        <ScaleTransform ScaleY="{Binding FillingConverter}" />
+                      </Border.RenderTransform>
+                    </Border>
+                  </Panel>
+                  <Path Data="M1,1 L31,1 L16,26 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                </Panel>
                 <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding WalletBitcoin}" ContentTemplate="{StaticResource TemplateWallet}" />
                 <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                   <SelectableTextBlock Grid.Column="1" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />

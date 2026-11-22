@@ -36,6 +36,9 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public partial decimal? Budget { get; set; }
 
   [ObservableProperty]
+  public partial double FillingConverter { get; set; }
+
+  [ObservableProperty]
   public partial bool IsMining { get; set; }
 
   [ObservableProperty]
@@ -118,6 +121,13 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     long fundsBitcoin = WalletBitcoin.Funds.Value;
     long scaleBitcoin = COUNT_PERIODS_BUDGET_DAY * snapshotMiner.GetProperty("budget").GetInt64();
     WalletBitcoin.Filling = fundsBitcoin == 0 ? 0 : (double)fundsBitcoin / (fundsBitcoin + scaleBitcoin);
+
+    if (scaleBitcoin == 0)
+      FillingConverter = 0;
+    else if (fundsBitcoin == 0)
+      FillingConverter = 1;
+    else
+      FillingConverter = Math.Min(1, (double)scaleBitcoin / fundsBitcoin);
 
     JsonElement levelWithdrawalAuto = snapshotMiner.GetProperty("levelWithdrawalAuto");
     LevelWithdrawalAutoNode = levelWithdrawalAuto.ValueKind == JsonValueKind.Null ? null : levelWithdrawalAuto.GetInt64();
