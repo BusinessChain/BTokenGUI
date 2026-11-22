@@ -47,36 +47,35 @@
           <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
             <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
               <SelectableTextBlock Text="Mining" FontWeight="Bold" HorizontalAlignment="Center" />
-              <Border Classes="Panel">
-                <StackPanel Spacing="6" Margin="10">
-                  <SelectableTextBlock Text="Anchorer" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="32,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="20">
+                <Border Grid.Row="0" Grid.RowSpan="4" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+                <Path Grid.Row="1" Grid.Column="0" Data="M0,0 L16,0 L8,8 Z M0,16 L16,16 L8,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Path Grid.Row="2" Grid.Column="0" Data="M0,0 L14,0 L7,10 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="6">
                   <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
                   <StackPanel Orientation="Horizontal" Spacing="12">
                     <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
                     <Button Content="Withdraw" Command="{Binding OpenWithdrawalCommand}" />
                   </StackPanel>
                 </StackPanel>
-              </Border>
-              <Border Classes="Panel">
-                <StackPanel Spacing="6" Margin="10">
-                  <SelectableTextBlock Text="Miner" FontWeight="SemiBold" />
-                  <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                    <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
-                    <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
-                  </Grid>
-                  <StackPanel Orientation="Horizontal" Spacing="12">
-                    <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
-                    <Button Content="Withdraw" Command="{Binding OpenWithdrawalRevenueCommand}" />
-                  </StackPanel>
+                <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                  <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
+                  <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+                </Grid>
+                <StackPanel Grid.Row="2" Grid.Column="1" Spacing="6">
+                  <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center">
+                    <Panel>
+                      <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
+                      <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
+                    </Panel>
+                  </Button>
+                  <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
                 </StackPanel>
-              </Border>
-              <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center">
-                <Panel>
-                  <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
-                  <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
-                </Panel>
-              </Button>
-              <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
+                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                  <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
+                  <Button Content="Withdraw" Command="{Binding OpenWithdrawalRevenueCommand}" />
+                </StackPanel>
+              </Grid>
             </StackPanel>
           </Border>
           <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
