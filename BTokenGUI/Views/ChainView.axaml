@@ -35,7 +35,7 @@
                               <Button Content="Withdraw bitcoin" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
                               <Button Content="Withdraw Miner revenue" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalRevenueCommand}" CommandParameter="{Binding}" />
                             </StackPanel>
-                            <SelectableTextBlock Text="{Binding StateRoundLast}" TextWrapping="Wrap" />
+                            <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
                           </StackPanel>
                         </Border>
                       </DataTemplate>

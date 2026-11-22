@@ -33,7 +33,7 @@ public partial class Blockchain
     public partial decimal? Budget { get; set; }
 
     [ObservableProperty]
-    public partial string StateRoundLast { get; set; }
+    public partial string StateMiner { get; set; }
 
     [ObservableProperty]
     public partial long Funds { get; set; }
@@ -91,7 +91,7 @@ public partial class Blockchain
 
     public void Update(JsonElement snapshotMiner)
     {
-      StateRoundLast = snapshotMiner.GetProperty("stateRoundLast").GetString();
+      StateMiner = snapshotMiner.GetProperty("stateMiner").GetString();
       Funds = snapshotMiner.GetProperty("funds").GetInt64();
 
       JsonElement revenue = snapshotMiner.GetProperty("revenue");
@@ -126,7 +126,7 @@ public partial class Blockchain
       catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
       {
         if (!MarkErrors(exception))
-          StateRoundLast = exception.Message;
+          StateMiner = exception.Message;
       }
     }
   }
