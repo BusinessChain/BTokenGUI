@@ -9,7 +9,7 @@
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
           <KeyFrame Cue="0%">
-            <Setter Property="Opacity" Value="0.2" />
+            <Setter Property="Opacity" Value="0.4" />
           </KeyFrame>
           <KeyFrame Cue="100%">
             <Setter Property="Opacity" Value="1" />
@@ -74,24 +74,26 @@
               <SelectableTextBlock Text="Mining" FontWeight="Bold" HorizontalAlignment="Center" />
               <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="20">
                 <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-                <Button Grid.Row="1" Grid.Column="0" Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                  <Panel Width="32" Height="28" Classes.running="{Binding IsMining}">
-                    <Path Classes="glow" Data="M0,0 L32,0 L16,28 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0">
-                      <Path.Effect>
-                        <BlurEffect Radius="16" />
-                      </Path.Effect>
-                    </Path>
-                    <Panel Clip="M0,0 L32,0 L16,28 Z">
-                      <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
-                      <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="0.5,1">
-                        <Border.RenderTransform>
-                          <ScaleTransform ScaleY="{Binding FillingConverter}" />
-                        </Border.RenderTransform>
-                      </Border>
+                <Panel Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.running="{Binding IsMining}">
+                  <Path Classes="glow" Data="M8,6 L56,6 L32,48 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="8" />
+                    </Path.Effect>
+                  </Path>
+                  <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Panel Width="32" Height="28">
+                      <Panel Clip="M0,0 L32,0 L16,28 Z">
+                        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
+                        <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="0.5,1">
+                          <Border.RenderTransform>
+                            <ScaleTransform ScaleY="{Binding FillingConverter}" />
+                          </Border.RenderTransform>
+                        </Border>
+                      </Panel>
+                      <Path Data="M1,1 L31,1 L16,26 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
                     </Panel>
-                    <Path Data="M1,1 L31,1 L16,26 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                  </Panel>
-                </Button>
+                  </Button>
+                </Panel>
                 <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding WalletBitcoin}" ContentTemplate="{StaticResource TemplateWallet}" />
                 <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="{Binding StateMiner}" TextWrapping="Wrap" VerticalAlignment="Center" />
                 <ContentControl Grid.Row="2" Grid.Column="0" Content="{Binding WalletBToken}" ContentTemplate="{StaticResource TemplateWallet}" />
