@@ -63,9 +63,9 @@
                 <Path Grid.Row="1" Grid.Column="0" Data="M0,0 L16,0 L8,8 Z M0,16 L16,16 L8,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Path Grid.Row="2" Grid.Column="0" Data="M0,0 L14,0 L7,10 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" />
                 <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding WalletBitcoin}" ContentTemplate="{StaticResource TemplateWallet}" />
-                <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                  <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
-                  <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+                <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                  <SelectableTextBlock Grid.Column="1" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
+                  <NumericUpDown Grid.Column="0" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
                 </Grid>
                 <StackPanel Grid.Row="2" Grid.Column="1" Spacing="6">
                   <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center">

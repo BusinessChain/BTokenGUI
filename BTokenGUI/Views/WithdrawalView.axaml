@@ -11,16 +11,16 @@
         <SelectableTextBlock Text="{Binding WalletWithdrawal.TitleWithdrawal}" FontWeight="Bold" />
         <SelectableTextBlock Text="{Binding WalletWithdrawal.Address, StringFormat='Funding address: {0}'}" IsVisible="{Binding WalletWithdrawal.Address, Converter={x:Static ObjectConverters.IsNotNull}}" TextWrapping="Wrap" />
         <SelectableTextBlock Text="{Binding WalletWithdrawal.Funds, StringFormat='Funds: {0}', TargetNullValue='Funds: unknown while the accounts synchronize'}" TextWrapping="Wrap" />
-        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
-          <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Address" VerticalAlignment="Center" />
-          <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
-          <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
-          <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+          <SelectableTextBlock Grid.Row="0" Grid.Column="1" Text="Address" VerticalAlignment="Center" />
+          <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding AddressWithdrawal}" />
+          <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="Fee in satoshis" VerticalAlignment="Center" />
+          <NumericUpDown Grid.Row="1" Grid.Column="0" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
         </Grid>
         <CheckBox Content="auto" IsChecked="{Binding IsWithdrawalAutoChosen}" IsVisible="{Binding WalletWithdrawal.IsAutoOffered, FallbackValue=False}" />
-        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" IsVisible="{Binding IsWithdrawalAutoChosen}">
-          <SelectableTextBlock Grid.Column="0" Text="Automatic withdrawal level" VerticalAlignment="Center" />
-          <NumericUpDown Grid.Column="1" Value="{Binding LevelWithdrawalAuto}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" IsVisible="{Binding IsWithdrawalAutoChosen}">
+          <SelectableTextBlock Grid.Column="1" Text="Automatic withdrawal level" VerticalAlignment="Center" />
+          <NumericUpDown Grid.Column="0" Value="{Binding LevelWithdrawalAuto}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
         </Grid>
         <SelectableTextBlock Text="{Binding ErrorWithdrawal}" IsVisible="{Binding ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
