@@ -4,87 +4,98 @@
              xmlns:models="using:BTokenGUI.Models"
              x:Class="BTokenGUI.Views.ChainView"
              x:DataType="vm:MainViewModel">
+  <UserControl.Resources>
+    <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
+      <Border Classes="Panel">
+        <StackPanel Spacing="6" Margin="10">
+          <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+          <ItemsControl ItemsSource="{Binding Blocks}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:Blockchain+Block">
+                <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
+                  <Expander.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <SelectableTextBlock Text="{Binding Height}" FontWeight="SemiBold" />
+                      <SelectableTextBlock Text="{Binding HashShort}" />
+                    </StackPanel>
+                  </Expander.Header>
+                  <ItemsControl ItemsSource="{Binding Fields}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="models:Blockchain+Block+Field">
+                        <Grid ColumnDefinitions="140,*" Margin="0,2">
+                          <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
+                          <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                        </Grid>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </Expander>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
   <Border Classes="Panel">
     <DockPanel Margin="20">
       <SelectableTextBlock DockPanel.Dock="Top" Text="Chain" FontWeight="Bold" Margin="0,0,0,10" />
       <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding Blockchains}">
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="models:Blockchain">
-              <Border Classes="Panel">
-                <StackPanel Spacing="6" Margin="10">
-                  <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-                  <ContentControl Content="{Binding MinerBlockchain}">
-                    <ContentControl.ContentTemplate>
-                      <DataTemplate x:DataType="models:Blockchain+Miner">
-                        <Border Classes="Panel">
-                          <StackPanel Spacing="6" Margin="10">
-                            <SelectableTextBlock Text="Miner" FontWeight="Bold" />
-                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                              <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
-                              <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
-                            </Grid>
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                              <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
-                              <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalRevenueCommand}" CommandParameter="{Binding}" />
-                            </StackPanel>
-                            <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center" Margin="0,6,0,0">
-                              <Panel>
-                                <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
-                                <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
-                              </Panel>
-                            </Button>
-                            <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
+        <StackPanel>
+          <ContentControl Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+          <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+          <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
+            <StackPanel Spacing="10" Margin="10">
+              <SelectableTextBlock Text="Mining" FontWeight="Bold" HorizontalAlignment="Center" />
+              <ContentControl Content="{Binding BlockchainBitcoin.AnchorerBlockchain}">
+                <ContentControl.ContentTemplate>
+                  <DataTemplate x:DataType="models:Blockchain+Anchorer">
+                    <Border Classes="Panel">
+                      <StackPanel Spacing="6" Margin="10">
+                        <SelectableTextBlock Text="Anchorer" FontWeight="SemiBold" />
+                        <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                          <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
+                          <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
+                        </StackPanel>
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ContentControl.ContentTemplate>
+              </ContentControl>
+              <ContentControl Content="{Binding BlockchainBToken.MinerBlockchain}">
+                <ContentControl.ContentTemplate>
+                  <DataTemplate x:DataType="models:Blockchain+Miner">
+                    <StackPanel Spacing="10">
+                      <Border Classes="Panel">
+                        <StackPanel Spacing="6" Margin="10">
+                          <SelectableTextBlock Text="Miner" FontWeight="SemiBold" />
+                          <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
+                            <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+                          </Grid>
+                          <StackPanel Orientation="Horizontal" Spacing="12">
+                            <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
+                            <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalRevenueCommand}" CommandParameter="{Binding}" />
                           </StackPanel>
-                        </Border>
-                      </DataTemplate>
-                    </ContentControl.ContentTemplate>
-                  </ContentControl>
-                  <ItemsControl ItemsSource="{Binding Blocks}">
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate x:DataType="models:Blockchain+Block">
-                        <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
-                          <Expander.Header>
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                              <SelectableTextBlock Text="{Binding Height}" FontWeight="SemiBold" />
-                              <SelectableTextBlock Text="{Binding HashShort}" />
-                            </StackPanel>
-                          </Expander.Header>
-                          <ItemsControl ItemsSource="{Binding Fields}">
-                            <ItemsControl.ItemTemplate>
-                              <DataTemplate x:DataType="models:Blockchain+Block+Field">
-                                <Grid ColumnDefinitions="140,*" Margin="0,2">
-                                  <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
-                                  <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
-                                </Grid>
-                              </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                          </ItemsControl>
-                        </Expander>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
-                  <ContentControl Content="{Binding AnchorerBlockchain}">
-                    <ContentControl.ContentTemplate>
-                      <DataTemplate x:DataType="models:Blockchain+Anchorer">
-                        <Border Classes="Panel">
-                          <StackPanel Spacing="6" Margin="10">
-                            <SelectableTextBlock Text="Anchorer" FontWeight="Bold" />
-                            <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                              <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
-                              <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
-                            </StackPanel>
-                          </StackPanel>
-                        </Border>
-                      </DataTemplate>
-                    </ContentControl.ContentTemplate>
-                  </ContentControl>
-                </StackPanel>
-              </Border>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                        </StackPanel>
+                      </Border>
+                      <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center">
+                        <Panel>
+                          <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
+                          <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
+                        </Panel>
+                      </Button>
+                      <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ContentControl.ContentTemplate>
+              </ContentControl>
+            </StackPanel>
+          </Border>
+          <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+          <ContentControl Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+        </StackPanel>
       </ScrollViewer>
     </DockPanel>
   </Border>

@@ -32,7 +32,9 @@ public partial class MainViewModel : ObservableObject
 
   public ObservableCollection<Network> Networks { get; } = [];
 
-  public ObservableCollection<Blockchain> Blockchains { get; } = [];
+  public Blockchain BlockchainBitcoin { get; } = new("Bitcoin");
+
+  public Blockchain BlockchainBToken { get; } = new("BToken");
 
   public Wallet Wallet { get; } = new();
 
@@ -75,18 +77,8 @@ public partial class MainViewModel : ObservableObject
             network.Update(networkJSON.Value);
           }
 
-          foreach (JsonProperty blockchainJSON in blockchainsJSON.EnumerateObject())
-          {
-            Blockchain blockchain = Blockchains.FirstOrDefault(b => b.Name == blockchainJSON.Name);
-
-            if (blockchain == null)
-            {
-              blockchain = new Blockchain(blockchainJSON.Name);
-              Blockchains.Add(blockchain);
-            }
-
-            blockchain.Update(blockchainJSON.Value);
-          }
+          BlockchainBitcoin.Update(blockchainsJSON.GetProperty("Bitcoin"));
+          BlockchainBToken.Update(blockchainsJSON.GetProperty("BToken"));
 
           StatusConnection = "Connected to node";
         });
