@@ -41,6 +41,13 @@ public class NodeService : Service
     return StartCommandResult.Sticky;
   }
 
+  public override void OnTaskRemoved(Intent rootIntent)
+  {
+    StopForeground(StopForegroundFlags.Remove);
+    StopSelf();
+    global::Android.OS.Process.KillProcess(global::Android.OS.Process.MyPid());
+  }
+
   async Task RunNode()
   {
     Directory.SetCurrentDirectory(FilesDir.AbsolutePath);
