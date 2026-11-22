@@ -38,7 +38,7 @@ public class NodeService : Service
 
     TaskNode ??= Task.Run(RunNode);
 
-    return StartCommandResult.Sticky;
+    return StartCommandResult.NotSticky;
   }
 
   public override void OnTaskRemoved(Intent rootIntent)
