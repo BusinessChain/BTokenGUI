@@ -17,6 +17,11 @@
           <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
           <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
         </Grid>
+        <CheckBox Content="auto" IsChecked="{Binding IsWithdrawalAutoChosen}" IsVisible="{Binding WalletWithdrawal.IsAutoOffered, FallbackValue=False}" />
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" IsVisible="{Binding IsWithdrawalAutoChosen}">
+          <SelectableTextBlock Grid.Column="0" Text="Automatic withdrawal level" VerticalAlignment="Center" />
+          <NumericUpDown Grid.Column="1" Value="{Binding LevelWithdrawalAuto}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+        </Grid>
         <SelectableTextBlock Text="{Binding ErrorWithdrawal}" IsVisible="{Binding ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
           <Button Content="Send" Command="{Binding WithdrawCommand}" />

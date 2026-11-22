@@ -13,6 +13,8 @@ public partial class Mining
 
     public string TitleWithdrawal { get; }
 
+    public bool IsAutoOffered { get; }
+
     [ObservableProperty]
     public partial string Address { get; set; }
 
@@ -23,11 +25,12 @@ public partial class Mining
     public partial double Filling { get; set; }
 
 
-    public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal)
+    public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal, bool isAutoOffered)
     {
       Mining = mining;
       MethodWithdrawal = methodWithdrawal;
       TitleWithdrawal = titleWithdrawal;
+      IsAutoOffered = isAutoOffered;
     }
 
     [RelayCommand]
