@@ -15,7 +15,14 @@
       <Setter Property="CornerRadius" Value="4" />
       <Setter Property="Margin" Value="4" />
     </Style>
-    <Style Selector="TextBox:error, TextBox:error /template/ DataValidationErrors, NumericUpDown:error, NumericUpDown:error /template/ DataValidationErrors, NumericUpDown:error /template/ ButtonSpinner, NumericUpDown:error /template/ ButtonSpinner /template/ DataValidationErrors">
+    <Style Selector="Button.Close">
+      <Setter Property="Content" Value="✕" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="6,2" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+    <Style Selector="TextBox:error,TextBox:error /template/ DataValidationErrors, NumericUpDown:error, NumericUpDown:error /template/ DataValidationErrors, NumericUpDown:error /template/ ButtonSpinner, NumericUpDown:error /template/ ButtonSpinner /template/ DataValidationErrors">
       <Setter Property="ClipToBounds" Value="False" />
     </Style>
     <Style Selector="TextBox:error /template/ Border#PART_BorderElement, NumericUpDown:error /template/ ButtonSpinner /template/ Border">

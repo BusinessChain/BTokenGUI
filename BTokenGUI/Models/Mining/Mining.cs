@@ -70,8 +70,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   public Mining()
   {
-    WalletBitcoin = new(this, "withdrawBitcoin", "Withdraw bitcoin", false);
-    WalletBToken = new(this, "withdrawRevenueMiner", "Withdraw Miner revenue", true);
+    WalletBitcoin = new(this, "withdrawBitcoin", "Bitcoin tank", false);
+    WalletBToken = new(this, "withdrawRevenueMiner", "BToken tank", true);
   }
 
   public bool HasErrors
@@ -154,7 +154,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     else
       await SendRequestMiner("startMining", new Dictionary<string, object>
       {
-        ["budget"] = Budget
+        ["budget"] = Budget is decimal budget ? Math.Round(budget / COUNT_PERIODS_BUDGET_DAY) : null
       });
   }
 
@@ -164,7 +164,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     ClearErrors();
 
     if (BudgetNode > 0)
-      Budget = BudgetNode;
+      Budget = COUNT_PERIODS_BUDGET_DAY * BudgetNode;
 
     IsFormConverterOpen = true;
   }
