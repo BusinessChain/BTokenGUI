@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using BTokenGUI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace BTokenGUI.ViewModels;
 
@@ -18,23 +17,13 @@ public partial class MainViewModel : ObservableObject
   [ObservableProperty]
   public partial string StatusConnection { get; set; } = "Connecting to node";
 
-  [ObservableProperty]
-  public partial Blockchain.OwnerWallet OwnerWithdrawal { get; set; }
-
-  [ObservableProperty]
-  public partial string MethodWithdrawal { get; set; }
-
-  [ObservableProperty]
-  public partial string TitleWithdrawal { get; set; }
-
-  [ObservableProperty]
-  public partial string BalanceWithdrawal { get; set; }
-
   public ObservableCollection<Network> Networks { get; } = [];
 
   public Blockchain BlockchainBitcoin { get; } = new("Bitcoin");
 
   public Blockchain BlockchainBToken { get; } = new("BToken");
+
+  public Mining Mining { get; } = new();
 
   public Wallet Wallet { get; } = new();
 
@@ -74,8 +63,12 @@ public partial class MainViewModel : ObservableObject
             network.Update(networkJSON.Value);
           }
 
-          BlockchainBitcoin.Update(blockchainsJSON.GetProperty("Bitcoin"));
-          BlockchainBToken.Update(blockchainsJSON.GetProperty("BToken"));
+          JsonElement snapshotBitcoin = blockchainsJSON.GetProperty("Bitcoin");
+          JsonElement snapshotBToken = blockchainsJSON.GetProperty("BToken");
+
+          BlockchainBitcoin.Update(snapshotBitcoin);
+          BlockchainBToken.Update(snapshotBToken);
+          Mining.Update(snapshotBitcoin.GetProperty("anchorer"), snapshotBToken.GetProperty("miner"));
 
           StatusConnection = "Connected to node";
         });
@@ -96,57 +89,6 @@ public partial class MainViewModel : ObservableObject
 
         Dispatcher.UIThread.Post(() => StatusConnection = "Connecting to node");
       }
-    }
-  }
-
-  [RelayCommand]
-  void OpenWithdrawal(Blockchain.Anchorer anchorer)
-  {
-    OpenFormWithdrawal(anchorer, "withdrawBitcoin", "Withdraw bitcoin", $"Funds: {anchorer.Funds}");
-  }
-
-  [RelayCommand]
-  void OpenWithdrawalRevenue(Blockchain.Miner miner)
-  {
-    OpenFormWithdrawal(miner, "withdrawRevenueMiner", "Withdraw Miner revenue", $"Revenue: {miner.Revenue}");
-  }
-
-  void OpenFormWithdrawal(Blockchain.OwnerWallet owner, string method, string title, string balance)
-  {
-    owner.ClearErrors();
-    MethodWithdrawal = method;
-    TitleWithdrawal = title;
-    BalanceWithdrawal = balance;
-    OwnerWithdrawal = owner;
-  }
-
-  [RelayCommand]
-  void CancelWithdrawal()
-  {
-    OwnerWithdrawal = null;
-  }
-
-  [RelayCommand]
-  async Task Withdraw()
-  {
-    Blockchain.OwnerWallet owner = OwnerWithdrawal;
-
-    owner.ClearErrors();
-
-    try
-    {
-      await Node.SendRequest(MethodWithdrawal, new Dictionary<string, object>
-      {
-        ["address"] = owner.AddressWithdrawal,
-        ["fee"] = owner.FeeWithdrawal
-      });
-
-      OwnerWithdrawal = null;
-    }
-    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
-    {
-      if (!owner.MarkErrors(exception))
-        owner.ErrorWithdrawal = exception.Message;
     }
   }
 }

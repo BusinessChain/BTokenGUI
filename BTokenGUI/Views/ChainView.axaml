@@ -45,52 +45,38 @@
           <ContentControl Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
           <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
-            <StackPanel Spacing="10" Margin="10">
+            <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
               <SelectableTextBlock Text="Mining" FontWeight="Bold" HorizontalAlignment="Center" />
-              <ContentControl Content="{Binding BlockchainBitcoin.AnchorerBlockchain}">
-                <ContentControl.ContentTemplate>
-                  <DataTemplate x:DataType="models:Blockchain+Anchorer">
-                    <Border Classes="Panel">
-                      <StackPanel Spacing="6" Margin="10">
-                        <SelectableTextBlock Text="Anchorer" FontWeight="SemiBold" />
-                        <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                          <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
-                          <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
-                        </StackPanel>
-                      </StackPanel>
-                    </Border>
-                  </DataTemplate>
-                </ContentControl.ContentTemplate>
-              </ContentControl>
-              <ContentControl Content="{Binding BlockchainBToken.MinerBlockchain}">
-                <ContentControl.ContentTemplate>
-                  <DataTemplate x:DataType="models:Blockchain+Miner">
-                    <StackPanel Spacing="10">
-                      <Border Classes="Panel">
-                        <StackPanel Spacing="6" Margin="10">
-                          <SelectableTextBlock Text="Miner" FontWeight="SemiBold" />
-                          <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-                            <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
-                            <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
-                          </Grid>
-                          <StackPanel Orientation="Horizontal" Spacing="12">
-                            <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
-                            <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalRevenueCommand}" CommandParameter="{Binding}" />
-                          </StackPanel>
-                        </StackPanel>
-                      </Border>
-                      <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center">
-                        <Panel>
-                          <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
-                          <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
-                        </Panel>
-                      </Button>
-                      <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
-                    </StackPanel>
-                  </DataTemplate>
-                </ContentControl.ContentTemplate>
-              </ContentControl>
+              <Border Classes="Panel">
+                <StackPanel Spacing="6" Margin="10">
+                  <SelectableTextBlock Text="Anchorer" FontWeight="SemiBold" />
+                  <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                    <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
+                    <Button Content="Withdraw" Command="{Binding OpenWithdrawalCommand}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+              <Border Classes="Panel">
+                <StackPanel Spacing="6" Margin="10">
+                  <SelectableTextBlock Text="Miner" FontWeight="SemiBold" />
+                  <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
+                  </Grid>
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                    <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
+                    <Button Content="Withdraw" Command="{Binding OpenWithdrawalRevenueCommand}" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+              <Button Command="{Binding ToggleMiningCommand}" HorizontalAlignment="Center">
+                <Panel>
+                  <TextBlock Text="Start" IsVisible="{Binding !IsMining}" />
+                  <TextBlock Text="Stop" IsVisible="{Binding IsMining}" />
+                </Panel>
+              </Button>
+              <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" />
             </StackPanel>
           </Border>
           <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
