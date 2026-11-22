@@ -5,7 +5,13 @@
              x:Class="BTokenGUI.Views.ChainView"
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
-    <Style Selector="Panel.running > Path.glow">
+    <Style Selector="Path.gem">
+      <Setter Property="Fill" Value="DarkOrange" />
+    </Style>
+    <Style Selector="Path.gem.missed">
+      <Setter Property="Fill" Value="#6B4A2B" />
+    </Style>
+    <Style Selector="Panel.glowing > Path.glow">
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
           <KeyFrame Cue="0%">
@@ -61,6 +67,16 @@
         </Border>
       </Button>
     </DataTemplate>
+    <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Mining+Anchor">
+      <Panel Width="28" Height="28" Margin="2" Classes.glowing="{Binding !IsMissed}">
+        <Path Classes="glow" Data="M6,2 L22,2 L27,10 L14,26 L1,10 Z" Fill="DarkOrange" Opacity="0" IsHitTestVisible="False">
+          <Path.Effect>
+            <BlurEffect Radius="6" />
+          </Path.Effect>
+        </Path>
+        <Path Classes="gem" Classes.missed="{Binding IsMissed}" Data="F1 M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+      </Panel>
+    </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">
     <DockPanel Margin="20">
@@ -69,12 +85,22 @@
         <StackPanel>
           <ContentControl Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+          <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
+            <ItemsControl ItemsSource="{Binding Mining.Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+            </ItemsControl>
+          </Border>
+          <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
           <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
             <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
               <SelectableTextBlock Text="Miner" FontWeight="Bold" HorizontalAlignment="Center" />
               <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="20">
                 <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-                <Panel Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.running="{Binding IsMining}">
+                <Panel Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.glowing="{Binding IsMining}">
                   <Path Classes="glow" Data="M8,6 L56,6 L32,48 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
                     <Path.Effect>
                       <BlurEffect Radius="8" />
