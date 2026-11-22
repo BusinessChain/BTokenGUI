@@ -23,6 +23,9 @@ public partial class Wallet : ObservableObject
   public partial string Balance { get; set; }
 
   [ObservableProperty]
+  public partial string ValueIncomingPending { get; set; }
+
+  [ObservableProperty]
   public partial string AddressPayee { get; set; }
 
   [ObservableProperty]
@@ -182,7 +185,16 @@ public partial class Wallet : ObservableObject
     JsonElement balance = await Node.SendRequest("getBalanceAccount", new Dictionary<string, object> { ["address"] = Address }).ConfigureAwait(false);
 
     Dispatcher.UIThread.Post(() =>
-      Balance = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString());
+    {
+      if (balance.ValueKind == JsonValueKind.Null)
+      {
+        Balance = ValueIncomingPending = "unknown while the accounts synchronize";
+        return;
+      }
+
+      Balance = balance.GetProperty("balance").GetInt64().ToString();
+      ValueIncomingPending = balance.GetProperty("valueIncomingPending").GetInt64().ToString();
+    });
   }
 
   internal async Task ProcessTip(string hashTip, int heightTip)
