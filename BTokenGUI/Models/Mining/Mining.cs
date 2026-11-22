@@ -26,6 +26,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   long? LevelWithdrawalAutoNode;
 
+  long BudgetNode;
+
   public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
   public Wallet WalletBitcoin { get; }
@@ -122,7 +124,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     WalletBToken.Funds = revenue.ValueKind == JsonValueKind.Null ? null : revenue.GetInt64();
 
     long fundsBitcoin = WalletBitcoin.Funds.Value;
-    long scaleBitcoin = COUNT_PERIODS_BUDGET_DAY * snapshotMiner.GetProperty("budget").GetInt64();
+    BudgetNode = snapshotMiner.GetProperty("budget").GetInt64();
+    long scaleBitcoin = COUNT_PERIODS_BUDGET_DAY * BudgetNode;
     WalletBitcoin.Filling = fundsBitcoin == 0 ? 0 : (double)fundsBitcoin / (fundsBitcoin + scaleBitcoin);
 
     if (scaleBitcoin == 0)
@@ -159,6 +162,10 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   void OpenFormConverter()
   {
     ClearErrors();
+
+    if (BudgetNode > 0)
+      Budget = BudgetNode;
+
     IsFormConverterOpen = true;
   }
 
