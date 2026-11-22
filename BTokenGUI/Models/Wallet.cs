@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BTokenGUI.ViewModels;
 using BTokenSigner;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -79,7 +78,7 @@ public partial class Wallet : ObservableObject
   {
     try
     {
-      JsonElement tXUnsigned = await MainViewModel.SendRequest("createTXBTokenUnsigned", new Dictionary<string, object>
+      JsonElement tXUnsigned = await Node.SendRequest("createTXBTokenUnsigned", new Dictionary<string, object>
       {
         ["keyPublic"] = Convert.ToHexString(KeyPublic),
         ["fee"] = FeePayment,
@@ -116,7 +115,7 @@ public partial class Wallet : ObservableObject
   {
     try
     {
-      JsonElement keysMiner = await MainViewModel.SendRequest("getKeysMiner", null);
+      JsonElement keysMiner = await Node.SendRequest("getKeysMiner", null);
 
       await JsonSerializer.SerializeAsync(stream, new Dictionary<string, object>
       {
@@ -140,7 +139,7 @@ public partial class Wallet : ObservableObject
       using JsonDocument document = JsonDocument.Parse(backup);
       JsonElement root = document.RootElement;
 
-      await MainViewModel.SendRequest("importKeysMiner", new Dictionary<string, object>
+      await Node.SendRequest("importKeysMiner", new Dictionary<string, object>
       {
         ["bitcoin"] = root.GetProperty("minerBitcoin"),
         ["bToken"] = root.GetProperty("minerBToken")
@@ -183,7 +182,7 @@ public partial class Wallet : ObservableObject
 
     for (int height = heightScannedLast + 1; height <= heightTip; height++)
     {
-      JsonElement blockTXs = await MainViewModel.SendRequest("getTXsAccount", new Dictionary<string, object> { ["address"] = Address, ["height"] = height }).ConfigureAwait(false);
+      JsonElement blockTXs = await Node.SendRequest("getTXsAccount", new Dictionary<string, object> { ["address"] = Address, ["height"] = height }).ConfigureAwait(false);
 
       if (blockTXs.ValueKind != JsonValueKind.Null)
         foreach (JsonElement tX in blockTXs.GetProperty("tXs").EnumerateArray())
@@ -209,7 +208,7 @@ public partial class Wallet : ObservableObject
 
     StateStored.Upsert(new BsonDocument { ["_id"] = ID_HEIGHT_SCANNED_LAST, [NAME_FIELD_VALUE] = heightScannedLast });
 
-    JsonElement account = await MainViewModel.SendRequest("getAccount", new Dictionary<string, object> { ["address"] = Address }).ConfigureAwait(false);
+    JsonElement account = await Node.SendRequest("getAccount", new Dictionary<string, object> { ["address"] = Address }).ConfigureAwait(false);
 
     if (account.ValueKind != JsonValueKind.Null)
       foreach (BsonDocument payment in TXsStored.Find(Query.And(
@@ -227,7 +226,7 @@ public partial class Wallet : ObservableObject
 
   static async Task SubmitPayment(string tXUnsigned, string signature)
   {
-    await MainViewModel.SendRequest("submitTXBTokenSigned", new Dictionary<string, object>
+    await Node.SendRequest("submitTXBTokenSigned", new Dictionary<string, object>
     {
       ["tXUnsigned"] = tXUnsigned,
       ["signature"] = signature

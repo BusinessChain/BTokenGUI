@@ -38,11 +38,8 @@ public partial class MainViewModel : ObservableObject
 
   public Wallet Wallet { get; } = new();
 
-  const string URL_RPC = "http://127.0.0.1:8778/";
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
   const int COUNT_BLOCKS_NEWEST = 6;
-
-  static HttpClient HttpClient = new();
 
 
   public MainViewModel()
@@ -58,7 +55,7 @@ public partial class MainViewModel : ObservableObject
 
       try
       {
-        JsonElement snapshotState = await SendRequest("getSnapshotState", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
+        JsonElement snapshotState = await Node.SendRequest("getSnapshotState", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
         JsonElement networksJSON = snapshotState.GetProperty("networks");
         JsonElement blockchainsJSON = snapshotState.GetProperty("blockchains");
 
@@ -83,7 +80,7 @@ public partial class MainViewModel : ObservableObject
           StatusConnection = "Connected to node";
         });
 
-        JsonElement balance = await SendRequest("getBalanceAccount", new Dictionary<string, object> { ["address"] = Wallet.Address }).ConfigureAwait(false);
+        JsonElement balance = await Node.SendRequest("getBalanceAccount", new Dictionary<string, object> { ["address"] = Wallet.Address }).ConfigureAwait(false);
 
         Dispatcher.UIThread.Post(() =>
           Wallet.Balance = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString());
@@ -138,7 +135,7 @@ public partial class MainViewModel : ObservableObject
 
     try
     {
-      await SendRequest(MethodWithdrawal, new Dictionary<string, object>
+      await Node.SendRequest(MethodWithdrawal, new Dictionary<string, object>
       {
         ["address"] = owner.AddressWithdrawal,
         ["fee"] = owner.FeeWithdrawal
@@ -151,34 +148,5 @@ public partial class MainViewModel : ObservableObject
       if (!owner.MarkErrors(exception))
         owner.ErrorWithdrawal = exception.Message;
     }
-  }
-
-  internal static async Task<JsonElement> SendRequest(string method, object parameters)
-  {
-    byte[] request = JsonSerializer.SerializeToUtf8Bytes(new Dictionary<string, object>
-    {
-      ["jsonrpc"] = "2.0",
-      ["id"] = 1,
-      ["method"] = method,
-      ["params"] = parameters
-    });
-
-    using HttpResponseMessage response = await HttpClient.PostAsync(URL_RPC, new ByteArrayContent(request)).ConfigureAwait(false);
-
-    using JsonDocument document = JsonDocument.Parse(await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false));
-
-    JsonElement root = document.RootElement;
-
-    if (root.TryGetProperty("error", out JsonElement error))
-    {
-      List<string> parametersFaulty = [];
-
-      if (error.TryGetProperty("data", out JsonElement data) && data.TryGetProperty("parameters", out JsonElement parametersJSON))
-        parametersFaulty = parametersJSON.EnumerateArray().Select(p => p.GetString()).ToList();
-
-      throw new RPCException(error.GetProperty("message").GetString(), parametersFaulty);
-    }
-
-    return root.GetProperty("result").Clone();
   }
 }

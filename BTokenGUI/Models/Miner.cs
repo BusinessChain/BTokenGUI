@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BTokenGUI.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -58,7 +57,7 @@ public partial class Blockchain
 
       try
       {
-        await MainViewModel.SendRequest(method, parameters);
+        await Node.SendRequest(method, parameters);
       }
       catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
       {
