@@ -11,16 +11,21 @@ public partial class Blockchain : ObservableObject
 {
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
+  bool IsTipLast;
 
 
-  public Blockchain(string name)
+  public Blockchain(string name, bool isTipLast)
   {
     Name = name;
+    IsTipLast = isTipLast;
   }
 
   public void Update(JsonElement snapshotState)
   {
     List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().ToList();
+
+    if (IsTipLast)
+      blocksJSON.Reverse();
     HashSet<string> hashes = blocksJSON.Select(block => block.GetProperty("hash").GetString()).ToHashSet();
 
     foreach (Block block in Blocks.Where(block => !hashes.Contains(block.Hash)).ToList())

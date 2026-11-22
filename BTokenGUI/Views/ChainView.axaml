@@ -71,7 +71,7 @@
           <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
           <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
             <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
-              <SelectableTextBlock Text="Mining" FontWeight="Bold" HorizontalAlignment="Center" />
+              <SelectableTextBlock Text="Miner" FontWeight="Bold" HorizontalAlignment="Center" />
               <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="20">
                 <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
                 <Panel Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.running="{Binding IsMining}">
