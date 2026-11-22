@@ -20,17 +20,10 @@
                         <Border Classes="Panel">
                           <StackPanel Spacing="6" Margin="10">
                             <SelectableTextBlock Text="Miner" FontWeight="Bold" />
-                            <SelectableTextBlock Text="Bitcoin" FontWeight="SemiBold" />
-                            <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                              <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
-                              <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
-                            </StackPanel>
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                               <SelectableTextBlock Grid.Column="0" Text="Budget in satoshis per 10 minutes" VerticalAlignment="Center" />
                               <NumericUpDown Grid.Column="1" Value="{Binding Budget}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
                             </Grid>
-                            <SelectableTextBlock Text="BToken" FontWeight="SemiBold" Margin="0,6,0,0" />
                             <StackPanel Orientation="Horizontal" Spacing="12">
                               <SelectableTextBlock Text="{Binding Revenue, StringFormat='Revenue: {0}'}" VerticalAlignment="Center" />
                               <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalRevenueCommand}" CommandParameter="{Binding}" />
@@ -71,6 +64,22 @@
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>
                   </ItemsControl>
+                  <ContentControl Content="{Binding AnchorerBlockchain}">
+                    <ContentControl.ContentTemplate>
+                      <DataTemplate x:DataType="models:Blockchain+Anchorer">
+                        <Border Classes="Panel">
+                          <StackPanel Spacing="6" Margin="10">
+                            <SelectableTextBlock Text="Anchorer" FontWeight="Bold" />
+                            <SelectableTextBlock Text="{Binding AddressFunding, StringFormat='Funding address: {0}'}" TextWrapping="Wrap" />
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                              <SelectableTextBlock Text="{Binding Funds, StringFormat='Funds: {0}'}" VerticalAlignment="Center" />
+                              <Button Content="Withdraw" Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).OpenWithdrawalCommand}" CommandParameter="{Binding}" />
+                            </StackPanel>
+                          </StackPanel>
+                        </Border>
+                      </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                  </ContentControl>
                 </StackPanel>
               </Border>
             </DataTemplate>

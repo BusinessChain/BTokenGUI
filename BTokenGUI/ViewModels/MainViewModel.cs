@@ -19,7 +19,7 @@ public partial class MainViewModel : ObservableObject
   public partial string StatusConnection { get; set; } = "Connecting to node";
 
   [ObservableProperty]
-  public partial Blockchain.Miner MinerWithdrawal { get; set; }
+  public partial Blockchain.OwnerWallet OwnerWithdrawal { get; set; }
 
   [ObservableProperty]
   public partial string MethodWithdrawal { get; set; }
@@ -111,9 +111,9 @@ public partial class MainViewModel : ObservableObject
   }
 
   [RelayCommand]
-  void OpenWithdrawal(Blockchain.Miner miner)
+  void OpenWithdrawal(Blockchain.Anchorer anchorer)
   {
-    OpenFormWithdrawal(miner, "withdrawBitcoin", "Withdraw bitcoin", $"Funds: {miner.Funds}");
+    OpenFormWithdrawal(anchorer, "withdrawBitcoin", "Withdraw bitcoin", $"Funds: {anchorer.Funds}");
   }
 
   [RelayCommand]
@@ -122,42 +122,42 @@ public partial class MainViewModel : ObservableObject
     OpenFormWithdrawal(miner, "withdrawRevenueMiner", "Withdraw Miner revenue", $"Revenue: {miner.Revenue}");
   }
 
-  void OpenFormWithdrawal(Blockchain.Miner miner, string method, string title, string balance)
+  void OpenFormWithdrawal(Blockchain.OwnerWallet owner, string method, string title, string balance)
   {
-    miner.ClearErrors();
+    owner.ClearErrors();
     MethodWithdrawal = method;
     TitleWithdrawal = title;
     BalanceWithdrawal = balance;
-    MinerWithdrawal = miner;
+    OwnerWithdrawal = owner;
   }
 
   [RelayCommand]
   void CancelWithdrawal()
   {
-    MinerWithdrawal = null;
+    OwnerWithdrawal = null;
   }
 
   [RelayCommand]
   async Task Withdraw()
   {
-    Blockchain.Miner miner = MinerWithdrawal;
+    Blockchain.OwnerWallet owner = OwnerWithdrawal;
 
-    miner.ClearErrors();
+    owner.ClearErrors();
 
     try
     {
       await SendRequest(MethodWithdrawal, new Dictionary<string, object>
       {
-        ["address"] = miner.AddressWithdrawal,
-        ["fee"] = miner.FeeWithdrawal
+        ["address"] = owner.AddressWithdrawal,
+        ["fee"] = owner.FeeWithdrawal
       });
 
-      MinerWithdrawal = null;
+      OwnerWithdrawal = null;
     }
     catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or InvalidOperationException)
     {
-      if (!miner.MarkErrors(exception))
-        miner.ErrorWithdrawal = exception.Message;
+      if (!owner.MarkErrors(exception))
+        owner.ErrorWithdrawal = exception.Message;
     }
   }
 

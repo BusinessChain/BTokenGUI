@@ -15,6 +15,9 @@ public partial class Blockchain : ObservableObject
   [ObservableProperty]
   public partial Miner MinerBlockchain { get; set; }
 
+  [ObservableProperty]
+  public partial Anchorer AnchorerBlockchain { get; set; }
+
 
   public Blockchain(string name)
   {
@@ -41,6 +44,12 @@ public partial class Blockchain : ObservableObject
     {
       MinerBlockchain ??= new Miner();
       MinerBlockchain.Update(snapshotMiner);
+    }
+
+    if (snapshotState.TryGetProperty("anchorer", out JsonElement snapshotAnchorer))
+    {
+      AnchorerBlockchain ??= new Anchorer();
+      AnchorerBlockchain.Update(snapshotAnchorer);
     }
   }
 

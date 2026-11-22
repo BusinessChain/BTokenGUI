@@ -4,19 +4,19 @@
              xmlns:models="using:BTokenGUI.Models"
              x:Class="BTokenGUI.Views.WithdrawalView"
              x:DataType="vm:MainViewModel">
-  <Grid IsVisible="{Binding MinerWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}">
+  <Grid IsVisible="{Binding OwnerWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}">
     <Border Background="#99000000" />
     <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
       <StackPanel Spacing="12" Margin="16">
         <SelectableTextBlock Text="{Binding TitleWithdrawal}" FontWeight="Bold" />
         <SelectableTextBlock Text="{Binding BalanceWithdrawal}" TextWrapping="Wrap" />
-        <Grid DataContext="{Binding MinerWithdrawal}" x:DataType="models:Blockchain+Miner" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
+        <Grid DataContext="{Binding OwnerWithdrawal}" x:DataType="models:Blockchain+OwnerWallet" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="6" ColumnSpacing="12">
           <SelectableTextBlock Grid.Row="0" Grid.Column="0" Text="Address" VerticalAlignment="Center" />
           <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AddressWithdrawal}" />
           <SelectableTextBlock Grid.Row="1" Grid.Column="0" Text="Fee in satoshis" VerticalAlignment="Center" />
           <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding FeeWithdrawal}" ShowButtonSpinner="False" FormatString="0" ParsingNumberStyle="Integer" Minimum="0" />
         </Grid>
-        <SelectableTextBlock Text="{Binding MinerWithdrawal.ErrorWithdrawal}" IsVisible="{Binding MinerWithdrawal.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
+        <SelectableTextBlock Text="{Binding OwnerWithdrawal.ErrorWithdrawal}" IsVisible="{Binding OwnerWithdrawal.ErrorWithdrawal, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Right">
           <Button Content="Send" Command="{Binding WithdrawCommand}" />
           <Button Content="Cancel" Command="{Binding CancelWithdrawalCommand}" />
