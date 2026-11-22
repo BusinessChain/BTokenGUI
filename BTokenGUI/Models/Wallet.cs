@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using BTokenSigner;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -171,6 +172,14 @@ public partial class Wallet : ObservableObject
     {
       StateBackupLast = exception.Message;
     }
+  }
+
+  internal async Task UpdateBalance()
+  {
+    JsonElement balance = await Node.SendRequest("getBalanceAccount", new Dictionary<string, object> { ["address"] = Address }).ConfigureAwait(false);
+
+    Dispatcher.UIThread.Post(() =>
+      Balance = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString());
   }
 
   internal async Task ProcessTip(string hashTip, int heightTip)

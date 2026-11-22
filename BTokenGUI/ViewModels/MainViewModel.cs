@@ -73,10 +73,7 @@ public partial class MainViewModel : ObservableObject
           StatusConnection = "Connected to node";
         });
 
-        JsonElement balance = await Node.SendRequest("getBalanceAccount", new Dictionary<string, object> { ["address"] = Wallet.Address }).ConfigureAwait(false);
-
-        Dispatcher.UIThread.Post(() =>
-          Wallet.Balance = balance.ValueKind == JsonValueKind.Null ? "unknown while the accounts synchronize" : balance.GetInt64().ToString());
+        await Wallet.UpdateBalance().ConfigureAwait(false);
 
         JsonElement headerTipBToken = blockchainsJSON.GetProperty("BToken").GetProperty("headers")[0];
 
