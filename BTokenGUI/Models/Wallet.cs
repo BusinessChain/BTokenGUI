@@ -50,21 +50,26 @@ public partial class Wallet : ObservableObject
 
   public Wallet()
   {
-    string directoryWallet = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WalletGUI");
+    string directoryWallet = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BToken", "WalletGUI");
     PathKey = Path.Combine(directoryWallet, "key");
 
     Directory.CreateDirectory(directoryWallet);
 
     if (!File.Exists(PathKey))
-      File.WriteAllText(PathKey, Crypto.GenerateKeyPrivate());
+      File.WriteAllText(PathKey, Crypto.GenerateKeyPrivate() + Environment.NewLine);
 
-    SetKeyPrivate(File.ReadAllText(PathKey).Trim());
+    SetKeyPrivate(LoadKeysPrivate().Last());
 
     LiteDatabase liteDatabase = new(Path.Combine(directoryWallet, "wallet.db"));
     AppDomain.CurrentDomain.ProcessExit += (s, e) => { liteDatabase.Dispose(); };
 
     TXsStored = liteDatabase.GetCollection<BsonDocument>("transactions");
     StateStored = liteDatabase.GetCollection<BsonDocument>("state");
+  }
+
+  List<string> LoadKeysPrivate()
+  {
+    return File.ReadAllLines(PathKey).Select(l => l.Trim()).Where(l => l.Length > 0).ToList();
   }
 
   void SetKeyPrivate(string keyPrivate)
@@ -154,13 +159,11 @@ public partial class Wallet : ObservableObject
         return;
       }
 
-      if (Balance != "0" || TXsStored.Count() > 0)
-      {
-        StateBackupLast = $"Imported the Miner's keys from {nameFile}, but kept the Wallet's key, because it has a balance or transactions.";
-        return;
-      }
+      List<string> keysPrivate = LoadKeysPrivate();
+      keysPrivate.Remove(keyWallet);
+      keysPrivate.Add(keyWallet);
 
-      File.WriteAllText(PathKey, keyWallet);
+      File.WriteAllLines(PathKey, keysPrivate);
       SetKeyPrivate(keyWallet);
 
       StateStored.Upsert(new BsonDocument { ["_id"] = ID_HEIGHT_SCANNED_LAST, [NAME_FIELD_VALUE] = 0 });
