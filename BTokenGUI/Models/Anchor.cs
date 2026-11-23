@@ -27,6 +27,9 @@ public partial class Blockchain
     [ObservableProperty]
     public partial bool IsMissed { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsRotten { get; set; }
+
 
     public Anchor(JsonElement anchor)
     {
@@ -39,7 +42,7 @@ public partial class Blockchain
     static List<Block.Field> ParseFields(JsonElement element)
     {
       return element.EnumerateObject()
-        .Where(property => property.Value.ValueKind != JsonValueKind.Array && property.Name is not ("isMissed" or "heightConfirmed"))
+        .Where(property => property.Value.ValueKind != JsonValueKind.Array && property.Name is not ("isMissed" or "isWinner" or "heightConfirmed"))
         .Select(property => new Block.Field(property.Name, property.Value.ToString()))
         .ToList();
     }
@@ -48,6 +51,7 @@ public partial class Blockchain
     {
       IsMissed = anchor.GetProperty("isMissed").GetBoolean();
       HeightConfirmed = anchor.GetProperty("heightConfirmed").GetInt32();
+      IsRotten = IsMissed || HeightConfirmed > 0 && !anchor.GetProperty("isWinner").GetBoolean();
     }
   }
 }
