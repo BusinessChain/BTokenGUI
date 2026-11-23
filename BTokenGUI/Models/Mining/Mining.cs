@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -36,8 +34,6 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   public Wallet WalletBToken { get; }
 
-  public ObservableCollection<Anchor> Anchors { get; } = [];
-
   [ObservableProperty]
   public partial decimal? Budget { get; set; }
 
@@ -67,6 +63,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   [ObservableProperty]
   public partial bool IsWithdrawalAutoChosen { get; set; }
+
   [ObservableProperty]
   public partial decimal? LevelWithdrawalAuto { get; set; }
 
@@ -119,26 +116,6 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   {
     WalletBitcoin.Funds = snapshotAnchorer.GetProperty("funds").GetInt64();
     WalletBitcoin.Address = snapshotAnchorer.GetProperty("addressFunding").GetString();
-
-    JsonElement anchors = snapshotAnchorer.GetProperty("anchors");
-    HashSet<string> hashes = anchors.EnumerateArray().Select(anchor => anchor.GetProperty("hash").GetString()).ToHashSet();
-
-    foreach (Anchor anchor in Anchors.Where(anchor => !hashes.Contains(anchor.Hash)).ToList())
-      Anchors.Remove(anchor);
-
-    foreach (JsonElement anchorJSON in anchors.EnumerateArray())
-    {
-      string hash = anchorJSON.GetProperty("hash").GetString();
-      Anchor anchor = Anchors.FirstOrDefault(a => a.Hash == hash);
-
-      if (anchor == null)
-      {
-        anchor = new Anchor(anchorJSON);
-        Anchors.Add(anchor);
-      }
-
-      anchor.Update(anchorJSON);
-    }
 
     IsMining = snapshotMiner.GetProperty("isMining").GetBoolean();
     StateMiner = snapshotMiner.GetProperty("stateMiner").GetString();
@@ -226,6 +203,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   {
     WalletWithdrawal = null;
   }
+
   [RelayCommand]
   async Task Withdraw()
   {

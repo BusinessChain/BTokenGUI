@@ -36,7 +36,7 @@
         <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource TemplateField}" Margin="8" />
       </Border>
     </DataTemplate>
-    <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Mining+Anchor">
+    <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
       <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsMissed}">
         <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="#FFB347" Stroke="#FFB347" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
           <Path.Effect>
@@ -119,12 +119,7 @@
           <ContentControl Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
           <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
-            <ItemsControl ItemsSource="{Binding Mining.Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-              <ItemsControl.Styles>
-                <Style Selector="WrapPanel > ContentPresenter" x:DataType="models:Mining+Anchor">
-                  <Setter Property="IsVisible" Value="{Binding !HeightConfirmed}" />
-                </Style>
-              </ItemsControl.Styles>
+            <ItemsControl ItemsSource="{Binding BlockchainBitcoin.Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                   <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />

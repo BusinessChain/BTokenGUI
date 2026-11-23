@@ -11,6 +11,7 @@ public partial class Blockchain : ObservableObject
 {
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
+  public ObservableCollection<Anchor> Anchors { get; } = [];
   bool IsTipLast;
 
 
@@ -22,6 +23,11 @@ public partial class Blockchain : ObservableObject
 
   public void Update(JsonElement snapshotState)
   {
+    Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor = Anchors
+      .Select(anchor => (anchor, Anchors))
+      .Concat(Blocks.SelectMany(block => block.Anchors.Select(anchor => (anchor, block.Anchors))))
+      .ToDictionary(placeAnchor => placeAnchor.anchor.Hash);
+
     List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().ToList();
 
     if (IsTipLast)
@@ -38,20 +44,40 @@ public partial class Blockchain : ObservableObject
       if (!Blocks.Any(block => block.Hash == hash))
         Blocks.Insert(index, new Block(blocksJSON[index]));
     }
+
+    if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
+      PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
   }
 
-  public void UpdateAnchors(IEnumerable<Mining.Anchor> anchors)
+  void PlaceAnchors(JsonElement anchorsJSON, Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor)
   {
-    foreach (Block block in Blocks)
+    foreach (JsonElement anchorJSON in anchorsJSON.EnumerateArray())
     {
-      List<Mining.Anchor> anchorsBlock = anchors.Where(anchor => anchor.HeightConfirmed == block.Height).ToList();
+      string hash = anchorJSON.GetProperty("hash").GetString();
 
-      foreach (Mining.Anchor anchor in block.Anchors.Except(anchorsBlock).ToList())
-        block.Anchors.Remove(anchor);
+      Anchor anchor;
+      ObservableCollection<Anchor> place;
 
-      foreach (Mining.Anchor anchor in anchorsBlock.Except(block.Anchors).ToList())
-        block.Anchors.Add(anchor);
+      if (placesAnchor.Remove(hash, out (Anchor Anchor, ObservableCollection<Anchor> Place) placeAnchor))
+        (anchor, place) = placeAnchor;
+      else
+        (anchor, place) = (new Anchor(anchorJSON), null);
+
+      anchor.Update(anchorJSON);
+
+      ObservableCollection<Anchor> destination = anchor.HeightConfirmed == 0
+        ? Anchors
+        : Blocks.FirstOrDefault(block => block.Height == anchor.HeightConfirmed)?.Anchors;
+
+      if (destination == place)
+        continue;
+
+      place?.Remove(anchor);
+      destination?.Add(anchor);
     }
+
+    foreach ((Anchor anchor, ObservableCollection<Anchor> place) in placesAnchor.Values)
+      place.Remove(anchor);
   }
 
   public class Block
@@ -60,7 +86,7 @@ public partial class Blockchain : ObservableObject
     public int Height { get; }
     public string HashShort { get; }
     public List<Field> Fields { get; }
-    public ObservableCollection<Mining.Anchor> Anchors { get; } = [];
+    public ObservableCollection<Anchor> Anchors { get; } = [];
 
 
     public Block(JsonElement block)
