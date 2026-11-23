@@ -17,14 +17,16 @@ public partial class Blockchain : ObservableObject
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
   bool IsPlaced;
+  Blockchain BlockchainParent;
 
 
-  public Blockchain(string name, bool isTipLast, bool isTXPoolVisible, bool isBlocksMinedPoolVisible)
+  public Blockchain(string name, bool isTipLast, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent)
   {
     Name = name;
     IsTipLast = isTipLast;
     IsTXPoolVisible = isTXPoolVisible;
     IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
+    BlockchainParent = blockchainParent;
   }
 
   public void Update(JsonElement snapshotState)
@@ -44,6 +46,18 @@ public partial class Blockchain : ObservableObject
       : [];
 
     PlaceBlocks(blocksJSON, blocksMinedJSON);
+
+    if (BlockchainParent != null)
+    {
+      Dictionary<string, int> heightsParent = [];
+
+      foreach (Block blockParent in BlockchainParent.Blocks)
+        foreach (string hashBlockReferenced in blockParent.HashesAnchorWinner)
+          heightsParent[hashBlockReferenced] = blockParent.Height;
+
+      foreach (Block block in Blocks)
+        block.HeightParent = heightsParent.TryGetValue(block.Hash, out int heightParent) ? heightParent : null;
+    }
 
     if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);

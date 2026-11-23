@@ -23,6 +23,9 @@ public partial class Blockchain
     public HashSet<string> HashesAnchorWinner { get; }
 
     [ObservableProperty]
+    public partial int? HeightParent { get; set; }
+
+    [ObservableProperty]
     public partial List<TX> TXs { get; set; }
 
     string NameBlockchain;

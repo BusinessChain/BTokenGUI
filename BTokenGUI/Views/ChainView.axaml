@@ -107,16 +107,22 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockDetails" x:DataType="models:Blockchain+Block">
       <StackPanel Spacing="12">
-        <ItemsControl ItemsSource="{Binding Fields}">
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="models:Blockchain+Block+Field">
-              <Grid ColumnDefinitions="140,*" Margin="0,2">
-                <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
-                <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
-              </Grid>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <StackPanel>
+          <ItemsControl ItemsSource="{Binding Fields}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:Blockchain+Block+Field">
+                <Grid ColumnDefinitions="140,*" Margin="0,2">
+                  <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
+                  <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <Grid ColumnDefinitions="140,*" Margin="0,2" IsVisible="{Binding HeightParent, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <SelectableTextBlock Grid.Column="0" Text="heightParent" />
+            <SelectableTextBlock Grid.Column="1" Text="{Binding HeightParent}" />
+          </Grid>
+        </StackPanel>
         <SelectableTextBlock Text="TXs" FontWeight="SemiBold" />
         <ItemsControl ItemsSource="{Binding TXs}">
           <ItemsControl.ItemTemplate>
