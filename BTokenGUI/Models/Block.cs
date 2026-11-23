@@ -39,6 +39,9 @@ public partial class Blockchain
 
       foreach (JsonProperty property in block.EnumerateObject())
       {
+        if (property.Value.ValueKind == JsonValueKind.Array)
+          continue;
+
         Fields.Add(new Field(property.Name, property.Value.ToString()));
 
         if (property.Name == "unixTimeSeconds")
