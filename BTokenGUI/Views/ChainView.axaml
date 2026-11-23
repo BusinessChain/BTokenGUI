@@ -13,6 +13,21 @@
     </Style>
     <Style Selector="Border.vessel">
       <Setter Property="DockPanel.Dock" Value="Top" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
+      <Setter Property="BorderThickness" Value="2" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="MinWidth" Value="160" />
+      <Setter Property="MinHeight" Value="44" />
+    </Style>
+    <Style Selector="Border.vessel > ItemsControl">
+      <Setter Property="Margin" Value="6" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+        </ItemsPanelTemplate>
+      </Setter>
     </Style>
     <Style Selector="DockPanel.tipLast > Border.vessel">
       <Setter Property="DockPanel.Dock" Value="Bottom" />
@@ -67,18 +82,22 @@
         </Button>
       </Panel>
     </DataTemplate>
+    <DataTemplate x:Key="TemplateBlockMined" x:DataType="models:Blockchain+Block">
+      <Panel Width="28" Height="28" Margin="2">
+        <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+        <Path Data="M2,8 L14,14 L14,26 L2,20 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+        <Path Data="M14,14 L26,8 L26,20 L14,26 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+      </Panel>
+    </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
       <Border Classes="Panel">
         <DockPanel Classes.tipLast="{Binding IsTipLast}" Margin="10">
           <SelectableTextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="SemiBold" Margin="0,0,0,6" />
-          <Border Classes="Panel vessel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
-            <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-            </ItemsControl>
+          <Border Classes="Panel vessel" IsVisible="{Binding IsTXPoolVisible}">
+            <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+          </Border>
+          <Border Classes="Panel vessel" IsVisible="{Binding IsBlocksMinedPoolVisible}">
+            <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
           </Border>
           <ItemsControl ItemsSource="{Binding Blocks}">
             <ItemsControl.ItemTemplate>

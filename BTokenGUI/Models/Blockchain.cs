@@ -13,14 +13,19 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Anchor> Flights { get; } = [];
+  public ObservableCollection<Block> BlocksMined { get; } = [];
   public bool IsTipLast { get; }
+  public bool IsTXPoolVisible { get; }
+  public bool IsBlocksMinedPoolVisible { get; }
   bool IsAnchorsPlaced;
 
 
-  public Blockchain(string name, bool isTipLast)
+  public Blockchain(string name, bool isTipLast, bool isTXPoolVisible, bool isBlocksMinedPoolVisible)
   {
     Name = name;
     IsTipLast = isTipLast;
+    IsTXPoolVisible = isTXPoolVisible;
+    IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
   }
 
   public void Update(JsonElement snapshotState)
@@ -34,21 +39,30 @@ public partial class Blockchain : ObservableObject
 
     if (IsTipLast)
       blocksJSON.Reverse();
+
+    SyncBlocks(Blocks, blocksJSON);
+
+    if (snapshotState.TryGetProperty("blocksAwaitingAnchor", out JsonElement blocksAwaitingAnchor))
+      SyncBlocks(BlocksMined, blocksAwaitingAnchor.EnumerateArray().ToList());
+
+    if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
+      PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
+  }
+
+  static void SyncBlocks(ObservableCollection<Block> blocks, List<JsonElement> blocksJSON)
+  {
     HashSet<string> hashes = blocksJSON.Select(block => block.GetProperty("hash").GetString()).ToHashSet();
 
-    foreach (Block block in Blocks.Where(block => !hashes.Contains(block.Hash)).ToList())
-      Blocks.Remove(block);
+    foreach (Block block in blocks.Where(block => !hashes.Contains(block.Hash)).ToList())
+      blocks.Remove(block);
 
     for (int index = 0; index < blocksJSON.Count; index++)
     {
       string hash = blocksJSON[index].GetProperty("hash").GetString();
 
-      if (!Blocks.Any(block => block.Hash == hash))
-        Blocks.Insert(index, new Block(blocksJSON[index]));
+      if (!blocks.Any(block => block.Hash == hash))
+        blocks.Insert(index, new Block(blocksJSON[index]));
     }
-
-    if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
-      PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
   }
 
   void PlaceAnchors(JsonElement anchorsJSON, Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor)
