@@ -40,10 +40,11 @@ public partial class Blockchain : ObservableObject
     if (IsTipLast)
       blocksJSON.Reverse();
 
-    SyncBlocks(Blocks, blocksJSON);
+    List<JsonElement> blocksMinedJSON = snapshotState.TryGetProperty("blocksAwaitingAnchor", out JsonElement blocksAwaitingAnchor)
+      ? blocksAwaitingAnchor.EnumerateArray().ToList()
+      : [];
 
-    if (snapshotState.TryGetProperty("blocksAwaitingAnchor", out JsonElement blocksAwaitingAnchor))
-      SyncBlocks(BlocksMined, blocksAwaitingAnchor.EnumerateArray().ToList());
+    PlaceBlocks(blocksJSON, blocksMinedJSON);
 
     if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
@@ -51,20 +52,44 @@ public partial class Blockchain : ObservableObject
     IsPlaced = true;
   }
 
-  static void SyncBlocks(ObservableCollection<Block> blocks, List<JsonElement> blocksJSON)
+  void PlaceBlocks(List<JsonElement> headersJSON, List<JsonElement> blocksMinedJSON)
   {
-    HashSet<string> hashes = blocksJSON.Select(block => block.GetProperty("hash").GetString()).ToHashSet();
+    Dictionary<string, (Block Block, ObservableCollection<Block> Place)> placesBlock = Blocks
+      .Select(block => (block, Blocks))
+      .Concat(BlocksMined.Select(block => (block, BlocksMined)))
+      .ToDictionary(placeBlock => placeBlock.block.Hash);
 
-    foreach (Block block in blocks.Where(block => !hashes.Contains(block.Hash)).ToList())
-      blocks.Remove(block);
+    (List<JsonElement> BlocksJSON, ObservableCollection<Block> Destination)[] destinationsBlocks = [(headersJSON, Blocks), (blocksMinedJSON, BlocksMined)];
 
-    for (int index = 0; index < blocksJSON.Count; index++)
-    {
-      string hash = blocksJSON[index].GetProperty("hash").GetString();
+    Dictionary<string, ObservableCollection<Block>> destinationsBlock = [];
 
-      if (!blocks.Any(block => block.Hash == hash))
-        blocks.Insert(index, new Block(blocksJSON[index]));
-    }
+    foreach ((List<JsonElement> blocksJSON, ObservableCollection<Block> destination) in destinationsBlocks)
+      foreach (JsonElement blockJSON in blocksJSON)
+        destinationsBlock.TryAdd(blockJSON.GetProperty("hash").GetString(), destination);
+
+    foreach ((Block block, ObservableCollection<Block> place) in placesBlock.Values)
+      if (!destinationsBlock.TryGetValue(block.Hash, out ObservableCollection<Block> destination) || destination != place && !block.IsFlying)
+        place.Remove(block);
+
+    foreach ((List<JsonElement> blocksJSON, ObservableCollection<Block> destination) in destinationsBlocks)
+      for (int index = 0; index < blocksJSON.Count; index++)
+      {
+        string hash = blocksJSON[index].GetProperty("hash").GetString();
+        int indexInsert = Math.Min(index, destination.Count);
+
+        if (destinationsBlock[hash] != destination)
+          continue;
+
+        if (placesBlock.TryGetValue(hash, out (Block Block, ObservableCollection<Block> Place) placeBlock))
+        {
+          if (!placeBlock.Block.IsFlying && placeBlock.Place != destination)
+            Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
+        }
+        else if (destination == BlocksMined)
+          Move(new Block(blocksJSON[index]), null, destination, indexInsert);
+        else
+          destination.Insert(indexInsert, new Block(blocksJSON[index]));
+      }
   }
 
   void PlaceAnchors(JsonElement anchorsJSON, Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor)

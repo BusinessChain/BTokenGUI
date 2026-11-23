@@ -24,6 +24,7 @@ public partial class ChainView : UserControl
     InitializeComponent();
 
     ItemsFlights.ContainerPrepared += StartFlight;
+    ItemsFlightsBToken.ContainerPrepared += StartFlight;
   }
 
   async void StartFlight(object sender, ContainerPreparedEventArgs e)

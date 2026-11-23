@@ -32,10 +32,18 @@
     <Style Selector="DockPanel.tipLast > Border.vessel">
       <Setter Property="DockPanel.Dock" Value="Bottom" />
     </Style>
-    <Style Selector="Panel.flying">
+    <Style Selector=":is(Control).flying">
       <Setter Property="Opacity" Value="0" />
     </Style>
-    <Style Selector="ItemsControl.flights Panel.flying">
+    <Style Selector="ItemsControl.flights">
+      <Setter Property="IsHitTestVisible" Value="False" />
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <Canvas />
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="ItemsControl.flights :is(Control).flying">
       <Setter Property="Opacity" Value="1" />
     </Style>
     <Style Selector="Panel.glowing > Path.glow">
@@ -89,7 +97,7 @@
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockMined" x:DataType="models:Blockchain+Block">
-      <Panel Width="28" Height="28" Margin="2">
+      <Panel Width="28" Height="28" Margin="2" Classes.flying="{Binding IsFlying}">
         <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         <Path Data="M2,8 L14,14 L14,26 L2,20 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         <Path Data="M14,14 L26,8 L26,20 L14,26 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
@@ -108,7 +116,7 @@
           <ItemsControl ItemsSource="{Binding Blocks}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:Blockchain+Block">
-                <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6">
+                <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6" Classes.flying="{Binding IsFlying}">
                   <Expander.Header>
                     <StackPanel Orientation="Horizontal" Spacing="12">
                       <SelectableTextBlock Text="{Binding Height}" FontWeight="SemiBold" />
@@ -193,13 +201,8 @@
             <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
             <ContentControl Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           </StackPanel>
-          <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" ItemTemplate="{StaticResource TemplateAnchor}" IsHitTestVisible="False">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <Canvas />
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-          </ItemsControl>
+          <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" ItemTemplate="{StaticResource TemplateAnchor}" />
+          <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" ItemTemplate="{StaticResource TemplateBlockMined}" />
         </Panel>
       </ScrollViewer>
     </DockPanel>
