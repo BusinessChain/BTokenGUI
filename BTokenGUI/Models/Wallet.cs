@@ -45,6 +45,7 @@ public partial class Wallet : ObservableObject
   byte[] KeyPublic;
   ILiteCollection<BsonDocument> TXsStored;
   ILiteCollection<BsonDocument> StateStored;
+  ILiteCollection<BsonDocument> HashesBlockScanned;
   string HashTipLast;
 
   const string ID_HEIGHT_SCANNED_LAST = "heightScannedLast";
@@ -68,6 +69,7 @@ public partial class Wallet : ObservableObject
 
     TXsStored = liteDatabase.GetCollection<BsonDocument>("transactions");
     StateStored = liteDatabase.GetCollection<BsonDocument>("state");
+    HashesBlockScanned = liteDatabase.GetCollection<BsonDocument>("hashesBlockScanned");
   }
 
   List<string> LoadKeysPrivate()
@@ -209,6 +211,16 @@ public partial class Wallet : ObservableObject
       JsonElement blockTXs = await Node.SendRequest("getTXsAccount", new Dictionary<string, object> { ["address"] = Address, ["height"] = height }).ConfigureAwait(false);
 
       if (blockTXs.ValueKind != JsonValueKind.Null)
+      {
+        if (HashesBlockScanned.FindById(height - 1) is BsonDocument documentHashPrevious
+          && documentHashPrevious[NAME_FIELD_VALUE].AsString != blockTXs.GetProperty("hashPrevious").GetString())
+        {
+          height = await FindHeightFork(height - 1).ConfigureAwait(false);
+          HashesBlockScanned.DeleteMany(Query.GT("_id", height));
+          heightScannedLast = height;
+          continue;
+        }
+
         foreach (JsonElement tX in blockTXs.GetProperty("tXs").EnumerateArray())
         {
           BsonDocument document = TXsStored.FindById(tX.GetProperty("hash").GetString()) ?? new BsonDocument
@@ -226,6 +238,9 @@ public partial class Wallet : ObservableObject
           document["height"] = height;
           TXsStored.Upsert(document);
         }
+
+        HashesBlockScanned.Upsert(new BsonDocument { ["_id"] = height, [NAME_FIELD_VALUE] = blockTXs.GetProperty("hashBlock").GetString() });
+      }
 
       heightScannedLast = height;
     }
@@ -246,6 +261,21 @@ public partial class Wallet : ObservableObject
         { }
 
     HashTipLast = hashTip;
+  }
+
+  async Task<int> FindHeightFork(int height)
+  {
+    while (HashesBlockScanned.FindById(height) is BsonDocument documentHash)
+    {
+      JsonElement blockTXs = await Node.SendRequest("getTXsAccount", new Dictionary<string, object> { ["address"] = Address, ["height"] = height }).ConfigureAwait(false);
+
+      if (blockTXs.ValueKind == JsonValueKind.Null || documentHash[NAME_FIELD_VALUE].AsString == blockTXs.GetProperty("hashBlock").GetString())
+        break;
+
+      height--;
+    }
+
+    return height;
   }
 
   static async Task SubmitPayment(string tXUnsigned, string signature)
