@@ -31,11 +31,14 @@ public partial class Blockchain
     bool IsLoadingTXs;
 
 
-    public Block(JsonElement block, string nameBlockchain)
+    public Block(JsonElement block, string nameBlockchain, bool isPaired)
     {
       NameBlockchain = nameBlockchain;
       Hash = block.GetProperty("hash").GetString();
-      BrushPair = CreateBrushPair(Hash);
+
+      if (isPaired)
+        BrushPair = CreateBrushPair(Hash);
+
       Height = block.GetProperty("height").GetInt32();
       HashesAnchorWinner = block.GetProperty("anchorsWinner").EnumerateArray()
         .Select(anchor => anchor.GetProperty("hashBlockReferenced").GetString())

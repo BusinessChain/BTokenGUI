@@ -106,9 +106,9 @@ public partial class Blockchain : ObservableObject
               Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
           }
           else if (destination == BlocksMined)
-            Move(new Block(blockJSON, Name), null, destination, indexInsert);
+            Move(new Block(blockJSON, Name, BlockchainParent != null), null, destination, indexInsert);
           else
-            destination.Insert(indexInsert, new Block(blockJSON, Name));
+            destination.Insert(indexInsert, new Block(blockJSON, Name, BlockchainParent != null));
         }
 
         int indexBlock = destination.ToList().FindIndex(block => block.Hash == hash);
