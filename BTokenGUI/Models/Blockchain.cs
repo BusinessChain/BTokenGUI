@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BTokenGUI.Models;
@@ -93,9 +95,9 @@ public partial class Blockchain : ObservableObject
               Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
           }
           else if (destination == BlocksMined)
-            Move(new Block(blockJSON), null, destination, indexInsert);
+            Move(new Block(blockJSON, Name), null, destination, indexInsert);
           else
-            destination.Insert(indexInsert, new Block(blockJSON));
+            destination.Insert(indexInsert, new Block(blockJSON, Name));
         }
 
         int indexBlock = destination.ToList().FindIndex(block => block.Hash == hash);
@@ -176,9 +178,16 @@ public partial class Blockchain : ObservableObject
     public List<Field> Fields { get; }
     public ObservableCollection<Anchor> Anchors { get; } = [];
 
+    [ObservableProperty]
+    public partial List<TX> TXs { get; set; }
 
-    public Block(JsonElement block)
+    string NameBlockchain;
+    bool IsLoadingTXs;
+
+
+    public Block(JsonElement block, string nameBlockchain)
     {
+      NameBlockchain = nameBlockchain;
       Hash = block.GetProperty("hash").GetString();
       BrushPair = CreateBrushPair(Hash);
       Height = block.GetProperty("height").GetInt32();
@@ -191,6 +200,32 @@ public partial class Blockchain : ObservableObject
 
         if (property.Name == "unixTimeSeconds")
           Fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64()).ToLocalTime().ToString("G")));
+      }
+    }
+
+    public async Task LoadTXs()
+    {
+      if (TXs != null || IsLoadingTXs)
+        return;
+
+      IsLoadingTXs = true;
+
+      try
+      {
+        JsonElement tXsJSON = await Node.SendRequest("getTXsBlock", new Dictionary<string, object>
+        {
+          ["blockchain"] = NameBlockchain,
+          ["hash"] = Hash
+        });
+
+        if (tXsJSON.ValueKind == JsonValueKind.Array)
+          TXs = tXsJSON.EnumerateArray().Select(tX => new TX(tX)).ToList();
+      }
+      catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or RPCException)
+      { }
+      finally
+      {
+        IsLoadingTXs = false;
       }
     }
 

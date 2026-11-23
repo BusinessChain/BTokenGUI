@@ -96,6 +96,39 @@
         <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource TemplateField}" Margin="8" />
       </Border>
     </DataTemplate>
+    <DataTemplate x:Key="TemplateTX" x:DataType="models:Blockchain+TX">
+      <StackPanel Spacing="12">
+        <ItemsControl ItemsSource="{Binding Fields}" ItemTemplate="{StaticResource TemplateField}" />
+        <SelectableTextBlock Text="Inputs" FontWeight="SemiBold" />
+        <ItemsControl ItemsSource="{Binding Inputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+        <SelectableTextBlock Text="Outputs" FontWeight="SemiBold" />
+        <ItemsControl ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+      </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="TemplateBlockDetails" x:DataType="models:Blockchain+Block">
+      <StackPanel Spacing="12">
+        <ItemsControl ItemsSource="{Binding Fields}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Blockchain+Block+Field">
+              <Grid ColumnDefinitions="140,*" Margin="0,2">
+                <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
+                <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <SelectableTextBlock Text="TXs" FontWeight="SemiBold" />
+        <ItemsControl ItemsSource="{Binding TXs}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Blockchain+TX">
+              <Border Classes="Panel" Margin="0,0,0,6">
+                <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateTX}" Margin="8" />
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
       <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsRotten}" Classes.flying="{Binding IsFlying}">
         <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="{Binding BrushPair}" Stroke="{Binding BrushPair}" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
@@ -109,11 +142,7 @@
               <StackPanel Spacing="12" MaxWidth="420">
                 <SelectableTextBlock Text="Anchor TX" FontWeight="Bold" />
                 <SelectableTextBlock Text="This anchor missed its Bitcoin block." IsVisible="{Binding IsMissed}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
-                <ItemsControl ItemsSource="{Binding Fields}" ItemTemplate="{StaticResource TemplateField}" />
-                <SelectableTextBlock Text="Inputs" FontWeight="SemiBold" />
-                <ItemsControl ItemsSource="{Binding Inputs}" ItemTemplate="{StaticResource TemplateEntry}" />
-                <SelectableTextBlock Text="Outputs" FontWeight="SemiBold" />
-                <ItemsControl ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+                <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
               </StackPanel>
             </Flyout>
           </Button.Flyout>
@@ -131,9 +160,23 @@
             <BlurEffect Radius="8" />
           </Path.Effect>
         </Path>
-        <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{Binding BrushPair}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
-        <Path Data="M2,8 L14,14 L14,26 L2,20 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
-        <Path Data="M14,14 L26,8 L26,20 L14,26 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+        <Button Padding="0" Background="Transparent" BorderThickness="0">
+          <Button.Flyout>
+            <Flyout Opening="LoadTXsFlyout">
+              <ScrollViewer MaxHeight="600">
+                <StackPanel Spacing="12" MaxWidth="420">
+                  <SelectableTextBlock Text="Mined block" FontWeight="Bold" />
+                  <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
+                </StackPanel>
+              </ScrollViewer>
+            </Flyout>
+          </Button.Flyout>
+          <Panel Width="28" Height="28">
+            <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{Binding BrushPair}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+            <Path Data="M2,8 L14,14 L14,26 L2,20 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+            <Path Data="M14,14 L26,8 L26,20 L14,26 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+          </Panel>
+        </Button>
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
@@ -149,7 +192,7 @@
           <ItemsControl ItemsSource="{Binding Blocks}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:Blockchain+Block">
-                <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6" Classes.flying="{Binding IsFlying}">
+                <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6" Classes.flying="{Binding IsFlying}" Expanding="LoadTXsExpander">
                   <Expander.Header>
                     <StackPanel Orientation="Horizontal" Spacing="12">
                       <SelectableTextBlock Text="{Binding Height}" FontWeight="SemiBold" />
@@ -163,16 +206,7 @@
                       </ItemsControl>
                     </StackPanel>
                   </Expander.Header>
-                  <ItemsControl ItemsSource="{Binding Fields}">
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate x:DataType="models:Blockchain+Block+Field">
-                        <Grid ColumnDefinitions="140,*" Margin="0,2">
-                          <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
-                          <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
-                        </Grid>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
+                  <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
                 </Expander>
               </DataTemplate>
             </ItemsControl.ItemTemplate>
