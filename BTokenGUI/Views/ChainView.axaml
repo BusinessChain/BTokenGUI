@@ -147,7 +147,7 @@
             <Flyout>
               <StackPanel Spacing="12" MaxWidth="420">
                 <SelectableTextBlock Text="Anchor TX" FontWeight="Bold" />
-                <SelectableTextBlock Text="{Binding ReasonForNotGlowing}" IsVisible="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
+                <SelectableTextBlock Text="{Binding ReasonForNotGlowing}" IsVisible="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="#AC7045" TextWrapping="Wrap" />
                 <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
               </StackPanel>
             </Flyout>
@@ -198,22 +198,42 @@
           <ItemsControl ItemsSource="{Binding Blocks}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:Blockchain+Block">
-                <Expander HorizontalAlignment="Stretch" Margin="0,0,0,6" Classes.flying="{Binding IsFlying}" Expanding="LoadTXsExpander">
-                  <Expander.Header>
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                      <SelectableTextBlock Text="{Binding Height}" FontWeight="SemiBold" />
-                      <SelectableTextBlock Text="{Binding HashShort}" />
-                      <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" VerticalAlignment="Center">
-                        <ItemsControl.ItemsPanel>
-                          <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                          </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                      </ItemsControl>
-                    </StackPanel>
-                  </Expander.Header>
-                  <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
-                </Expander>
+                <Panel Width="176" Height="72" Margin="0,0,0,6" HorizontalAlignment="Center" Classes.flying="{Binding IsFlying}">
+                  <Button Padding="0" Background="Transparent" BorderThickness="0">
+                    <Button.Flyout>
+                      <Flyout Opening="LoadTXsFlyout">
+                        <ScrollViewer MaxHeight="600">
+                          <StackPanel Spacing="12" MaxWidth="420">
+                            <SelectableTextBlock Text="Block" FontWeight="Bold" />
+                            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
+                          </StackPanel>
+                        </ScrollViewer>
+                      </Flyout>
+                    </Button.Flyout>
+                    <Panel Width="176" Height="72">
+                      <Path Data="M1,19 L19,1 L175,1 L175,53 L157,71 L1,71 Z" Fill="{Binding BrushPair}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+                      <Path Data="M1,19 L157,19 L157,71 L1,71 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+                      <Path Data="M157,19 L175,1 L175,53 L157,71 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+                    </Panel>
+                  </Button>
+                  <TextBlock Text="{Binding Height}" Width="138" Margin="19,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center" FontSize="12" FontWeight="Bold" Foreground="White" IsHitTestVisible="False">
+                    <TextBlock.Effect>
+                      <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
+                    </TextBlock.Effect>
+                  </TextBlock>
+                  <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="156" Height="52" Margin="1,19,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <ItemsControl.ItemContainerTheme>
+                      <ControlTheme TargetType="ContentPresenter">
+                        <Setter Property="Margin" Value="-8,0" />
+                      </ControlTheme>
+                    </ItemsControl.ItemContainerTheme>
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                  </ItemsControl>
+                </Panel>
               </DataTemplate>
             </ItemsControl.ItemTemplate>
           </ItemsControl>

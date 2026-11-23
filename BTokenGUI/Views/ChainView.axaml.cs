@@ -6,7 +6,6 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
-using Avalonia.Interactivity;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -61,11 +60,6 @@ public partial class ChainView : UserControl
     }
 
     ((Blockchain)itemsFlights.DataContext).Land(good);
-  }
-
-  void LoadTXsExpander(object sender, CancelRoutedEventArgs e)
-  {
-    _ = ((Blockchain.Block)((Control)sender).DataContext).LoadTXs();
   }
 
   void LoadTXsFlyout(object sender, EventArgs e)

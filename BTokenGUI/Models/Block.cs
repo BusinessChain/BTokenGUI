@@ -17,7 +17,6 @@ public partial class Blockchain
     public partial bool IsExploding { get; set; }
 
     public int Height { get; }
-    public string HashShort { get; }
     public List<Field> Fields { get; }
     public ObservableCollection<Anchor> Anchors { get; } = [];
     public HashSet<string> HashesAnchorWinner { get; }
@@ -38,7 +37,6 @@ public partial class Blockchain
       Hash = block.GetProperty("hash").GetString();
       BrushPair = CreateBrushPair(Hash);
       Height = block.GetProperty("height").GetInt32();
-      HashShort = $"{Hash[..8]} ... {Hash[^8..]}";
       HashesAnchorWinner = block.GetProperty("anchorsWinner").EnumerateArray()
         .Select(anchor => anchor.GetProperty("hashBlockReferenced").GetString())
         .ToHashSet();
