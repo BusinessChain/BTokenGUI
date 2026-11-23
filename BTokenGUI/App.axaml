@@ -3,6 +3,10 @@
              x:Class="BTokenGUI.App"
              RequestedThemeVariant="Dark">
 
+  <Application.Resources>
+    <SolidColorBrush x:Key="BrushWindowBackground" Color="#090E1A" />
+  </Application.Resources>
+
   <Application.Styles>
     <FluentTheme>
       <FluentTheme.Palettes>

@@ -19,7 +19,7 @@ public partial class MainViewModel : ObservableObject
 
   public ObservableCollection<Network> Networks { get; } = [];
 
-  public Blockchain BlockchainBitcoin { get; } = new("Bitcoin", isTipLast: true, isTXPoolVisible: true, isBlocksMinedPoolVisible: false, blockchainParent: null);
+  public Blockchain BlockchainBitcoin { get; } = new("Bitcoin", isAboveMiner: true, isTXPoolVisible: true, isBlocksMinedPoolVisible: false, blockchainParent: null);
 
   public Blockchain BlockchainBToken { get; }
 
@@ -33,7 +33,7 @@ public partial class MainViewModel : ObservableObject
 
   public MainViewModel()
   {
-    BlockchainBToken = new("BToken", isTipLast: false, isTXPoolVisible: false, isBlocksMinedPoolVisible: true, blockchainParent: BlockchainBitcoin);
+    BlockchainBToken = new("BToken", isAboveMiner: false, isTXPoolVisible: false, isBlocksMinedPoolVisible: true, blockchainParent: BlockchainBitcoin);
 
     _ = PollNode();
   }

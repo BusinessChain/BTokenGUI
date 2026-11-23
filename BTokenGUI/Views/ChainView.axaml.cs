@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -17,6 +19,7 @@ public partial class ChainView : UserControl
 {
   const double OFFSET_CENTER_GEM = 16;
   const double SECONDS_FLIGHT = 0.8;
+  const double SECONDS_SLIDE = 0.5;
 
 
   public ChainView()
@@ -46,13 +49,10 @@ public partial class ChainView : UserControl
       && controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), itemsFlights) is Point pointStart
       && controlDestination.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
     {
-      Animation animation = new()
-      {
-        Duration = TimeSpan.FromSeconds(SECONDS_FLIGHT),
-        Easing = new CubicEaseInOut(),
-        FillMode = FillMode.Forward,
-        Children = { CreateKeyFrame(0, pointStart), CreateKeyFrame(1, pointEnd) }
-      };
+      Animation animation = CreateAnimation(
+        SECONDS_FLIGHT,
+        (Canvas.LeftProperty, pointStart.X - OFFSET_CENTER_GEM, pointEnd.X - OFFSET_CENTER_GEM),
+        (Canvas.TopProperty, pointStart.Y - OFFSET_CENTER_GEM, pointEnd.Y - OFFSET_CENTER_GEM));
 
       container.Opacity = 1;
 
@@ -62,21 +62,55 @@ public partial class ChainView : UserControl
     ((Blockchain)itemsFlights.DataContext).Land(good);
   }
 
+  async void SlideBlocks(object sender, ContainerPreparedEventArgs e)
+  {
+    ItemsControl itemsBlocks = (ItemsControl)sender;
+    Blockchain blockchain = (Blockchain)itemsBlocks.DataContext;
+
+    if (!blockchain.IsPanelLocked)
+      return;
+
+    Control[] containersSliding = itemsBlocks.GetRealizedContainers().Where(container => container != e.Container).ToArray();
+    double offset = containersSliding[0].Bounds.Width + ((StackPanel)itemsBlocks.ItemsPanelRoot).Spacing;
+
+    e.Container.Opacity = 0;
+
+    foreach (Control container in containersSliding)
+      container.RenderTransform = new TranslateTransform(offset, 0);
+
+    await Task.WhenAll(containersSliding
+      .Select(container => CreateAnimation(SECONDS_SLIDE, (TranslateTransform.XProperty, offset, 0)).RunAsync(container))
+      .Append(CreateAnimation(SECONDS_SLIDE, (Visual.OpacityProperty, 0, 1)).RunAsync(e.Container)));
+
+    foreach (Control container in containersSliding)
+      container.RenderTransform = null;
+
+    e.Container.Opacity = 1;
+    blockchain.IsPanelLocked = false;
+  }
+
   void LoadTXsFlyout(object sender, EventArgs e)
   {
     _ = ((Blockchain.Block)((Flyout)sender).Target.DataContext).LoadTXs();
   }
 
-  static KeyFrame CreateKeyFrame(double cue, Point point)
+  static Animation CreateAnimation(double seconds, params (AvaloniaProperty Property, double ValueStart, double ValueEnd)[] transitions)
   {
-    return new KeyFrame
+    KeyFrame keyFrameStart = new() { Cue = new Cue(0) };
+    KeyFrame keyFrameEnd = new() { Cue = new Cue(1) };
+
+    foreach ((AvaloniaProperty property, double valueStart, double valueEnd) in transitions)
     {
-      Cue = new Cue(cue),
-      Setters =
-      {
-        new Setter(Canvas.LeftProperty, point.X - OFFSET_CENTER_GEM),
-        new Setter(Canvas.TopProperty, point.Y - OFFSET_CENTER_GEM)
-      }
+      keyFrameStart.Setters.Add(new Setter(property, valueStart));
+      keyFrameEnd.Setters.Add(new Setter(property, valueEnd));
+    }
+
+    return new Animation
+    {
+      Duration = TimeSpan.FromSeconds(seconds),
+      Easing = new CubicEaseInOut(),
+      FillMode = FillMode.Forward,
+      Children = { keyFrameStart, keyFrameEnd }
     };
   }
 

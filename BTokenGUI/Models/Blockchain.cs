@@ -13,17 +13,18 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Block> BlocksMined { get; } = [];
-  public bool IsTipLast { get; }
+  public bool IsAboveMiner { get; }
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
+  public bool IsPanelLocked;
   bool IsPlaced;
   Blockchain BlockchainParent;
 
 
-  public Blockchain(string name, bool isTipLast, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent)
+  public Blockchain(string name, bool isAboveMiner, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent)
   {
     Name = name;
-    IsTipLast = isTipLast;
+    IsAboveMiner = isAboveMiner;
     IsTXPoolVisible = isTXPoolVisible;
     IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
     BlockchainParent = blockchainParent;
@@ -31,23 +32,28 @@ public partial class Blockchain : ObservableObject
 
   public void Update(JsonElement snapshotState)
   {
+    if (IsPanelLocked)
+      return;
+
     Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor = Anchors
       .Select(anchor => (anchor, Anchors))
       .Concat(Blocks.SelectMany(block => block.Anchors.Select(anchor => (anchor, block.Anchors))))
       .ToDictionary(placeAnchor => placeAnchor.anchor.Hash);
 
-    List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().ToList();
-
-    if (IsTipLast)
-      blocksJSON.Reverse();
+    List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().Reverse().ToList();
 
     List<JsonElement> blocksMinedJSON = snapshotState.TryGetProperty("blocksAwaitingAnchor", out JsonElement blocksAwaitingAnchor)
       ? blocksAwaitingAnchor.EnumerateArray().ToList()
       : [];
 
+    IsPanelLocked = IsPlaced
+      && blocksJSON.Count > 1
+      && blocksJSON.Count == Blocks.Count
+      && blocksJSON[^2].GetProperty("hash").GetString() == Blocks[^1].Hash;
+
     PlaceBlocks(blocksJSON, blocksMinedJSON);
 
-    if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
+    if (!IsPanelLocked && snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
 
     IsPlaced = true;
