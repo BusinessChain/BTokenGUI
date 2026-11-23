@@ -67,10 +67,6 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   [ObservableProperty]
   public partial bool IsWithdrawalAutoChosen { get; set; }
-
-  [ObservableProperty]
-  public partial Anchor AnchorShown { get; set; }
-
   [ObservableProperty]
   public partial decimal? LevelWithdrawalAuto { get; set; }
 
@@ -137,7 +133,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
       if (anchor == null)
       {
-        anchor = new Anchor(this, anchorJSON);
+        anchor = new Anchor(anchorJSON);
         Anchors.Add(anchor);
       }
 
@@ -230,13 +226,6 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   {
     WalletWithdrawal = null;
   }
-
-  [RelayCommand]
-  void CloseAnchor()
-  {
-    AnchorShown = null;
-  }
-
   [RelayCommand]
   async Task Withdraw()
   {

@@ -17,6 +17,5 @@
     </Grid>
     <views:WithdrawalView />
     <views:ConverterView />
-    <views:AnchorView />
   </Grid>
 </Window>

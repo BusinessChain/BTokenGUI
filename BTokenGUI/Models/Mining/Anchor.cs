@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace BTokenGUI.Models;
 
@@ -10,8 +9,6 @@ public partial class Mining
 {
   public partial class Anchor : ObservableObject
   {
-    Mining Mining;
-
     public string Hash { get; }
 
     public List<Blockchain.Block.Field> Fields { get; }
@@ -27,9 +24,8 @@ public partial class Mining
     public partial int HeightConfirmed { get; set; }
 
 
-    public Anchor(Mining mining, JsonElement anchor)
+    public Anchor(JsonElement anchor)
     {
-      Mining = mining;
       Hash = anchor.GetProperty("hash").GetString();
       Fields = ParseFields(anchor);
       Inputs = anchor.GetProperty("inputs").EnumerateArray().Select(ParseFields).ToList();
@@ -48,12 +44,6 @@ public partial class Mining
     {
       IsMissed = anchor.GetProperty("isMissed").GetBoolean();
       HeightConfirmed = anchor.GetProperty("heightConfirmed").GetInt32();
-    }
-
-    [RelayCommand]
-    void OpenPanel()
-    {
-      Mining.AnchorShown = this;
     }
   }
 }

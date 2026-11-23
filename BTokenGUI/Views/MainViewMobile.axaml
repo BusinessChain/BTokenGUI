@@ -24,6 +24,5 @@
     </TabControl>
     <views:WithdrawalView />
     <views:ConverterView />
-    <views:AnchorView />
   </Grid>
 </UserControl>

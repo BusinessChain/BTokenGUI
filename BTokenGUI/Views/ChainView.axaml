@@ -25,6 +25,17 @@
     </Style>
   </UserControl.Styles>
   <UserControl.Resources>
+    <DataTemplate x:Key="TemplateField" x:DataType="models:Blockchain+Block+Field">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Margin="0,2">
+        <SelectableTextBlock Grid.Column="0" Text="{Binding Value}" TextWrapping="Wrap" />
+        <SelectableTextBlock Grid.Column="1" Text="{Binding Name}" />
+      </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="TemplateEntry">
+      <Border Classes="Panel" Margin="0,0,0,6">
+        <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource TemplateField}" Margin="8" />
+      </Border>
+    </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Mining+Anchor">
       <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsMissed}">
         <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="#FFB347" Stroke="#FFB347" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
@@ -32,7 +43,20 @@
             <BlurEffect Radius="8" />
           </Path.Effect>
         </Path>
-        <Button Command="{Binding OpenPanelCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Button.Flyout>
+            <Flyout>
+              <StackPanel Spacing="12" MaxWidth="420">
+                <SelectableTextBlock Text="Anchor TX" FontWeight="Bold" />
+                <SelectableTextBlock Text="This anchor missed its Bitcoin block." IsVisible="{Binding IsMissed}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
+                <ItemsControl ItemsSource="{Binding Fields}" ItemTemplate="{StaticResource TemplateField}" />
+                <SelectableTextBlock Text="Inputs" FontWeight="SemiBold" />
+                <ItemsControl ItemsSource="{Binding Inputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+                <SelectableTextBlock Text="Outputs" FontWeight="SemiBold" />
+                <ItemsControl ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
           <Path Classes="gem" Classes.missed="{Binding IsMissed}" Width="28" Height="28" Data="F1 M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         </Button>
       </Panel>
