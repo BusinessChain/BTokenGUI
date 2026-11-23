@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BTokenGUI.Models;
@@ -17,7 +18,7 @@ public partial class Blockchain : ObservableObject
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
   public bool IsTipExtending;
-  public bool IsPanelLocked;
+  public Task TaskSlideBlocks = Task.CompletedTask;
   bool IsPlaced;
   Blockchain BlockchainParent;
 
@@ -33,7 +34,7 @@ public partial class Blockchain : ObservableObject
 
   public void Update(JsonElement snapshotState)
   {
-    if (IsPanelLocked)
+    if (!TaskSlideBlocks.IsCompleted)
       return;
 
     Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor = Anchors
@@ -56,7 +57,7 @@ public partial class Blockchain : ObservableObject
 
     IsTipExtending = false;
 
-    if (!IsPanelLocked && snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
+    if (TaskSlideBlocks.IsCompleted && snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
 
     IsPlaced = true;
@@ -169,14 +170,12 @@ public partial class Blockchain : ObservableObject
   void Move<T>(T good, ObservableCollection<T> place, ObservableCollection<T> destination, int index) where T : Good
   {
     place?.Remove(good);
+    good.Origin = place;
+    good.IsFlying = IsPlaced;
     destination.Insert(index, good);
 
-    if (!IsPlaced)
-      return;
-
-    good.Origin = place;
-    good.IsFlying = true;
-    Flights.Add(good);
+    if (IsPlaced)
+      Flights.Add(good);
   }
 
   public void Land(Good good)

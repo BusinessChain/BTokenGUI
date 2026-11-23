@@ -38,6 +38,7 @@
     </Style>
     <Style Selector="DockPanel.aboveMiner > ContentControl.shelf">
       <Setter Property="DockPanel.Dock" Value="Bottom" />
+      <Setter Property="Margin" Value="0,-29,0,20" />
     </Style>
     <Style Selector="Ellipse.shadowShelf">
       <Setter Property="IsVisible" Value="False" />
@@ -338,10 +339,10 @@
             </Panel>
             <Panel Grid.Column="1">
               <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,40" />
-              <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,0,-28,0" ContainerPrepared="SlideBlocks">
+              <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-28,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
                 <ItemsControl.ItemsPanel>
                   <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="48" Margin="0,0,40,40" />
+                    <StackPanel Orientation="Horizontal" Spacing="48" Margin="0,36,40,40" />
                   </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
