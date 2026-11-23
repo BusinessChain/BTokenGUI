@@ -28,7 +28,7 @@ public partial class MainViewModel : ObservableObject
   public Wallet Wallet { get; } = new();
 
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
-  const int COUNT_BLOCKS_NEWEST = 6;
+  const int COUNT_BLOCKS_NEWEST = 3;
 
 
   public MainViewModel()

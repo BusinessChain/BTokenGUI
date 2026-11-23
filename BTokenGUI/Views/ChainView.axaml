@@ -40,6 +40,15 @@
     <Style Selector="ItemsControl.flights :is(Control).flying">
       <Setter Property="Opacity" Value="1" />
     </Style>
+    <Style Selector="ItemsControl.blocks Path.wall" x:DataType="models:Blockchain+Block">
+      <Setter Property="Fill" Value="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}" />
+      <Setter Property="Opacity" Value="0.2" />
+    </Style>
+    <Style Selector="ItemsControl.blocks Path.edge" x:DataType="models:Blockchain+Block">
+      <Setter Property="Stroke" Value="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="StrokeJoin" Value="Round" />
+    </Style>
     <Style Selector="ItemsControl.blocks ContentPresenter:nth-child(1) Border.string">
       <Setter Property="IsVisible" Value="False" />
     </Style>
@@ -110,22 +119,16 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockDetails" x:DataType="models:Blockchain+Block">
       <StackPanel Spacing="12">
-        <StackPanel>
-          <ItemsControl ItemsSource="{Binding Fields}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate x:DataType="models:Blockchain+Block+Field">
-                <Grid ColumnDefinitions="140,*" Margin="0,2">
-                  <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
-                  <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
-                </Grid>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
-          <Grid ColumnDefinitions="140,*" Margin="0,2" IsVisible="{Binding HeightParent, Converter={x:Static ObjectConverters.IsNotNull}}">
-            <SelectableTextBlock Grid.Column="0" Text="heightParent" />
-            <SelectableTextBlock Grid.Column="1" Text="{Binding HeightParent}" />
-          </Grid>
-        </StackPanel>
+        <ItemsControl ItemsSource="{Binding Fields}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Blockchain+Block+Field">
+              <Grid ColumnDefinitions="140,*" Margin="0,2">
+                <SelectableTextBlock Grid.Column="0" Text="{Binding Name}" />
+                <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <SelectableTextBlock Text="TXs" FontWeight="SemiBold" />
         <ItemsControl ItemsSource="{Binding TXs}">
           <ItemsControl.ItemTemplate>
@@ -197,15 +200,20 @@
           <Border Classes="Panel vessel" IsVisible="{Binding IsBlocksMinedPoolVisible}">
             <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
           </Border>
-          <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" HorizontalAlignment="Center">
+          <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
-                <StackPanel Spacing="16" />
+                <StackPanel Spacing="16" Margin="0,0,0,40" />
               </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:Blockchain+Block">
                 <Panel Width="176" Height="72" Classes.flying="{Binding IsFlying}">
+                  <Path Data="M1,19 L19,1 L175,1 L205,31 L205,83 L187,101 L31,101 L1,71 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="8" />
+                    </Path.Effect>
+                  </Path>
                   <Border Classes="string" Width="2" Height="18" Margin="0,-17,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
                   <Button Padding="0" Background="Transparent" BorderThickness="0">
                     <Button.Flyout>
@@ -219,8 +227,11 @@
                       </Flyout>
                     </Button.Flyout>
                     <Panel Width="176" Height="72">
-                      <Path Data="M1,19 L19,1 L175,1 L175,53 L157,71 L1,71 Z" Fill="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}" Opacity="0.0625" />
-                      <Path Data="M1,19 L19,1 L175,1 L175,53 L157,71 L1,71 Z M1,19 L157,19 L175,1 M157,19 L157,71" Stroke="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}" StrokeThickness="1" StrokeJoin="Round" />
+                      <Path Classes="wall" Data="M1,19 L19,1 L175,1 L175,53 L157,71 L1,71 Z" />
+                      <Path Classes="edge" Data="M19,1 L19,53 L175,53 M19,53 L1,71" Opacity="0.4" />
+                      <Path Classes="wall" Data="M1,19 L19,1 L175,1 L157,19 Z" Opacity="0.6" />
+                      <Path Classes="wall" Data="M1,19 L157,19 L157,71 L1,71 Z" />
+                      <Path Classes="edge" Data="M1,19 L19,1 L175,1 L175,53 L157,71 L1,71 Z M1,19 L157,19 L175,1 M157,19 L157,71" StrokeThickness="2" />
                     </Panel>
                   </Button>
                   <TextBlock Text="{Binding Height}" Width="138" Margin="19,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextAlignment="Center" FontSize="12" FontWeight="Bold" Foreground="White" IsHitTestVisible="False">
@@ -260,9 +271,15 @@
     </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">
+    <Border.Background>
+      <RadialGradientBrush Center="0%,0%" GradientOrigin="0%,0%" RadiusX="100%" RadiusY="100%">
+        <GradientStop Offset="0" Color="#60FFFFFF" />
+        <GradientStop Offset="1" Color="#06FFFFFF" />
+      </RadialGradientBrush>
+    </Border.Background>
     <DockPanel Margin="20">
       <SelectableTextBlock DockPanel.Dock="Top" Text="Chain" FontWeight="Bold" Margin="0,0,0,10" />
-      <ScrollViewer>
+      <ScrollViewer VerticalScrollBarVisibility="Hidden">
         <Panel>
           <StackPanel>
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />

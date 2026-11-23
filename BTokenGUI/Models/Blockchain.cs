@@ -47,18 +47,6 @@ public partial class Blockchain : ObservableObject
 
     PlaceBlocks(blocksJSON, blocksMinedJSON);
 
-    if (BlockchainParent != null)
-    {
-      Dictionary<string, int> heightsParent = [];
-
-      foreach (Block blockParent in BlockchainParent.Blocks)
-        foreach (string hashBlockReferenced in blockParent.HashesAnchorWinner)
-          heightsParent[hashBlockReferenced] = blockParent.Height;
-
-      foreach (Block block in Blocks)
-        block.HeightParent = heightsParent.TryGetValue(block.Hash, out int heightParent) ? heightParent : null;
-    }
-
     if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
 
