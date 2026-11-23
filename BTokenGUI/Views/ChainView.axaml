@@ -5,12 +5,6 @@
              x:Class="BTokenGUI.Views.ChainView"
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
-    <Style Selector="Path.gem">
-      <Setter Property="Fill" Value="DarkOrange" />
-    </Style>
-    <Style Selector="Path.gem.rotten">
-      <Setter Property="Fill" Value="#6B4A2B" />
-    </Style>
     <Style Selector="Border.vessel">
       <Setter Property="DockPanel.Dock" Value="Top" />
       <Setter Property="BorderBrush" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
@@ -104,7 +98,7 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
       <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsRotten}" Classes.flying="{Binding IsFlying}">
-        <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="#FFB347" Stroke="#FFB347" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
+        <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="{Binding BrushPair}" Stroke="{Binding BrushPair}" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
           <Path.Effect>
             <BlurEffect Radius="8" />
           </Path.Effect>
@@ -123,7 +117,7 @@
               </StackPanel>
             </Flyout>
           </Button.Flyout>
-          <Path Classes="gem" Classes.rotten="{Binding IsRotten}" Width="28" Height="28" Data="F1 M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+          <Path Fill="{Binding BrushPair}" Width="28" Height="28" Data="F1 M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         </Button>
       </Panel>
     </DataTemplate>
@@ -137,7 +131,7 @@
             <BlurEffect Radius="8" />
           </Path.Effect>
         </Path>
-        <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
+        <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{Binding BrushPair}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         <Path Data="M2,8 L14,14 L14,26 L2,20 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         <Path Data="M14,14 L26,8 L26,20 L14,26 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
       </Panel>

@@ -31,6 +31,9 @@ public partial class Blockchain
       Fields = ParseFields(anchor);
       Inputs = anchor.GetProperty("inputs").EnumerateArray().Select(ParseFields).ToList();
       Outputs = anchor.GetProperty("outputs").EnumerateArray().Select(ParseFields).ToList();
+      BrushPair = CreateBrushPair(anchor.GetProperty("outputs").EnumerateArray()
+        .First(output => output.TryGetProperty("hashBlockReferenced", out _))
+        .GetProperty("hashBlockReferenced").GetString());
     }
 
     static List<Block.Field> ParseFields(JsonElement element)

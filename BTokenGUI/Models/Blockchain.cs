@@ -180,6 +180,7 @@ public partial class Blockchain : ObservableObject
     public Block(JsonElement block)
     {
       Hash = block.GetProperty("hash").GetString();
+      BrushPair = CreateBrushPair(Hash);
       Height = block.GetProperty("height").GetInt32();
       HashShort = $"{Hash[..8]} ... {Hash[^8..]}";
       Fields = [];
