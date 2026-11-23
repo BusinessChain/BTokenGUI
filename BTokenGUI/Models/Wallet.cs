@@ -217,6 +217,13 @@ public partial class Wallet : ObservableObject
         {
           height = await FindHeightFork(height - 1).ConfigureAwait(false);
           HashesBlockScanned.DeleteMany(Query.GT("_id", height));
+
+          foreach (BsonDocument documentTX in TXsStored.Find(Query.GT("height", height)).ToList())
+          {
+            documentTX["height"] = 0;
+            TXsStored.Update(documentTX);
+          }
+
           heightScannedLast = height;
           continue;
         }
