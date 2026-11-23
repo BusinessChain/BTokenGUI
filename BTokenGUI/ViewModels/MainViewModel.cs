@@ -69,6 +69,7 @@ public partial class MainViewModel : ObservableObject
           BlockchainBitcoin.Update(snapshotBitcoin);
           BlockchainBToken.Update(snapshotBToken);
           Mining.Update(snapshotBitcoin.GetProperty("anchorer"), snapshotBToken.GetProperty("miner"));
+          BlockchainBitcoin.UpdateAnchors(Mining.Anchors);
 
           StatusConnection = "Connected to node";
         });

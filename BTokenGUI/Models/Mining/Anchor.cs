@@ -23,6 +23,9 @@ public partial class Mining
     [ObservableProperty]
     public partial bool IsMissed { get; set; }
 
+    [ObservableProperty]
+    public partial int HeightConfirmed { get; set; }
+
 
     public Anchor(Mining mining, JsonElement anchor)
     {
@@ -36,7 +39,7 @@ public partial class Mining
     static List<Blockchain.Block.Field> ParseFields(JsonElement element)
     {
       return element.EnumerateObject()
-        .Where(property => property.Value.ValueKind != JsonValueKind.Array && property.Name != "isMissed")
+        .Where(property => property.Value.ValueKind != JsonValueKind.Array && property.Name is not ("isMissed" or "heightConfirmed"))
         .Select(property => new Blockchain.Block.Field(property.Name, property.Value.ToString()))
         .ToList();
     }
@@ -44,6 +47,7 @@ public partial class Mining
     public void Update(JsonElement anchor)
     {
       IsMissed = anchor.GetProperty("isMissed").GetBoolean();
+      HeightConfirmed = anchor.GetProperty("heightConfirmed").GetInt32();
     }
 
     [RelayCommand]

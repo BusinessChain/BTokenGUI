@@ -40,12 +40,27 @@ public partial class Blockchain : ObservableObject
     }
   }
 
+  public void UpdateAnchors(IEnumerable<Mining.Anchor> anchors)
+  {
+    foreach (Block block in Blocks)
+    {
+      List<Mining.Anchor> anchorsBlock = anchors.Where(anchor => anchor.HeightConfirmed == block.Height).ToList();
+
+      foreach (Mining.Anchor anchor in block.Anchors.Except(anchorsBlock).ToList())
+        block.Anchors.Remove(anchor);
+
+      foreach (Mining.Anchor anchor in anchorsBlock.Except(block.Anchors).ToList())
+        block.Anchors.Add(anchor);
+    }
+  }
+
   public class Block
   {
     public string Hash { get; }
     public int Height { get; }
     public string HashShort { get; }
     public List<Field> Fields { get; }
+    public ObservableCollection<Mining.Anchor> Anchors { get; } = [];
 
 
     public Block(JsonElement block)
