@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -18,6 +19,10 @@ public partial class Blockchain
     public List<List<Block.Field>> Outputs { get; }
 
     public int HeightConfirmed { get; private set; }
+
+    public ObservableCollection<Anchor> Origin { get; set; }
+
+    public ObservableCollection<Anchor> Destination { get; set; }
 
     [ObservableProperty]
     public partial bool IsMissed { get; set; }

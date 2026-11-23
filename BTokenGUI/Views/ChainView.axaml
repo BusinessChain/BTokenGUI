@@ -115,53 +115,62 @@
     <DockPanel Margin="20">
       <SelectableTextBlock DockPanel.Dock="Top" Text="Chain" FontWeight="Bold" Margin="0,0,0,10" />
       <ScrollViewer>
-        <StackPanel>
-          <ContentControl Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
-          <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-          <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
-            <ItemsControl ItemsSource="{Binding BlockchainBitcoin.Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-            </ItemsControl>
-          </Border>
-          <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-          <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
-            <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
-              <SelectableTextBlock Text="Miner" FontWeight="Bold" HorizontalAlignment="Center" />
-              <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="20">
-                <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-                <Panel Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.glowing="{Binding IsMining}">
-                  <Path Classes="glow" Data="M8,6 L56,6 L32,48 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
-                    <Path.Effect>
-                      <BlurEffect Radius="8" />
-                    </Path.Effect>
-                  </Path>
-                  <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Panel Width="32" Height="28">
-                      <Panel Clip="M0,0 L32,0 L16,28 Z">
-                        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
-                        <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,100%">
-                          <Border.RenderTransform>
-                            <ScaleTransform ScaleY="{Binding FillingConverter}" />
-                          </Border.RenderTransform>
-                        </Border>
+        <Panel>
+          <StackPanel>
+            <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+            <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+            <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
+              <ItemsControl ItemsSource="{Binding BlockchainBitcoin.Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
+            </Border>
+            <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+            <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
+              <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
+                <SelectableTextBlock Text="Miner" FontWeight="Bold" HorizontalAlignment="Center" />
+                <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="20">
+                  <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+                  <Panel x:Name="PanelConverter" Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.glowing="{Binding IsMining}">
+                    <Path Classes="glow" Data="M8,6 L56,6 L32,48 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
+                      <Path.Effect>
+                        <BlurEffect Radius="8" />
+                      </Path.Effect>
+                    </Path>
+                    <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <Panel Width="32" Height="28">
+                        <Panel Clip="M0,0 L32,0 L16,28 Z">
+                          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
+                          <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,100%">
+                            <Border.RenderTransform>
+                              <ScaleTransform ScaleY="{Binding FillingConverter}" />
+                            </Border.RenderTransform>
+                          </Border>
+                        </Panel>
+                        <Path Data="M1,1 L31,1 L16,26 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
                       </Panel>
-                      <Path Data="M1,1 L31,1 L16,26 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                    </Panel>
-                  </Button>
-                </Panel>
-                <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding WalletBitcoin}" ContentTemplate="{StaticResource TemplateWallet}" />
-                <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="{Binding StateMiner}" TextWrapping="Wrap" VerticalAlignment="Center" />
-                <ContentControl Grid.Row="2" Grid.Column="0" Content="{Binding WalletBToken}" ContentTemplate="{StaticResource TemplateWallet}" />
-              </Grid>
-            </StackPanel>
-          </Border>
-          <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-          <ContentControl Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
-        </StackPanel>
+                    </Button>
+                  </Panel>
+                  <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding WalletBitcoin}" ContentTemplate="{StaticResource TemplateWallet}" />
+                  <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="{Binding StateMiner}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                  <ContentControl Grid.Row="2" Grid.Column="0" Content="{Binding WalletBToken}" ContentTemplate="{StaticResource TemplateWallet}" />
+                </Grid>
+              </StackPanel>
+            </Border>
+            <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+            <ContentControl Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+          </StackPanel>
+          <ItemsControl x:Name="ItemsFlights" ItemsSource="{Binding BlockchainBitcoin.Flights}" ItemTemplate="{StaticResource TemplateAnchor}" IsHitTestVisible="False">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <Canvas />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+          </ItemsControl>
+        </Panel>
       </ScrollViewer>
     </DockPanel>
   </Border>

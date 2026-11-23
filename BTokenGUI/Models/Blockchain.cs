@@ -12,7 +12,9 @@ public partial class Blockchain : ObservableObject
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
+  public ObservableCollection<Anchor> Flights { get; } = [];
   bool IsTipLast;
+  bool IsAnchorsPlaced;
 
 
   public Blockchain(string name, bool isTipLast)
@@ -55,6 +57,9 @@ public partial class Blockchain : ObservableObject
     {
       string hash = anchorJSON.GetProperty("hash").GetString();
 
+      if (Flights.Any(anchorFlying => anchorFlying.Hash == hash))
+        continue;
+
       Anchor anchor;
       ObservableCollection<Anchor> place;
 
@@ -73,11 +78,33 @@ public partial class Blockchain : ObservableObject
         continue;
 
       place?.Remove(anchor);
-      destination?.Add(anchor);
+
+      if (destination == null)
+        continue;
+
+      if (IsAnchorsPlaced)
+      {
+        anchor.Origin = place;
+        anchor.Destination = destination;
+        Flights.Add(anchor);
+      }
+      else
+        destination.Add(anchor);
     }
 
     foreach ((Anchor anchor, ObservableCollection<Anchor> place) in placesAnchor.Values)
       place.Remove(anchor);
+
+    IsAnchorsPlaced = true;
+  }
+
+  public void Land(Anchor anchor)
+  {
+    Flights.Remove(anchor);
+    anchor.Destination.Add(anchor);
+
+    anchor.Origin = null;
+    anchor.Destination = null;
   }
 
   public class Block
