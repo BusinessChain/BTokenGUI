@@ -58,6 +58,37 @@
         </Animation>
       </Style.Animations>
     </Style>
+    <Style Selector="Panel.exploding">
+      <Style.Animations>
+        <Animation Duration="0:0:0.6" FillMode="Forward" Easing="CubicEaseOut">
+          <KeyFrame Cue="0%">
+            <Setter Property="ScaleTransform.ScaleX" Value="1" />
+            <Setter Property="ScaleTransform.ScaleY" Value="1" />
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="ScaleTransform.ScaleX" Value="2.5" />
+            <Setter Property="ScaleTransform.ScaleY" Value="2.5" />
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
+    <Style Selector="Panel.exploding > Path.flash">
+      <Style.Animations>
+        <Animation Duration="0:0:0.3" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="30%">
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
   </UserControl.Styles>
   <UserControl.Resources>
     <DataTemplate x:Key="TemplateField" x:DataType="models:Blockchain+Block+Field">
@@ -97,7 +128,15 @@
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockMined" x:DataType="models:Blockchain+Block">
-      <Panel Width="28" Height="28" Margin="2" Classes.flying="{Binding IsFlying}">
+      <Panel Width="28" Height="28" Margin="2" Classes.flying="{Binding IsFlying}" Classes.exploding="{Binding IsExploding}" RenderTransformOrigin="50%,50%">
+        <Panel.RenderTransform>
+          <ScaleTransform />
+        </Panel.RenderTransform>
+        <Path Classes="flash" Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="White" Opacity="0" IsHitTestVisible="False">
+          <Path.Effect>
+            <BlurEffect Radius="8" />
+          </Path.Effect>
+        </Path>
         <Path Data="M14,2 L26,8 L26,20 L14,26 L2,20 L2,8 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         <Path Data="M2,8 L14,14 L14,26 L2,20 Z" Fill="#40000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />
         <Path Data="M14,14 L26,8 L26,20 L14,26 Z" Fill="#80000000" Stroke="#40FFFFFF" StrokeThickness="1" StrokeJoin="Round" />

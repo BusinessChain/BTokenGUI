@@ -68,28 +68,42 @@ public partial class Blockchain : ObservableObject
         destinationsBlock.TryAdd(blockJSON.GetProperty("hash").GetString(), destination);
 
     foreach ((Block block, ObservableCollection<Block> place) in placesBlock.Values)
-      if (!destinationsBlock.TryGetValue(block.Hash, out ObservableCollection<Block> destination) || destination != place && !block.IsFlying)
+    {
+      bool isVanished = !destinationsBlock.TryGetValue(block.Hash, out ObservableCollection<Block> destination);
+
+      if (isVanished && place == BlocksMined && IsPlaced && !block.IsFlying && !block.IsExploding)
+        block.IsExploding = true;
+      else if (isVanished || destination != place && !block.IsFlying)
         place.Remove(block);
+    }
 
     foreach ((List<JsonElement> blocksJSON, ObservableCollection<Block> destination) in destinationsBlocks)
-      for (int index = 0; index < blocksJSON.Count; index++)
+    {
+      int indexInsert = 0;
+
+      foreach (JsonElement blockJSON in blocksJSON)
       {
-        string hash = blocksJSON[index].GetProperty("hash").GetString();
-        int indexInsert = Math.Min(index, destination.Count);
+        string hash = blockJSON.GetProperty("hash").GetString();
 
-        if (destinationsBlock[hash] != destination)
-          continue;
-
-        if (placesBlock.TryGetValue(hash, out (Block Block, ObservableCollection<Block> Place) placeBlock))
+        if (destinationsBlock[hash] == destination)
         {
-          if (!placeBlock.Block.IsFlying && placeBlock.Place != destination)
-            Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
+          if (placesBlock.TryGetValue(hash, out (Block Block, ObservableCollection<Block> Place) placeBlock))
+          {
+            if (!placeBlock.Block.IsFlying && placeBlock.Place != destination)
+              Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
+          }
+          else if (destination == BlocksMined)
+            Move(new Block(blockJSON), null, destination, indexInsert);
+          else
+            destination.Insert(indexInsert, new Block(blockJSON));
         }
-        else if (destination == BlocksMined)
-          Move(new Block(blocksJSON[index]), null, destination, indexInsert);
-        else
-          destination.Insert(indexInsert, new Block(blocksJSON[index]));
+
+        int indexBlock = destination.ToList().FindIndex(block => block.Hash == hash);
+
+        if (indexBlock >= 0)
+          indexInsert = indexBlock + 1;
       }
+    }
   }
 
   void PlaceAnchors(JsonElement anchorsJSON, Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor)
@@ -152,8 +166,11 @@ public partial class Blockchain : ObservableObject
     good.Origin = null;
   }
 
-  public class Block : Good
+  public partial class Block : Good
   {
+    [ObservableProperty]
+    public partial bool IsExploding { get; set; }
+
     public int Height { get; }
     public string HashShort { get; }
     public List<Field> Fields { get; }
