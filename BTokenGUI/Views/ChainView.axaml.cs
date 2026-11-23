@@ -67,8 +67,10 @@ public partial class ChainView : UserControl
     ItemsControl itemsBlocks = (ItemsControl)sender;
     Blockchain blockchain = (Blockchain)itemsBlocks.DataContext;
 
-    if (!blockchain.IsPanelLocked)
+    if (!blockchain.IsTipExtending)
       return;
+
+    blockchain.IsPanelLocked = true;
 
     Control[] containersSliding = itemsBlocks.GetRealizedContainers().Where(container => container != e.Container).ToArray();
     double offset = containersSliding[0].Bounds.Width + ((StackPanel)itemsBlocks.ItemsPanelRoot).Spacing;

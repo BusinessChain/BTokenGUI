@@ -16,6 +16,7 @@ public partial class Blockchain : ObservableObject
   public bool IsAboveMiner { get; }
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
+  public bool IsTipExtending;
   public bool IsPanelLocked;
   bool IsPlaced;
   Blockchain BlockchainParent;
@@ -46,12 +47,14 @@ public partial class Blockchain : ObservableObject
       ? blocksAwaitingAnchor.EnumerateArray().ToList()
       : [];
 
-    IsPanelLocked = IsPlaced
+    IsTipExtending = IsPlaced
       && blocksJSON.Count > 1
       && blocksJSON.Count == Blocks.Count
       && blocksJSON[^2].GetProperty("hash").GetString() == Blocks[^1].Hash;
 
     PlaceBlocks(blocksJSON, blocksMinedJSON);
+
+    IsTipExtending = false;
 
     if (!IsPanelLocked && snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
