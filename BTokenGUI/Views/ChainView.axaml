@@ -11,6 +11,12 @@
     <Style Selector="Path.gem.rotten">
       <Setter Property="Fill" Value="#6B4A2B" />
     </Style>
+    <Style Selector="Border.vessel">
+      <Setter Property="DockPanel.Dock" Value="Top" />
+    </Style>
+    <Style Selector="DockPanel.tipLast > Border.vessel">
+      <Setter Property="DockPanel.Dock" Value="Bottom" />
+    </Style>
     <Style Selector="Panel.glowing > Path.glow">
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
@@ -63,8 +69,17 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
       <Border Classes="Panel">
-        <StackPanel Spacing="6" Margin="10">
-          <SelectableTextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+        <DockPanel Classes.tipLast="{Binding IsTipLast}" Margin="10">
+          <SelectableTextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="SemiBold" Margin="0,0,0,6" />
+          <Border Classes="Panel vessel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
+            <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+            </ItemsControl>
+          </Border>
           <ItemsControl ItemsSource="{Binding Blocks}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="models:Blockchain+Block">
@@ -96,7 +111,7 @@
               </DataTemplate>
             </ItemsControl.ItemTemplate>
           </ItemsControl>
-        </StackPanel>
+        </DockPanel>
       </Border>
     </DataTemplate>
     <DataTemplate x:Key="TemplateWallet" x:DataType="models:Mining+Wallet">
@@ -118,16 +133,6 @@
         <Panel>
           <StackPanel>
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
-            <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-            <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2" HorizontalAlignment="Center" MinWidth="160" MinHeight="44">
-              <ItemsControl ItemsSource="{Binding BlockchainBitcoin.Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Margin="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <ItemsControl.ItemsPanel>
-                  <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
-                  </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-              </ItemsControl>
-            </Border>
             <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
             <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
               <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">

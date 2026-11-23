@@ -13,7 +13,7 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Anchor> Flights { get; } = [];
-  bool IsTipLast;
+  public bool IsTipLast { get; }
   bool IsAnchorsPlaced;
 
 
