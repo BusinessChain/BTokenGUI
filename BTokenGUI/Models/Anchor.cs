@@ -8,10 +8,8 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain
 {
-  public partial class Anchor : ObservableObject
+  public partial class Anchor : Good
   {
-    public string Hash { get; }
-
     public List<Block.Field> Fields { get; }
 
     public List<List<Block.Field>> Inputs { get; }
@@ -19,10 +17,6 @@ public partial class Blockchain
     public List<List<Block.Field>> Outputs { get; }
 
     public int HeightConfirmed { get; private set; }
-
-    public ObservableCollection<Anchor> Origin { get; set; }
-
-    public ObservableCollection<Anchor> Destination { get; set; }
 
     [ObservableProperty]
     public partial bool IsMissed { get; set; }

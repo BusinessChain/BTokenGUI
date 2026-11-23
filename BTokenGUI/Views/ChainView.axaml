@@ -32,6 +32,12 @@
     <Style Selector="DockPanel.tipLast > Border.vessel">
       <Setter Property="DockPanel.Dock" Value="Bottom" />
     </Style>
+    <Style Selector="Panel.flying">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="ItemsControl.flights Panel.flying">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
     <Style Selector="Panel.glowing > Path.glow">
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
@@ -58,7 +64,7 @@
       </Border>
     </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
-      <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsRotten}">
+      <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsRotten}" Classes.flying="{Binding IsFlying}">
         <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="#FFB347" Stroke="#FFB347" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
           <Path.Effect>
             <BlurEffect Radius="8" />
@@ -187,7 +193,7 @@
             <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
             <ContentControl Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           </StackPanel>
-          <ItemsControl x:Name="ItemsFlights" ItemsSource="{Binding BlockchainBitcoin.Flights}" ItemTemplate="{StaticResource TemplateAnchor}" IsHitTestVisible="False">
+          <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" ItemTemplate="{StaticResource TemplateAnchor}" IsHitTestVisible="False">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
                 <Canvas />

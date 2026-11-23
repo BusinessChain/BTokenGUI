@@ -1,15 +1,15 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections;
 using System.Linq;
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using BTokenGUI.Models;
-using BTokenGUI.ViewModels;
 
 namespace BTokenGUI.Views;
 
@@ -28,19 +28,22 @@ public partial class ChainView : UserControl
 
   async void StartFlight(object sender, ContainerPreparedEventArgs e)
   {
+    ItemsControl itemsFlights = (ItemsControl)sender;
     Control container = e.Container;
-    Blockchain.Anchor anchor = (Blockchain.Anchor)container.DataContext;
+    Blockchain.Good good = (Blockchain.Good)container.DataContext;
 
     container.Opacity = 0;
 
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
-    Control controlOrigin = anchor.Origin == null ? PanelConverter : (Control)FindPlace(anchor.Origin) ?? ContentBlockchainBitcoin;
-    ItemsControl controlDestination = FindPlace(anchor.Destination);
+    Control controlOrigin = good.Origin == null ? PanelConverter : (Control)FindPlace(good.Origin) ?? ContentBlockchainBitcoin;
+    Control controlDestination = this.GetVisualDescendants()
+      .OfType<ContentPresenter>()
+      .FirstOrDefault(presenter => presenter.DataContext == good && ItemsControl.ItemsControlFromItemContainer(presenter) is ItemsControl itemsControl && itemsControl != itemsFlights);
 
     if (controlDestination != null
-      && controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), ItemsFlights) is Point pointStart
-      && controlDestination.TranslatePoint(new Point(controlDestination.Bounds.Width, controlDestination.Bounds.Height / 2), ItemsFlights) is Point pointEnd)
+      && controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), itemsFlights) is Point pointStart
+      && controlDestination.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
     {
       Animation animation = new()
       {
@@ -55,7 +58,7 @@ public partial class ChainView : UserControl
       await animation.RunAsync(container);
     }
 
-    ((MainViewModel)DataContext).BlockchainBitcoin.Land(anchor);
+    ((Blockchain)itemsFlights.DataContext).Land(good);
   }
 
   static KeyFrame CreateKeyFrame(double cue, Point point)
@@ -71,10 +74,10 @@ public partial class ChainView : UserControl
     };
   }
 
-  ItemsControl FindPlace(ObservableCollection<Blockchain.Anchor> place)
+  ItemsControl FindPlace(IList place)
   {
     return this.GetVisualDescendants()
       .OfType<ItemsControl>()
-      .FirstOrDefault(itemsControl => itemsControl != ItemsFlights && itemsControl.ItemsSource == place);
+      .FirstOrDefault(itemsControl => itemsControl.ItemsSource == place);
   }
 }

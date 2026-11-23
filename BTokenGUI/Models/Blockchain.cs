@@ -12,12 +12,12 @@ public partial class Blockchain : ObservableObject
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
-  public ObservableCollection<Anchor> Flights { get; } = [];
+  public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Block> BlocksMined { get; } = [];
   public bool IsTipLast { get; }
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
-  bool IsAnchorsPlaced;
+  bool IsPlaced;
 
 
   public Blockchain(string name, bool isTipLast, bool isTXPoolVisible, bool isBlocksMinedPoolVisible)
@@ -47,6 +47,8 @@ public partial class Blockchain : ObservableObject
 
     if (snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
+
+    IsPlaced = true;
   }
 
   static void SyncBlocks(ObservableCollection<Block> blocks, List<JsonElement> blocksJSON)
@@ -71,9 +73,6 @@ public partial class Blockchain : ObservableObject
     {
       string hash = anchorJSON.GetProperty("hash").GetString();
 
-      if (Flights.Any(anchorFlying => anchorFlying.Hash == hash))
-        continue;
-
       Anchor anchor;
       ObservableCollection<Anchor> place;
 
@@ -81,6 +80,9 @@ public partial class Blockchain : ObservableObject
         (anchor, place) = placeAnchor;
       else
         (anchor, place) = (new Anchor(anchorJSON), null);
+
+      if (anchor.IsFlying)
+        continue;
 
       anchor.Update(anchorJSON);
 
@@ -91,39 +93,42 @@ public partial class Blockchain : ObservableObject
       if (destination == place)
         continue;
 
-      place?.Remove(anchor);
-
       if (destination == null)
-        continue;
-
-      if (IsAnchorsPlaced)
       {
-        anchor.Origin = place;
-        anchor.Destination = destination;
-        Flights.Add(anchor);
+        place?.Remove(anchor);
+        continue;
       }
-      else
-        destination.Add(anchor);
+
+      Move(anchor, place, destination, destination.Count);
     }
 
     foreach ((Anchor anchor, ObservableCollection<Anchor> place) in placesAnchor.Values)
       place.Remove(anchor);
-
-    IsAnchorsPlaced = true;
   }
 
-  public void Land(Anchor anchor)
+  void Move<T>(T good, ObservableCollection<T> place, ObservableCollection<T> destination, int index) where T : Good
   {
-    Flights.Remove(anchor);
-    anchor.Destination.Add(anchor);
+    place?.Remove(good);
+    destination.Insert(index, good);
 
-    anchor.Origin = null;
-    anchor.Destination = null;
+    if (!IsPlaced)
+      return;
+
+    good.Origin = place;
+    good.IsFlying = true;
+    Flights.Add(good);
   }
 
-  public class Block
+  public void Land(Good good)
   {
-    public string Hash { get; }
+    Flights.Remove(good);
+
+    good.IsFlying = false;
+    good.Origin = null;
+  }
+
+  public class Block : Good
+  {
     public int Height { get; }
     public string HashShort { get; }
     public List<Field> Fields { get; }
