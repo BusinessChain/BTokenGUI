@@ -7,7 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="BTokenGUI.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Title="BToken">
+        Title="BToken"
+        Background="#090E1A">
   <Grid>
     <Grid ColumnDefinitions="7*,7*,6*,6*">
       <views:NodeView Grid.Column="0" />

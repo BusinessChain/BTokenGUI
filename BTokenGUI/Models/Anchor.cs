@@ -16,16 +16,18 @@ public partial class Blockchain
 
     public string HashBlockReferenced { get; }
 
-    [ObservableProperty]
-    public partial bool IsMissed { get; set; }
+    public int LockTime { get; }
+
+    public bool IsMissed { get; private set; }
 
     [ObservableProperty]
-    public partial bool IsRotten { get; set; }
+    public partial string ReasonForNotGlowing { get; set; }
 
 
     public Anchor(JsonElement anchor)
     {
       Hash = anchor.GetProperty("hash").GetString();
+      LockTime = anchor.GetProperty("lockTime").GetInt32();
       TX = new TX(anchor);
       HashBlockReferenced = anchor.GetProperty("outputs").EnumerateArray()
         .First(output => output.TryGetProperty("hashBlockReferenced", out _))

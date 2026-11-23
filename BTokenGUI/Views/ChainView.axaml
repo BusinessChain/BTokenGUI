@@ -44,7 +44,7 @@
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
           <KeyFrame Cue="0%">
-            <Setter Property="Opacity" Value="0.4" />
+            <Setter Property="Opacity" Value="0" />
           </KeyFrame>
           <KeyFrame Cue="100%">
             <Setter Property="Opacity" Value="1" />
@@ -136,8 +136,8 @@
       </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
-      <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding !IsRotten}" Classes.flying="{Binding IsFlying}">
-        <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="{Binding BrushPair}" Stroke="{Binding BrushPair}" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
+      <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNull}}" Classes.flying="{Binding IsFlying}">
+        <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="White" Stroke="White" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
           <Path.Effect>
             <BlurEffect Radius="8" />
           </Path.Effect>
@@ -147,7 +147,7 @@
             <Flyout>
               <StackPanel Spacing="12" MaxWidth="420">
                 <SelectableTextBlock Text="Anchor TX" FontWeight="Bold" />
-                <SelectableTextBlock Text="This anchor missed its Bitcoin block." IsVisible="{Binding IsMissed}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
+                <SelectableTextBlock Text="{Binding ReasonForNotGlowing}" IsVisible="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{DynamicResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" />
                 <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
               </StackPanel>
             </Flyout>

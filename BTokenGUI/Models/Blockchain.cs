@@ -140,7 +140,16 @@ public partial class Blockchain : ObservableObject
 
       Block blockConfirmed = anchor.HeightConfirmed == 0 ? null : Blocks.FirstOrDefault(block => block.Height == anchor.HeightConfirmed);
 
-      anchor.IsRotten = anchor.IsMissed || blockConfirmed != null && !blockConfirmed.HashesAnchorWinner.Contains(anchor.HashBlockReferenced);
+      int heightEligible = anchor.LockTime + 1;
+
+      if (anchor.IsMissed)
+        anchor.ReasonForNotGlowing = $"The anchor was not mined in Bitcoin block {heightEligible}, the only block in which it can win.";
+      else if (blockConfirmed != null && anchor.HeightConfirmed != heightEligible)
+        anchor.ReasonForNotGlowing = $"The anchor was mined in Bitcoin block {anchor.HeightConfirmed}, but it can win only in Bitcoin block {heightEligible}.";
+      else if (blockConfirmed != null && !blockConfirmed.HashesAnchorWinner.Contains(anchor.HashBlockReferenced))
+        anchor.ReasonForNotGlowing = $"Another anchor won the draw in Bitcoin block {anchor.HeightConfirmed}.";
+      else
+        anchor.ReasonForNotGlowing = null;
 
       ObservableCollection<Anchor> destination = anchor.HeightConfirmed == 0 ? Anchors : blockConfirmed?.Anchors;
 

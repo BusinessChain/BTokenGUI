@@ -10,6 +10,7 @@
       </FluentTheme.Palettes>
     </FluentTheme>
     <Style Selector="Border.Panel">
+      <Setter Property="Background" Value="#10FFFFFF" />
       <Setter Property="BorderBrush" Value="Gray" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="4" />
