@@ -124,9 +124,11 @@ public partial class Blockchain : ObservableObject
 
       anchor.Update(anchorJSON);
 
-      ObservableCollection<Anchor> destination = anchor.HeightConfirmed == 0
-        ? Anchors
-        : Blocks.FirstOrDefault(block => block.Height == anchor.HeightConfirmed)?.Anchors;
+      Block blockConfirmed = anchor.HeightConfirmed == 0 ? null : Blocks.FirstOrDefault(block => block.Height == anchor.HeightConfirmed);
+
+      anchor.IsRotten = anchor.IsMissed || blockConfirmed != null && !blockConfirmed.HashesAnchorWinner.Contains(anchor.HashBlockReferenced);
+
+      ObservableCollection<Anchor> destination = anchor.HeightConfirmed == 0 ? Anchors : blockConfirmed?.Anchors;
 
       if (destination == place)
         continue;

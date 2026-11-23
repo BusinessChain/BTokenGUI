@@ -14,6 +14,8 @@ public partial class Blockchain
 
     public int HeightConfirmed { get; private set; }
 
+    public string HashBlockReferenced { get; }
+
     [ObservableProperty]
     public partial bool IsMissed { get; set; }
 
@@ -25,16 +27,16 @@ public partial class Blockchain
     {
       Hash = anchor.GetProperty("hash").GetString();
       TX = new TX(anchor);
-      BrushPair = CreateBrushPair(anchor.GetProperty("outputs").EnumerateArray()
+      HashBlockReferenced = anchor.GetProperty("outputs").EnumerateArray()
         .First(output => output.TryGetProperty("hashBlockReferenced", out _))
-        .GetProperty("hashBlockReferenced").GetString());
+        .GetProperty("hashBlockReferenced").GetString();
+      BrushPair = CreateBrushPair(HashBlockReferenced);
     }
 
     public void Update(JsonElement anchor)
     {
       IsMissed = anchor.GetProperty("isMissed").GetBoolean();
       HeightConfirmed = anchor.GetProperty("heightConfirmed").GetInt32();
-      IsRotten = IsMissed || HeightConfirmed > 0 && !anchor.GetProperty("isWinner").GetBoolean();
     }
   }
 }

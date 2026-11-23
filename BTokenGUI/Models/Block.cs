@@ -20,6 +20,7 @@ public partial class Blockchain
     public string HashShort { get; }
     public List<Field> Fields { get; }
     public ObservableCollection<Anchor> Anchors { get; } = [];
+    public HashSet<string> HashesAnchorWinner { get; }
 
     [ObservableProperty]
     public partial List<TX> TXs { get; set; }
@@ -35,6 +36,9 @@ public partial class Blockchain
       BrushPair = CreateBrushPair(Hash);
       Height = block.GetProperty("height").GetInt32();
       HashShort = $"{Hash[..8]} ... {Hash[^8..]}";
+      HashesAnchorWinner = block.GetProperty("anchorsWinner").EnumerateArray()
+        .Select(anchor => anchor.GetProperty("hashBlockReferenced").GetString())
+        .ToHashSet();
       Fields = [];
 
       foreach (JsonProperty property in block.EnumerateObject())

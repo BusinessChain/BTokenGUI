@@ -25,7 +25,7 @@ public partial class Blockchain
     static List<Block.Field> ParseFields(JsonElement element)
     {
       return element.EnumerateObject()
-        .Where(property => property.Value.ValueKind != JsonValueKind.Array && property.Name is not ("isMissed" or "isWinner" or "heightConfirmed"))
+        .Where(property => property.Value.ValueKind != JsonValueKind.Array && property.Name is not ("isMissed" or "heightConfirmed"))
         .Select(property => new Block.Field(property.Name, property.Value.ToString()))
         .ToList();
     }
