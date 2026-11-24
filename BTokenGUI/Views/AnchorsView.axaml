@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:models="using:BTokenGUI.Models"
+             x:Class="BTokenGUI.Views.AnchorsView"
+             x:DataType="vm:MainViewModel">
+  <Grid DataContext="{Binding BlockchainBitcoin}" x:DataType="models:Blockchain" IsVisible="{Binding IsFormAnchorsOpen}">
+    <Border Background="#99000000" />
+    <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+      <StackPanel Spacing="12" Margin="16">
+        <Grid ColumnDefinitions="*,Auto">
+          <SelectableTextBlock Grid.Column="0" Text="Anchor tank" FontWeight="Bold" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Classes="Close" Command="{Binding CloseFormAnchorsCommand}" />
+        </Grid>
+        <ScrollViewer MaxHeight="240">
+          <ItemsControl ItemsSource="{Binding Anchors}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:Blockchain+Anchor">
+                <Button Margin="0,0,0,4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                  <Button.Flyout>
+                    <Flyout>
+                      <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateFlyoutAnchor}" />
+                    </Flyout>
+                  </Button.Flyout>
+                  <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Border Grid.Column="0" Width="10" Height="10" CornerRadius="2" Background="{Binding BrushPair}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="{Binding Hash}" TextTrimming="CharacterEllipsis" />
+                  </Grid>
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>

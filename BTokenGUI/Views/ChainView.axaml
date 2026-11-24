@@ -43,7 +43,7 @@
       <Setter Property="Margin" Value="0,0,12,0" />
     </Style>
     <Style Selector="ContentControl.tank.besideTankAnchor">
-      <Setter Property="Margin" Value="0,0,42,0" />
+      <Setter Property="Margin" Value="0,0,55,0" />
     </Style>
     <Style Selector="ItemsControl.heap">
       <Setter Property="Height" Value="140" />
@@ -140,10 +140,10 @@
     <StreamGeometry x:Key="GeometryCap">M2,10 A34,14 0 0 1 70,10 A34,5 0 0 1 2,10 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryCapTankAnchor">M2,45 A34,14 0 0 0 70,45 A34,5 0 0 0 2,45 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
-    <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,112</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,96</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankAnchor">M70,45 A34,14 0 0 1 2,45 L31.5,-5 L30,-5 L30,-12 L42,-12 L42,-5 L40.5,-5 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankAnchorInterior">M70,45 A34,5 0 0 1 2,45 L31.5,-5 L40.5,-5 Z</StreamGeometry>
-    <StreamGeometry x:Key="GeometryPipeAnchor">M-51,109 L-51,101 C-51,89 -18,91 -18,79 L-18,65</StreamGeometry>
+    <StreamGeometry x:Key="GeometryPipeAnchor">M-5,96 L-5,65</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
@@ -261,7 +261,7 @@
               <Path Data="M1,97 L19,79 L71,79 L53,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.5" />
               <Path Data="M19,1 L19,79 L71,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
             </Panel>
-            <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="28,84,0,0" />
+            <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="28,78,0,0" />
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L71,1 L53,19 Z" Fill="{StaticResource BrushWindowBackground}" />
@@ -474,11 +474,7 @@
         <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Button.Flyout>
             <Flyout>
-              <StackPanel Spacing="12" MaxWidth="420">
-                <SelectableTextBlock Text="Anchor TX" FontWeight="Bold" />
-                <SelectableTextBlock Text="{Binding ReasonForNotGlowing}" IsVisible="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="#AC7045" TextWrapping="Wrap" />
-                <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
-              </StackPanel>
+              <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateFlyoutAnchor}" />
             </Flyout>
           </Button.Flyout>
           <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{Binding BrushPair}" Foreground="{Binding BrushPair}" Background="{Binding BrushPair}">
@@ -700,8 +696,11 @@
                 <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
               </Panel>
             </ContentControl>
-            <ContentControl Classes="tankAnchor" Grid.Row="2" Grid.Column="1" Theme="{StaticResource ThemeTankAnchor}" Margin="0,0,-18,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
-              <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+            <ContentControl Classes="tankAnchor" Grid.Row="2" Grid.Column="1" Theme="{StaticResource ThemeTankAnchor}" Margin="0,0,-31,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
+              <Panel>
+                <Button Command="{Binding OpenFormAnchorsCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+              </Panel>
             </ContentControl>
             <Canvas Grid.Row="2" Grid.Column="1" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTankAnchorVisible}">
               <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" StrokeJoin="Round" />
@@ -747,15 +746,15 @@
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                     <ColumnDefinition Width="*" />
                   </Grid.ColumnDefinitions>
-                  <Panel x:Name="PanelConverter" Grid.Column="1" Width="128" Height="112" Margin="0,0,14,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
-                    <Path Classes="glow" Data="M16,12 L112,12 L64,96 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
+                  <Panel x:Name="PanelConverter" Grid.Column="1" Width="164" Height="112" Margin="0,0,-34,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
+                    <Path Classes="glow" Data="M16,12 L148,12 L82,96 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
                       <Path.Effect>
                         <BlurEffect Radius="16" />
                       </Path.Effect>
                     </Path>
                     <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                      <Panel Width="64" Height="56">
-                        <Panel Clip="M0,0 L64,0 L32,56 Z">
+                      <Panel Width="100" Height="56">
+                        <Panel Clip="M0,0 L100,0 L50,56 Z">
                           <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
                           <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,100%">
                             <Border.RenderTransform>
@@ -763,7 +762,7 @@
                             </Border.RenderTransform>
                           </Border>
                         </Panel>
-                        <Path Data="M1,1 L63,1 L32,54 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                        <Path Data="M1,1 L99,1 L50,54 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
                       </Panel>
                     </Button>
                   </Panel>

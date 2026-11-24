@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BTokenGUI.Models;
 
@@ -25,6 +26,8 @@ public partial class Blockchain : ObservableObject
   public partial bool IsPlaced { get; set; }
   [ObservableProperty]
   public partial double FillingPowder { get; set; }
+  [ObservableProperty]
+  public partial bool IsFormAnchorsOpen { get; set; }
   Blockchain BlockchainParent;
   long? FundsTank;
 
@@ -36,6 +39,18 @@ public partial class Blockchain : ObservableObject
     IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
     BlockchainParent = blockchainParent;
     Tank = tank;
+  }
+
+  [RelayCommand]
+  void OpenFormAnchors()
+  {
+    IsFormAnchorsOpen = true;
+  }
+
+  [RelayCommand]
+  void CloseFormAnchors()
+  {
+    IsFormAnchorsOpen = false;
   }
 
   public void Update(JsonElement snapshotState)

@@ -26,6 +26,13 @@
         <ItemsControl ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource TemplateEntry}" />
       </StackPanel>
     </DataTemplate>
+    <DataTemplate x:Key="TemplateFlyoutAnchor" x:DataType="models:Blockchain+Anchor">
+      <StackPanel Spacing="12" MaxWidth="420">
+        <SelectableTextBlock Text="Anchor TX" FontWeight="Bold" />
+        <SelectableTextBlock Text="{Binding ReasonForNotGlowing}" IsVisible="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="#AC7045" TextWrapping="Wrap" />
+        <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
+      </StackPanel>
+    </DataTemplate>
   </Application.Resources>
 
   <Application.Styles>
