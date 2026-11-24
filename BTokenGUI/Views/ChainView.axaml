@@ -6,20 +6,22 @@
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
     <Style Selector="ContentControl.shelf">
-      <Setter Property="DockPanel.Dock" Value="Top" />
       <Setter Property="HorizontalAlignment" Value="Center" />
       <Setter Property="MinWidth" Value="160" />
       <Setter Property="MinHeight" Value="56" />
-      <Setter Property="Margin" Value="0,0,0,20" />
+      <Setter Property="Margin" Value="36,0,0,38" />
       <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <TemplatedControl Theme="{StaticResource ThemePlank}" Background="Black" BorderBrush="Black" Margin="8,0,-8,-8" Opacity="0.45">
-              <TemplatedControl.Effect>
+            <Panel Height="58" Margin="0,0,-30,-30" VerticalAlignment="Bottom" Opacity="0.35" IsHitTestVisible="False">
+              <Panel.Effect>
                 <BlurEffect Radius="8" />
-              </TemplatedControl.Effect>
-            </TemplatedControl>
+              </Panel.Effect>
+              <Path Width="30" HorizontalAlignment="Left" Data="M18,0 L30,0 L30,58 L0,28 L0,18 Z" Fill="Black" />
+              <Border Margin="30,0,48,0" Background="Black" />
+              <Path Width="48" HorizontalAlignment="Right" Data="M0,0 L18,0 L48,30 L48,40 L30,58 L0,58 Z" Fill="Black" />
+            </Panel>
             <TemplatedControl Theme="{StaticResource ThemePlank}" />
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" Margin="21,6,21,18" />
           </Panel>
@@ -36,8 +38,10 @@
         </ItemsPanelTemplate>
       </Setter>
     </Style>
-    <Style Selector="DockPanel.aboveMiner > ContentControl.shelf">
-      <Setter Property="DockPanel.Dock" Value="Bottom" />
+    <Style Selector="DockPanel.aboveMiner Panel.shelves">
+      <Setter Property="Grid.Row" Value="2" />
+    </Style>
+    <Style Selector="DockPanel.aboveMiner ContentControl.shelf">
       <Setter Property="Margin" Value="0,-29,0,20" />
     </Style>
     <Style Selector="Ellipse.shadowShelf">
@@ -315,17 +319,19 @@
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
-      <Border Classes="Panel">
+      <Border Classes="Panel" BorderThickness="0" Background="Transparent">
         <DockPanel Classes.aboveMiner="{Binding IsAboveMiner}" Margin="10">
           <SelectableTextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="SemiBold" Margin="0,0,0,6" />
-          <ContentControl Classes="shelf" IsVisible="{Binding IsTXPoolVisible}">
-            <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
-          </ContentControl>
-          <ContentControl Classes="shelf" IsVisible="{Binding IsBlocksMinedPoolVisible}">
-            <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
-          </ContentControl>
-          <Grid ColumnDefinitions="3*,Auto,*">
-            <Panel Grid.Column="0" Margin="0,0,0,40" ClipToBounds="True">
+          <Grid ColumnDefinitions="3*,Auto,*" RowDefinitions="Auto,Auto,Auto" Margin="0,0,40,0">
+            <Panel Classes="shelves" Grid.Column="1" Width="800" Margin="-400,0,-343,0" HorizontalAlignment="Right">
+              <ContentControl Classes="shelf" IsVisible="{Binding IsTXPoolVisible}">
+                <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+              </ContentControl>
+              <ContentControl Classes="shelf" IsVisible="{Binding IsBlocksMinedPoolVisible}">
+                <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
+              </ContentControl>
+            </Panel>
+            <Panel Grid.Row="1" Grid.Column="0" Margin="0,0,0,40" ClipToBounds="True">
               <Panel Width="160" Margin="-160,0,0,0" HorizontalAlignment="Right" IsHitTestVisible="False">
                 <Panel.OpacityMask>
                   <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
@@ -334,15 +340,15 @@
                   </LinearGradientBrush>
                 </Panel.OpacityMask>
                 <TemplatedControl Theme="{StaticResource ThemeRail}" />
-                <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.5" Margin="40,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.5" Margin="52,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
               </Panel>
             </Panel>
-            <Panel Grid.Column="1">
+            <Panel Grid.Row="1" Grid.Column="1">
               <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,40" />
               <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-28,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
                 <ItemsControl.ItemsPanel>
                   <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="48" Margin="0,36,40,40" />
+                    <StackPanel Orientation="Horizontal" Spacing="36" Margin="0,36,40,40" />
                   </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -418,10 +424,9 @@
         <Panel>
           <StackPanel>
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
-            <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-            <Border Classes="Panel" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="2">
+            <Border Classes="Panel" BorderThickness="0" Background="Transparent">
               <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
-                <SelectableTextBlock Text="Miner" FontWeight="Bold" HorizontalAlignment="Center" />
+                <SelectableTextBlock Text="Miner" FontWeight="Bold" />
                 <Grid ColumnDefinitions="56,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="20">
                   <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Width="2" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
                   <Panel x:Name="PanelConverter" Grid.Row="1" Grid.Column="0" Width="64" Height="56" Margin="-4,-14" HorizontalAlignment="Center" VerticalAlignment="Center" Classes.glowing="{Binding IsMining}">
@@ -450,7 +455,6 @@
                 </Grid>
               </StackPanel>
             </Border>
-            <Border Width="2" Height="20" HorizontalAlignment="Center" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
             <ContentControl Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           </StackPanel>
           <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" ItemTemplate="{StaticResource TemplateAnchor}" />
