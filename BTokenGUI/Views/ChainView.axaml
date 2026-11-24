@@ -133,6 +133,7 @@
     <StreamGeometry x:Key="GeometryConeInterior">M2,10 A34,5 0 0 1 70,10 L40.5,60 L31.5,60 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryConeCollar">M30,60 L42,60 L42,67 L30,67 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTubeTip">M36,66 L36,101</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeConverter">M38,104 L36,104 C29.4,104 24,109.4 24,116 L24,190</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
@@ -420,7 +421,14 @@
           <Grid ColumnDefinitions="3*,Auto,*" RowDefinitions="Auto,Auto,Auto" Margin="0,0,40,0">
             <Panel Classes="shelves" Grid.Column="1" Width="800" Margin="-400,0,-343,0" HorizontalAlignment="Right">
               <ContentControl Theme="{StaticResource ThemeCone}" Margin="36,0,0,-7" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsVisible="{Binding IsTXPoolVisible}">
-                <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+                <Panel>
+                  <Panel IsHitTestVisible="False">
+                    <Path Data="{StaticResource GeometryTubeTip}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                    <Path Data="{StaticResource GeometryTubeTip}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
+                    <Path Data="{StaticResource GeometryTubeTip}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
+                  </Panel>
+                  <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+                </Panel>
               </ContentControl>
               <ContentControl Classes="shelf" IsVisible="{Binding IsBlocksMinedPoolVisible}">
                 <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
