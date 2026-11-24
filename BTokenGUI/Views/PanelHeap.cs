@@ -5,6 +5,8 @@ namespace BTokenGUI.Views;
 
 public class PanelHeap : Panel
 {
+  const int COUNT_ROWS_HEAP = 5;
+
   protected override Size MeasureOverride(Size availableSize)
   {
     foreach (Control child in Children)
@@ -26,7 +28,7 @@ public class PanelHeap : Panel
 
       if (++column > row)
       {
-        row++;
+        row = (row + 1) % COUNT_ROWS_HEAP;
         column = 0;
       }
     }
