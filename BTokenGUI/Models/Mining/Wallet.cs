@@ -27,6 +27,9 @@ public partial class Mining
     [ObservableProperty]
     public partial bool IsAutoActive { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsAutoToWalletGUI { get; set; }
+
 
     public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal, bool isAutoOffered)
     {

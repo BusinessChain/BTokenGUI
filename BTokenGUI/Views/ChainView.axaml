@@ -452,6 +452,16 @@
                 <Path Data="{StaticResource GeometryTubeWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
                 <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
               </Panel>
+              <Path Classes="glow" Data="{StaticResource GeometryTubeWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI, FallbackValue=False}" IsHitTestVisible="False">
+                <Path.Effect>
+                  <BlurEffect Radius="6" />
+                </Path.Effect>
+              </Path>
+              <Path Classes="glow" Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsAutoToWalletGUI, FallbackValue=False}" IsHitTestVisible="False">
+                <Path.Effect>
+                  <BlurEffect Radius="6" />
+                </Path.Effect>
+              </Path>
               <Panel IsHitTestVisible="False">
                 <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
                 <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />

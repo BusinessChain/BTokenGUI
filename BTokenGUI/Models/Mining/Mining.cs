@@ -141,6 +141,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     JsonElement levelWithdrawalAuto = snapshotMiner.GetProperty("levelWithdrawalAuto");
     LevelWithdrawalAutoNode = levelWithdrawalAuto.ValueKind == JsonValueKind.Null ? null : levelWithdrawalAuto.GetInt64();
     WalletBToken.IsAutoActive = LevelWithdrawalAutoNode != null;
+    WalletBToken.IsAutoToWalletGUI = WalletGUI.AddressWithdrawalAuto == WalletGUI.Address;
 
     if (WalletBToken.Funds is not long fundsBToken || fundsBToken == 0)
       WalletBToken.Filling = 0;
