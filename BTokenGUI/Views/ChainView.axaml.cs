@@ -37,6 +37,7 @@ public partial class ChainView : UserControl
 
   static readonly Point ContactPortUpper = new(8, 8);
   static readonly Point ContactPortLower = new(8, 5.6);
+  static readonly (string ClassCone, string ClassPort)[] PortsCone = [("tank", "portLid"), ("tankAnchor", "portNozzle")];
 
   ContentPresenter PresenterBlockLeaving;
 
@@ -52,26 +53,24 @@ public partial class ChainView : UserControl
 
     Pipes =
     [
-      CreatePipe(ContentBlockchainBitcoin, isTipUpper: false),
-      CreatePipe(ContentBlockchainBitcoin, isTipUpper: true),
-      CreatePipe(ContentBlockchainBToken, isTipUpper: true)
+      CreatePipe(ContentBlockchainBitcoin),
+      CreatePipe(ContentBlockchainBToken)
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
   }
 
-  FlexPipe CreatePipe(ContentControl chain, bool isTipUpper)
+  FlexPipe CreatePipe(ContentControl chain)
   {
     Path outline = new() { Stroke = new SolidColorBrush(Color.Parse("#7D8794")), StrokeThickness = 8 };
     Path core = new() { Stroke = new SolidColorBrush(Color.Parse("#F2F4F7")), StrokeThickness = 6 };
-    TemplatedControl plugUpper = new() { Theme = (ControlTheme)this.FindResource("ThemePlug"), RenderTransform = new ScaleTransform(1, -1) };
-    TemplatedControl plugLower = new() { Theme = (ControlTheme)this.FindResource("ThemePlug") };
+    TemplatedControl plugTip = new() { Theme = (ControlTheme)this.FindResource("ThemePlug"), RenderTransform = new ScaleTransform(1, -1) };
+    TemplatedControl[] plugsCone = PortsCone.Select(_ => new TemplatedControl { Theme = (ControlTheme)this.FindResource("ThemePlug") }).ToArray();
 
-    CanvasPipes.Children.AddRange([outline, core]);
-    (isTipUpper ? CanvasPipes : CanvasPlugs).Children.Add(plugUpper);
-    CanvasPlugs.Children.Add(plugLower);
+    CanvasPipes.Children.AddRange([outline, core, plugTip]);
+    CanvasPlugs.Children.AddRange(plugsCone);
 
-    return new FlexPipe(chain, isTipUpper, outline, core, plugUpper, plugLower);
+    return new FlexPipe(chain, outline, core, plugTip, plugsCone);
   }
 
   static ContentControl FindCone(ContentControl chain, string classCone)
@@ -155,7 +154,7 @@ public partial class ChainView : UserControl
 
       if (controlDestination?.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
       {
-        List<Point> routeFlex = FindPipeFlex(blockchain, good)?.TraceRoute() ?? [];
+        List<Point> routeFlex = TraceRouteFlex(blockchain, good);
 
         foreach (Point point in routeFlex.Select(point => CanvasPipes.TranslatePoint(point, itemsFlights)).OfType<Point>())
           ExtendRoute(route, point);
@@ -180,19 +179,24 @@ public partial class ChainView : UserControl
     blockchain.Land(good);
   }
 
-  FlexPipe FindPipeFlex(Blockchain blockchain, Blockchain.Good good)
+  List<Point> TraceRouteFlex(Blockchain blockchain, Blockchain.Good good)
   {
     if (blockchain.Blocks.Count == 0)
-      return null;
+      return [];
 
     Blockchain.Block tip = blockchain.Blocks[^1];
-    bool isChipFromTip = good is Blockchain.Chip && good.Origin == tip;
-    bool isAnchorIntoTip = good is Blockchain.Anchor anchor && good.Origin == blockchain.Anchors && tip.Anchors.Contains(anchor);
+    FlexPipe pipeChain = Pipes.First(pipe => pipe.Chain.Content == blockchain);
 
-    if (!isChipFromTip && !isAnchorIntoTip)
-      return null;
+    if (good is Blockchain.Chip && good.Origin == tip)
+      return pipeChain.TraceRoute("tank");
 
-    return Pipes.FirstOrDefault(pipe => pipe.Chain.Content == blockchain && pipe.IsTipUpper == isChipFromTip);
+    if (good is not Blockchain.Anchor anchor || good.Origin != blockchain.Anchors || !tip.Anchors.Contains(anchor))
+      return [];
+
+    List<Point> route = pipeChain.TraceRoute("tankAnchor");
+    route.Reverse();
+
+    return route;
   }
 
   static void ExtendRoute(List<Point> route, Point point)
@@ -331,87 +335,102 @@ public partial class ChainView : UserControl
   class FlexPipe
   {
     public ContentControl Chain;
-    public bool IsTipUpper;
     public bool IsTipFrozen;
     public double Retraction;
 
     Path Outline;
     Path Core;
-    TemplatedControl PlugUpper;
-    TemplatedControl PlugLower;
+    TemplatedControl PlugTip;
+    TemplatedControl[] PlugsCone;
     Point? ContactTip;
     Point Start;
-    Point End;
+    Point?[] Ends = [];
+    Geometry[] Branches = new Geometry[PortsCone.Length];
 
 
-    public FlexPipe(ContentControl chain, bool isTipUpper, Path outline, Path core, TemplatedControl plugUpper, TemplatedControl plugLower)
+    public FlexPipe(ContentControl chain, Path outline, Path core, TemplatedControl plugTip, TemplatedControl[] plugsCone)
     {
       Chain = chain;
-      IsTipUpper = isTipUpper;
       Outline = outline;
       Core = core;
-      PlugUpper = plugUpper;
-      PlugLower = plugLower;
+      PlugTip = plugTip;
+      PlugsCone = plugsCone;
     }
 
     public void Place(Visual canvas)
     {
-      Control portUpper = IsTipUpper ? FindPort(FindTip(Chain), "portBottom") : FindPort(FindCone(Chain, "tankAnchor"), "portBottom");
-      Control portLower = IsTipUpper ? FindPort(FindCone(Chain, "tank"), "portTop") : FindPort(FindTip(Chain), "portTop");
+      Point? contactTip = IsTipFrozen ? ContactTip : FindPort(FindTip(Chain), "portBottom")?.TranslatePoint(ContactPortUpper, canvas);
 
-      Point? contactUpper = IsTipUpper && IsTipFrozen ? ContactTip : portUpper?.TranslatePoint(ContactPortUpper, canvas);
-      Point? contactLower = !IsTipUpper && IsTipFrozen ? ContactTip : portLower?.TranslatePoint(ContactPortLower, canvas);
+      ContactTip = contactTip;
 
-      ContactTip = IsTipUpper ? contactUpper : contactLower;
+      Point?[] contactsCone = PortsCone
+        .Select(port => FindPort(FindCone(Chain, port.ClassCone), port.ClassPort)?.TranslatePoint(ContactPortLower, canvas))
+        .ToArray();
 
-      bool isPlaced = contactUpper != null && contactLower != null;
+      bool isPlaced = contactTip != null && contactsCone.Any(contact => contact != null);
 
       Outline.IsVisible = isPlaced;
       Core.IsVisible = isPlaced;
-      PlugUpper.IsVisible = isPlaced;
-      PlugLower.IsVisible = isPlaced;
+      PlugTip.IsVisible = isPlaced;
+
+      for (int i = 0; i < PlugsCone.Length; i++)
+        PlugsCone[i].IsVisible = isPlaced && contactsCone[i] != null;
 
       if (!isPlaced)
         return;
 
-      double retraction = Retraction * RETRACTION_PLUG;
+      Point start = new(contactTip.Value.X, contactTip.Value.Y + LENGTH_PLUG + Retraction * RETRACTION_PLUG);
 
-      Point start = new(contactUpper.Value.X, contactUpper.Value.Y + LENGTH_PLUG + (IsTipUpper ? retraction : 0));
-      Point end = new(contactLower.Value.X, contactLower.Value.Y - LENGTH_PLUG - (IsTipUpper ? 0 : retraction));
+      Point?[] ends = contactsCone
+        .Select(contact => contact is Point point ? new Point(point.X, point.Y - LENGTH_PLUG) : (Point?)null)
+        .ToArray();
 
-      Start = start;
-      End = end;
-
-      if (Canvas.GetLeft(PlugUpper) == start.X - WIDTH_PLUG / 2 && Canvas.GetTop(PlugUpper) == start.Y - LENGTH_PLUG
-        && Canvas.GetLeft(PlugLower) == end.X - WIDTH_PLUG / 2 && Canvas.GetTop(PlugLower) == end.Y)
+      if (start == Start && ends.SequenceEqual(Ends))
         return;
 
-      Canvas.SetLeft(PlugUpper, start.X - WIDTH_PLUG / 2);
-      Canvas.SetTop(PlugUpper, start.Y - LENGTH_PLUG);
-      Canvas.SetLeft(PlugLower, end.X - WIDTH_PLUG / 2);
-      Canvas.SetTop(PlugLower, end.Y);
+      Start = start;
+      Ends = ends;
+
+      Canvas.SetLeft(PlugTip, start.X - WIDTH_PLUG / 2);
+      Canvas.SetTop(PlugTip, start.Y - LENGTH_PLUG);
 
       Point leadStart = new(start.X, start.Y + LEAD_PIPE);
-      Point leadEnd = new(end.X, end.Y - LEAD_PIPE);
-      Point middle = new((leadStart.X + leadEnd.X) / 2 + BOW_PIPE, (leadStart.Y + leadEnd.Y) / 2);
-      double reach = (leadEnd.Y - leadStart.Y) / 2 * TENSION_PIPE;
 
-      Geometry geometry = Geometry.Parse(FormattableString.Invariant($"""
-        M{start.X},{start.Y} L{leadStart.X},{leadStart.Y}
-        C{leadStart.X},{leadStart.Y + reach} {middle.X},{middle.Y - reach} {middle.X},{middle.Y}
-        C{middle.X},{middle.Y + reach} {leadEnd.X},{leadEnd.Y - reach} {leadEnd.X},{leadEnd.Y} L{end.X},{end.Y}
-        """));
+      for (int i = 0; i < ends.Length; i++)
+      {
+        Branches[i] = null;
+
+        if (ends[i] is not Point end)
+          continue;
+
+        Canvas.SetLeft(PlugsCone[i], end.X - WIDTH_PLUG / 2);
+        Canvas.SetTop(PlugsCone[i], end.Y);
+
+        Point leadEnd = new(end.X, end.Y - LEAD_PIPE);
+        Point middle = new((leadStart.X + leadEnd.X) / 2 + (leadEnd.X < leadStart.X ? -BOW_PIPE : BOW_PIPE), (leadStart.Y + leadEnd.Y) / 2);
+        double reach = (leadEnd.Y - leadStart.Y) / 2 * TENSION_PIPE;
+
+        Branches[i] = Geometry.Parse(FormattableString.Invariant($"""
+          M{start.X},{start.Y} L{leadStart.X},{leadStart.Y}
+          C{leadStart.X},{leadStart.Y + reach} {middle.X},{middle.Y - reach} {middle.X},{middle.Y}
+          C{middle.X},{middle.Y + reach} {leadEnd.X},{leadEnd.Y - reach} {leadEnd.X},{leadEnd.Y} L{end.X},{end.Y}
+          """));
+      }
+
+      GeometryGroup geometry = new() { Children = [.. Branches.Where(branch => branch != null)] };
 
       Outline.Data = geometry;
       Core.Data = geometry;
     }
 
-    public List<Point> TraceRoute()
+    public List<Point> TraceRoute(string classCone)
     {
-      if (!Outline.IsVisible || Outline.Data == null)
+      int index = Array.FindIndex(PortsCone, port => port.ClassCone == classCone);
+
+      if (!Outline.IsVisible || Ends.ElementAtOrDefault(index) is not Point end)
         return [];
 
-      return [new Point(Start.X, Start.Y - LENGTH_PLUG), .. SampleRoute(Outline.Data), new Point(End.X, End.Y + LENGTH_PLUG)];
+      return [new Point(Start.X, Start.Y - LENGTH_PLUG), .. SampleRoute(Branches[index]), new Point(end.X, end.Y + LENGTH_PLUG)];
     }
   }
 }
