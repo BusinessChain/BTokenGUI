@@ -155,22 +155,49 @@ public partial class ChainView : UserControl
 
       if (controlDestination?.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
       {
-        if (pipe == null)
-          route.Add(pointEnd);
+        List<Point> routeFlex = FindPipeFlex(blockchain, good)?.TraceRoute() ?? [];
+
+        foreach (Point point in routeFlex.Select(point => CanvasPipes.TranslatePoint(point, itemsFlights)).OfType<Point>())
+          ExtendRoute(route, point);
+
+        bool isPiped = pipe != null || routeFlex.Count > 0;
+
+        if (isPiped)
+          ExtendRoute(route, pointEnd);
         else
-          route.AddRange(SampleRoute(new LineGeometry(route[^1], pointEnd)).Skip(1));
+          route.Add(pointEnd);
 
         await Animate(
           container,
           0,
-          pipe == null ? SECONDS_FLIGHT : (route.Count - 1) * SPACING_ROUTE / SPEED_PIPE,
-          pipe == null ? new CubicEaseInOut() : new LinearEasing(),
+          isPiped ? (route.Count - 1) * SPACING_ROUTE / SPEED_PIPE : SECONDS_FLIGHT,
+          isPiped ? new LinearEasing() : new CubicEaseInOut(),
           (Canvas.LeftProperty, route.Select(point => point.X - OFFSET_CENTER_GEM).ToArray()),
           (Canvas.TopProperty, route.Select(point => point.Y - OFFSET_CENTER_GEM).ToArray()));
       }
     }
 
     blockchain.Land(good);
+  }
+
+  FlexPipe FindPipeFlex(Blockchain blockchain, Blockchain.Good good)
+  {
+    if (blockchain.Blocks.Count == 0)
+      return null;
+
+    Blockchain.Block tip = blockchain.Blocks[^1];
+    bool isChipFromTip = good is Blockchain.Chip && good.Origin == tip;
+    bool isAnchorIntoTip = good is Blockchain.Anchor anchor && good.Origin == blockchain.Anchors && tip.Anchors.Contains(anchor);
+
+    if (!isChipFromTip && !isAnchorIntoTip)
+      return null;
+
+    return Pipes.FirstOrDefault(pipe => pipe.Chain.Content == blockchain && pipe.IsTipUpper == isChipFromTip);
+  }
+
+  static void ExtendRoute(List<Point> route, Point point)
+  {
+    route.AddRange(SampleRoute(new LineGeometry(route[^1], point)).Skip(1));
   }
 
   static List<Point> SampleRoute(Geometry geometry)
@@ -304,15 +331,17 @@ public partial class ChainView : UserControl
   class FlexPipe
   {
     public ContentControl Chain;
+    public bool IsTipUpper;
     public bool IsTipFrozen;
     public double Retraction;
 
-    bool IsTipUpper;
     Path Outline;
     Path Core;
     TemplatedControl PlugUpper;
     TemplatedControl PlugLower;
     Point? ContactTip;
+    Point Start;
+    Point End;
 
 
     public FlexPipe(ContentControl chain, bool isTipUpper, Path outline, Path core, TemplatedControl plugUpper, TemplatedControl plugLower)
@@ -350,6 +379,9 @@ public partial class ChainView : UserControl
       Point start = new(contactUpper.Value.X, contactUpper.Value.Y + LENGTH_PLUG + (IsTipUpper ? retraction : 0));
       Point end = new(contactLower.Value.X, contactLower.Value.Y - LENGTH_PLUG - (IsTipUpper ? 0 : retraction));
 
+      Start = start;
+      End = end;
+
       if (Canvas.GetLeft(PlugUpper) == start.X - WIDTH_PLUG / 2 && Canvas.GetTop(PlugUpper) == start.Y - LENGTH_PLUG
         && Canvas.GetLeft(PlugLower) == end.X - WIDTH_PLUG / 2 && Canvas.GetTop(PlugLower) == end.Y)
         return;
@@ -372,6 +404,14 @@ public partial class ChainView : UserControl
 
       Outline.Data = geometry;
       Core.Data = geometry;
+    }
+
+    public List<Point> TraceRoute()
+    {
+      if (!Outline.IsVisible || Outline.Data == null)
+        return [];
+
+      return [new Point(Start.X, Start.Y - LENGTH_PLUG), .. SampleRoute(Outline.Data), new Point(End.X, End.Y + LENGTH_PLUG)];
     }
   }
 }
