@@ -137,6 +137,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
     JsonElement levelWithdrawalAuto = snapshotMiner.GetProperty("levelWithdrawalAuto");
     LevelWithdrawalAutoNode = levelWithdrawalAuto.ValueKind == JsonValueKind.Null ? null : levelWithdrawalAuto.GetInt64();
+    WalletBToken.IsAutoActive = LevelWithdrawalAutoNode != null;
 
     if (WalletBToken.Funds is not long fundsBToken || fundsBToken == 0)
       WalletBToken.Filling = 0;
@@ -193,7 +194,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   void OpenFormWithdrawal(Wallet wallet)
   {
     ClearErrors();
-    IsWithdrawalAutoChosen = wallet.IsAutoOffered && LevelWithdrawalAutoNode != null;
+    IsWithdrawalAutoChosen = wallet.IsAutoActive;
     LevelWithdrawalAuto = LevelWithdrawalAutoNode;
     WalletWithdrawal = wallet;
   }
@@ -206,6 +207,17 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   [RelayCommand]
   async Task Withdraw()
+  {
+    await SubmitWithdrawal(true);
+  }
+
+  [RelayCommand]
+  async Task ApplyWithdrawalAuto()
+  {
+    await SubmitWithdrawal(false);
+  }
+
+  async Task SubmitWithdrawal(bool isSending)
   {
     ClearErrors();
 
@@ -220,14 +232,15 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
         });
       else
       {
-        if (WalletWithdrawal.IsAutoOffered && LevelWithdrawalAutoNode != null)
+        if (WalletWithdrawal.IsAutoActive)
           await Node.SendRequest("stopWithdrawalAutoMiner", null);
 
-        await Node.SendRequest(WalletWithdrawal.MethodWithdrawal, new Dictionary<string, object>
-        {
-          ["address"] = AddressWithdrawal,
-          ["fee"] = FeeWithdrawal
-        });
+        if (isSending)
+          await Node.SendRequest(WalletWithdrawal.MethodWithdrawal, new Dictionary<string, object>
+          {
+            ["address"] = AddressWithdrawal,
+            ["fee"] = FeeWithdrawal
+          });
       }
 
       WalletWithdrawal = null;

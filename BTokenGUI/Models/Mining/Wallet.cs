@@ -24,6 +24,9 @@ public partial class Mining
     [ObservableProperty]
     public partial double Filling { get; set; }
 
+    [ObservableProperty]
+    public partial bool IsAutoActive { get; set; }
+
 
     public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal, bool isAutoOffered)
     {

@@ -10,7 +10,7 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain : ObservableObject
 {
-  const int COUNT_CHIPS_TANK_FULL = 12;
+  const int COUNT_CHIPS_TANK_FULL = 10;
   const int COUNT_CHIPS_ARRIVAL = 3;
 
   public string Name { get; }
