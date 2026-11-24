@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -49,7 +48,7 @@ public partial class ChainView : UserControl
 
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
-    Control controlOrigin = good.Origin == null ? PanelConverter : (Control)FindPlace(good.Origin) ?? ContentBlockchainBitcoin;
+    Control controlOrigin = good.Origin == null ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
 
     if (controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), itemsFlights) is Point pointStart)
     {
@@ -59,9 +58,7 @@ public partial class ChainView : UserControl
 
       await blockchain.TaskSlideBlocks;
 
-      Control controlDestination = this.GetVisualDescendants()
-        .OfType<ContentPresenter>()
-        .FirstOrDefault(presenter => presenter.DataContext == good && ItemsControl.ItemsControlFromItemContainer(presenter) is ItemsControl itemsControl && itemsControl != itemsFlights);
+      Control controlDestination = FindControl(good, itemsFlights);
 
       if (controlDestination?.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
         await Animate(
@@ -212,10 +209,12 @@ public partial class ChainView : UserControl
     return animation.RunAsync(target);
   }
 
-  ItemsControl FindPlace(IList place)
+  Control FindControl(object shown, ItemsControl itemsFlights)
   {
     return this.GetVisualDescendants()
-      .OfType<ItemsControl>()
-      .FirstOrDefault(itemsControl => itemsControl.ItemsSource == place);
+      .OfType<Control>()
+      .FirstOrDefault(control => control is ItemsControl itemsControl
+        ? itemsControl.ItemsSource == shown
+        : control.DataContext == shown && ItemsControl.ItemsControlFromItemContainer(control) is ItemsControl itemsOwner && itemsOwner != itemsFlights);
   }
 }

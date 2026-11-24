@@ -13,9 +13,6 @@ public partial class Blockchain
 {
   public partial class Block : Good
   {
-    [ObservableProperty]
-    public partial bool IsExploding { get; set; }
-
     public int Height { get; }
     public List<Field> Fields { get; }
     public ObservableCollection<Anchor> Anchors { get; } = [];

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,27 +10,35 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain : ObservableObject
 {
+  const int COUNT_CHIPS_TANK_FULL = 12;
+  const int COUNT_CHIPS_ARRIVAL = 3;
+
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Block> BlocksMined { get; } = [];
+  public ObservableCollection<Chip> Chips { get; } = [];
+  public Mining.Wallet Tank { get; }
   public bool IsAboveMiner { get; }
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
   public bool IsTipExtending;
   public Task TaskSlideBlocks = Task.CompletedTask;
-  bool IsPlaced;
+  [ObservableProperty]
+  public partial bool IsPlaced { get; set; }
   Blockchain BlockchainParent;
+  long? FundsTank;
 
 
-  public Blockchain(string name, bool isAboveMiner, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent)
+  public Blockchain(string name, bool isAboveMiner, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent, Mining.Wallet tank)
   {
     Name = name;
     IsAboveMiner = isAboveMiner;
     IsTXPoolVisible = isTXPoolVisible;
     IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
     BlockchainParent = blockchainParent;
+    Tank = tank;
   }
 
   public void Update(JsonElement snapshotState)
@@ -59,6 +68,8 @@ public partial class Blockchain : ObservableObject
 
     if (TaskSlideBlocks.IsCompleted && snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
+
+    PlaceChips();
 
     IsPlaced = true;
   }
@@ -167,10 +178,31 @@ public partial class Blockchain : ObservableObject
       place.Remove(anchor);
   }
 
-  void Move<T>(T good, ObservableCollection<T> place, ObservableCollection<T> destination, int index) where T : Good
+  void PlaceChips()
   {
-    place?.Remove(good);
-    good.Origin = place;
+    if (Tank?.Funds is not long funds || !TaskSlideBlocks.IsCompleted || Blocks.Count == 0 || Blocks[^1].IsFlying)
+      return;
+
+    foreach (Chip chip in Chips.Where(chip => chip.IsExploding && !chip.IsFlying).ToList())
+      Chips.Remove(chip);
+
+    int countChipsFilling = (int)Math.Ceiling(Tank.Filling * COUNT_CHIPS_TANK_FULL);
+
+    foreach (Chip chip in Chips.Skip(countChipsFilling).Where(chip => !chip.IsFlying))
+      chip.IsExploding = true;
+
+    int countChipsNew = Math.Max(countChipsFilling - Chips.Count, funds > FundsTank ? COUNT_CHIPS_ARRIVAL : 0);
+
+    for (int i = 0; i < countChipsNew; i++)
+      Move(new Chip(), Blocks[^1], Chips, Chips.Count);
+
+    FundsTank = funds;
+  }
+
+  void Move<T>(T good, object origin, ObservableCollection<T> destination, int index) where T : Good
+  {
+    (origin as ObservableCollection<T>)?.Remove(good);
+    good.Origin = origin;
     good.IsFlying = IsPlaced;
     destination.Insert(index, good);
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -13,10 +12,13 @@ public partial class Blockchain
 
     public IBrush BrushPair { get; protected set; }
 
-    public IList Origin { get; set; }
+    public object Origin { get; set; }
 
     [ObservableProperty]
     public partial bool IsFlying { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsExploding { get; set; }
 
 
     protected static IBrush CreateBrushPair(string hash)

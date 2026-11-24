@@ -19,7 +19,7 @@ public partial class MainViewModel : ObservableObject
 
   public ObservableCollection<Network> Networks { get; } = [];
 
-  public Blockchain BlockchainBitcoin { get; } = new("Bitcoin", isAboveMiner: true, isTXPoolVisible: true, isBlocksMinedPoolVisible: false, blockchainParent: null);
+  public Blockchain BlockchainBitcoin { get; } = new("Bitcoin", isAboveMiner: true, isTXPoolVisible: true, isBlocksMinedPoolVisible: false, blockchainParent: null, tank: null);
 
   public Blockchain BlockchainBToken { get; }
 
@@ -33,7 +33,7 @@ public partial class MainViewModel : ObservableObject
 
   public MainViewModel()
   {
-    BlockchainBToken = new("BToken", isAboveMiner: false, isTXPoolVisible: false, isBlocksMinedPoolVisible: true, blockchainParent: BlockchainBitcoin);
+    BlockchainBToken = new("BToken", isAboveMiner: false, isTXPoolVisible: false, isBlocksMinedPoolVisible: true, blockchainParent: BlockchainBitcoin, tank: Mining.WalletBToken);
 
     _ = PollNode();
   }
@@ -68,9 +68,9 @@ public partial class MainViewModel : ObservableObject
           JsonElement snapshotBitcoin = blockchainsJSON.GetProperty("Bitcoin");
           JsonElement snapshotBToken = blockchainsJSON.GetProperty("BToken");
 
+          Mining.Update(snapshotBitcoin.GetProperty("anchorer"), snapshotBToken.GetProperty("miner"));
           BlockchainBitcoin.Update(snapshotBitcoin);
           BlockchainBToken.Update(snapshotBToken);
-          Mining.Update(snapshotBitcoin.GetProperty("anchorer"), snapshotBToken.GetProperty("miner"));
           StatusConnection = "Connected to node";
         });
 
