@@ -15,6 +15,8 @@ public partial class Mining
 
     public bool IsAutoOffered { get; }
 
+    public bool IsFeedingConverter { get; }
+
     [ObservableProperty]
     public partial string Address { get; set; }
 
@@ -31,12 +33,13 @@ public partial class Mining
     public partial bool IsAutoToWalletGUI { get; set; }
 
 
-    public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal, bool isAutoOffered)
+    public Wallet(Mining mining, string methodWithdrawal, string titleWithdrawal, bool isAutoOffered, bool isFeedingConverter)
     {
       Mining = mining;
       MethodWithdrawal = methodWithdrawal;
       TitleWithdrawal = titleWithdrawal;
       IsAutoOffered = isAutoOffered;
+      IsFeedingConverter = isFeedingConverter;
     }
 
     [RelayCommand]

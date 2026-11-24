@@ -73,8 +73,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public Mining(Models.Wallet walletGUI)
   {
     WalletGUI = walletGUI;
-    WalletBitcoin = new(this, "withdrawBitcoin", "Bitcoin tank", false);
-    WalletBToken = new(this, "withdrawRevenueMiner", "BToken tank", true);
+    WalletBitcoin = new(this, "withdrawBitcoin", "Bitcoin tank", isAutoOffered: false, isFeedingConverter: true);
+    WalletBToken = new(this, "withdrawRevenueMiner", "BToken tank", isAutoOffered: true, isFeedingConverter: false);
   }
 
   public bool HasErrors

@@ -20,7 +20,6 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Block> BlocksMined { get; } = [];
   public ObservableCollection<Chip> Chips { get; } = [];
   public Mining.Wallet Tank { get; }
-  public bool IsAboveMiner { get; }
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
   public bool IsTipExtending;
@@ -31,10 +30,9 @@ public partial class Blockchain : ObservableObject
   long? FundsTank;
 
 
-  public Blockchain(string name, bool isAboveMiner, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent, Mining.Wallet tank)
+  public Blockchain(string name, bool isTXPoolVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent, Mining.Wallet tank)
   {
     Name = name;
-    IsAboveMiner = isAboveMiner;
     IsTXPoolVisible = isTXPoolVisible;
     IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
     BlockchainParent = blockchainParent;
@@ -180,7 +178,7 @@ public partial class Blockchain : ObservableObject
 
   void PlaceChips()
   {
-    if (Tank?.Funds is not long funds || !TaskSlideBlocks.IsCompleted || Blocks.Count == 0 || Blocks[^1].IsFlying)
+    if (Tank.Funds is not long funds || !TaskSlideBlocks.IsCompleted || Blocks.Count == 0 || Blocks[^1].IsFlying)
       return;
 
     foreach (Chip chip in Chips.Where(chip => chip.IsExploding && !chip.IsFlying).ToList())
