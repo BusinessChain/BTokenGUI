@@ -43,6 +43,9 @@ public partial class Wallet : ObservableObject
   [ObservableProperty]
   public partial string AddressWithdrawalAuto { get; set; }
 
+  [ObservableProperty]
+  public partial bool IsViewActive { get; set; }
+
   string PathKey;
   string KeyPrivate;
   byte[] KeyPublic;
@@ -81,6 +84,12 @@ public partial class Wallet : ObservableObject
   partial void OnAddressWithdrawalAutoChanged(string value)
   {
     StateStored.Upsert(new BsonDocument { ["_id"] = ID_ADDRESS_WITHDRAWAL_AUTO, [NAME_FIELD_VALUE] = value });
+  }
+
+  [RelayCommand]
+  void ActivateView()
+  {
+    IsViewActive = true;
   }
 
   List<string> LoadKeysPrivate()

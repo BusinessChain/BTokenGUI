@@ -18,7 +18,7 @@
       <TabItem Header="Networks">
         <views:NetworksView />
       </TabItem>
-      <TabItem Header="Wallet">
+      <TabItem Header="Wallet" IsSelected="{Binding Wallet.IsViewActive, Mode=TwoWay}">
         <views:WalletView />
       </TabItem>
     </TabControl>
