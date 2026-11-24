@@ -494,6 +494,11 @@
                 <Path Data="{StaticResource GeometryConeInterior}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
                 <Path Data="M2,10 A34,5 0 0 1 70,10" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
               </Panel>
+              <Path Data="{StaticResource GeometryConeInterior}" Fill="#FF8A1F" Opacity="0.9" RenderTransformOrigin="36,60" IsVisible="{Binding !Tank.IsFeedingConverter}" IsHitTestVisible="False">
+                <Path.RenderTransform>
+                  <ScaleTransform ScaleX="{Binding FillingPowder}" ScaleY="{Binding FillingPowder}" />
+                </Path.RenderTransform>
+              </Path>
               <Path Classes="glow" Data="{StaticResource GeometryCone}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="4" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
                 <Path.Effect>
                   <BlurEffect Radius="10" />

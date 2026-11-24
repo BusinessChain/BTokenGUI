@@ -10,9 +10,6 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain : ObservableObject
 {
-  const int COUNT_CHIPS_TANK_FULL = 10;
-  const int COUNT_CHIPS_ARRIVAL = 3;
-
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
@@ -26,6 +23,8 @@ public partial class Blockchain : ObservableObject
   public Task TaskSlideBlocks = Task.CompletedTask;
   [ObservableProperty]
   public partial bool IsPlaced { get; set; }
+  [ObservableProperty]
+  public partial double FillingPowder { get; set; }
   Blockchain BlockchainParent;
   long? FundsTank;
 
@@ -189,7 +188,7 @@ public partial class Blockchain : ObservableObject
     if (anchorer is JsonElement anchorerJSON)
       PlaceChipsOutputs(anchorerJSON);
     else
-      PlaceChipsFilling(funds);
+      PlaceChipsPowder(funds);
 
     FundsTank = funds;
   }
@@ -234,17 +233,13 @@ public partial class Blockchain : ObservableObject
     }
   }
 
-  void PlaceChipsFilling(long funds)
+  void PlaceChipsPowder(long funds)
   {
-    int countChipsFilling = (int)Math.Ceiling(Tank.Filling * COUNT_CHIPS_TANK_FULL);
-
-    foreach (Chip chip in Chips.Skip(countChipsFilling).Where(chip => !chip.IsFlying))
-      chip.IsExploding = true;
-
-    int countChipsNew = Math.Max(countChipsFilling - Chips.Count, funds > FundsTank ? COUNT_CHIPS_ARRIVAL : 0);
-
-    for (int i = 0; i < countChipsNew; i++)
+    if (IsPlaced && funds > FundsTank)
       Move(new Chip(), Blocks[^1], Chips, Chips.Count);
+
+    if (!Chips.Any(chip => chip.IsFlying))
+      FillingPowder = Tank.Filling;
   }
 
   void Move<T>(T good, object origin, ObservableCollection<T> destination, int index) where T : Good
@@ -264,5 +259,11 @@ public partial class Blockchain : ObservableObject
 
     good.IsFlying = false;
     good.Origin = null;
+
+    if (good is Chip chip && !Tank.IsFeedingConverter)
+    {
+      chip.IsExploding = true;
+      FillingPowder = Tank.Filling;
+    }
   }
 }
