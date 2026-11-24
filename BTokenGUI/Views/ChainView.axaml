@@ -145,6 +145,24 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
+    <ControlTheme x:Key="ThemeChip" TargetType="ContentControl">
+      <Setter Property="Width" Value="32" />
+      <Setter Property="Height" Value="32" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="{TemplateBinding BorderBrush}" Opacity="0.9">
+              <Rectangle.Effect>
+                <BlurEffect Radius="6" />
+              </Rectangle.Effect>
+            </Rectangle>
+            <Path Data="M10,14 H12 M10,18 H12 M20,14 H22 M20,18 H22 M14,10 V12 M18,10 V12 M14,20 V22 M18,20 V22" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" />
+            <Border Width="8" Height="8" CornerRadius="1.5" BorderThickness="0.75" BorderBrush="{TemplateBinding Foreground}" Background="{TemplateBinding Background}" />
+            <ContentPresenter Content="{TemplateBinding Content}" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
     <ControlTheme x:Key="ThemePlank" TargetType="TemplatedControl">
       <Setter Property="Height" Value="28" />
       <Setter Property="VerticalAlignment" Value="Bottom" />
@@ -263,8 +281,8 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
       <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNull}}" Classes.flying="{Binding IsFlying}">
-        <Ellipse Classes="shadowShelf" Margin="4,0,0,17" />
-        <Path Classes="glow" Data="M28,24 L44,24 L49,32 L36,48 L23,32 Z" Fill="White" Stroke="White" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
+        <Ellipse Classes="shadowShelf" Margin="0,0,0,24" />
+        <Path Classes="glow" Data="M30,30 L42,30 L42,42 L30,42 Z" Fill="White" Stroke="White" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
           <Path.Effect>
             <BlurEffect Radius="8" />
           </Path.Effect>
@@ -279,15 +297,9 @@
               </StackPanel>
             </Flyout>
           </Button.Flyout>
-          <Panel Width="28" Height="28">
-            <Path Fill="{Binding BrushPair}" Data="M6,2 L22,2 L27,10 L14,26 L1,10 Z" />
-            <Path Fill="#73FFFFFF" Data="M10,10 L14,2 L18,10 Z M1,10 L6,2 L10,10 Z" />
-            <Path Fill="#2EFFFFFF" Data="M6,2 L14,2 L10,10 Z M1,10 L10,10 L14,26 Z" />
-            <Path Fill="#2E000000" Data="M14,2 L22,2 L18,10 Z M10,10 L18,10 L14,26 Z" />
-            <Path Fill="#66000000" Data="M18,10 L22,2 L27,10 Z M18,10 L27,10 L14,26 Z" />
-            <Path Data="M6,2 L22,2 L27,10 L14,26 L1,10 Z M1,10 L27,10 M6,2 L10,10 L14,2 L18,10 L22,2 M10,10 L14,26 L18,10" Stroke="#99FFFFFF" StrokeThickness="0.75" StrokeJoin="Round" />
-            <Path Fill="White" Data="M8.5,1.5 L9.3,3.7 L11.5,4.5 L9.3,5.3 L8.5,7.5 L7.7,5.3 L5.5,4.5 L7.7,3.7 Z" />
-          </Panel>
+          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{Binding BrushPair}" Foreground="{Binding BrushPair}" Background="{Binding BrushPair}">
+            <Ellipse Width="4" Height="4" Stroke="#FFF6DC" StrokeThickness="1" />
+          </ContentControl>
         </Button>
       </Panel>
     </DataTemplate>
@@ -329,26 +341,20 @@
         <Panel.RenderTransform>
           <ScaleTransform />
         </Panel.RenderTransform>
-        <Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="#FF8A1F" Opacity="0.9">
-          <Rectangle.Effect>
-            <BlurEffect Radius="6" />
-          </Rectangle.Effect>
-        </Rectangle>
+        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F" Foreground="#FFC46B">
+          <ContentControl.Background>
+            <RadialGradientBrush>
+              <GradientStop Offset="0" Color="#FFD27A" />
+              <GradientStop Offset="1" Color="#FF6A00" />
+            </RadialGradientBrush>
+          </ContentControl.Background>
+          <Rectangle Width="3" Height="3" Fill="#FFF6DC" />
+        </ContentControl>
         <Path Classes="flash" Data="M10,10 L22,10 L22,22 L10,22 Z" Fill="White" Opacity="0">
           <Path.Effect>
             <BlurEffect Radius="6" />
           </Path.Effect>
         </Path>
-        <Path Data="M10,14 H12 M10,18 H12 M20,14 H22 M20,18 H22 M14,10 V12 M18,10 V12 M14,20 V22 M18,20 V22" Stroke="#FFC46B" StrokeThickness="1" />
-        <Border Width="8" Height="8" CornerRadius="1.5" BorderThickness="0.75" BorderBrush="#FFE3AE">
-          <Border.Background>
-            <RadialGradientBrush>
-              <GradientStop Offset="0" Color="#FFD27A" />
-              <GradientStop Offset="1" Color="#FF6A00" />
-            </RadialGradientBrush>
-          </Border.Background>
-        </Border>
-        <Rectangle Width="3" Height="3" Fill="#FFF6DC" />
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
