@@ -264,7 +264,6 @@
               <Path Data="M53,19 L71,1 L71,79 L53,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
               <Path Data="M1,19 L19,1 L71,1 L71,79 L53,97 L1,97 Z M1,19 L53,19 L71,1 M53,19 L53,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
             </Panel>
-            <TemplatedControl Classes="portTop" Theme="{StaticResource ThemeReceptacle}" Margin="28,1,0,0" BorderBrush="{TemplateBinding BorderBrush}" />
           </Panel>
         </ControlTemplate>
       </Setter>
