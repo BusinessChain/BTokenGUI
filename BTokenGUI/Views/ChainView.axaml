@@ -135,6 +135,7 @@
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeTip">M36,66 L36,101</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,112</StreamGeometry>
+    <StreamGeometry x:Key="GeometryPipeAnchor">M-17,354 L-17,334 C-17,322 6,322 6,310 L6,-6 A12,12 0 0 0 -6,-18 L-27,-18 A12,12 0 0 0 -39,-6 L-39,0</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
@@ -583,6 +584,11 @@
                 <ItemsControl Classes="heap" ItemsSource="{Binding Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
               </Panel>
             </ContentControl>
+            <Canvas Grid.Row="0" Grid.Column="1" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTXPoolVisible}">
+              <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" StrokeJoin="Round" />
+              <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" StrokeJoin="Round" />
+              <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" StrokeJoin="Round" Opacity="0.36" />
+            </Canvas>
           </Grid>
         </DockPanel>
       </Border>
