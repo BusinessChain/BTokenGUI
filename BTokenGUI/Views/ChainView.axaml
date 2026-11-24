@@ -134,7 +134,7 @@
     <StreamGeometry x:Key="GeometryConeCollar">M30,60 L42,60 L42,67 L30,67 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeTip">M36,66 L36,101</StreamGeometry>
-    <StreamGeometry x:Key="GeometryTubeConverter">M38,104 L36,104 C29.4,104 24,109.4 24,116 L24,190</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,112</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
@@ -428,7 +428,12 @@
       <Border Classes="Panel" BorderThickness="0" Background="Transparent">
         <DockPanel Margin="10">
           <SelectableTextBlock DockPanel.Dock="Top" Text="{Binding Name}" FontWeight="SemiBold" Margin="0,0,0,6" />
-          <Grid ColumnDefinitions="3*,Auto,*" RowDefinitions="Auto,Auto,Auto" Margin="0,0,40,0">
+          <Grid RowDefinitions="Auto,Auto,Auto" Margin="0,0,40,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="3*" />
+              <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Panel Classes="shelves" Grid.Column="1" Width="800" Margin="-400,0,-343,0" HorizontalAlignment="Right">
               <ContentControl Theme="{StaticResource ThemeCone}" Margin="36,0,0,-7" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsVisible="{Binding IsTXPoolVisible}">
                 <Panel>
@@ -498,7 +503,7 @@
                           </ItemsControl.ItemsPanel>
                         </ItemsControl>
                       </ContentControl>
-                      <TextBlock Text="{Binding Height}" Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="12" FontWeight="Bold" Foreground="White" IsHitTestVisible="False">
+                      <TextBlock Text="{Binding Height}" Width="52" Margin="1,22,0,0" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" FontWeight="Bold" Foreground="White" IsHitTestVisible="False">
                         <TextBlock.Effect>
                           <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
                         </TextBlock.Effect>
@@ -508,7 +513,7 @@
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
             </Panel>
-            <Panel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,76,0" ClipToBounds="True" IsHitTestVisible="False">
+            <Panel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,76,0" ClipToBounds="True" IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
               <Canvas>
                 <Grid Width="{Binding $parent[DockPanel].Bounds.Width}" ColumnDefinitions="*,*">
                   <Panel Grid.Column="1" Height="8" Margin="12,100,0,0" VerticalAlignment="Top" Classes.glowing="{Binding Tank.IsAutoActive}">
@@ -523,11 +528,6 @@
                   </Panel>
                 </Grid>
               </Canvas>
-            </Panel>
-            <Panel Grid.Row="2" Grid.ColumnSpan="3" Width="48" Height="200" Margin="0,0,-40,-200" HorizontalAlignment="Center" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding Tank.IsFeedingConverter}">
-              <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-              <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-              <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
             </Panel>
             <Panel Grid.Row="2" Grid.ColumnSpan="3" Width="68" Height="52" Margin="0,78,-40,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
               <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
@@ -546,13 +546,18 @@
             </Panel>
             <ContentControl Grid.Row="2" Grid.Column="1" Theme="{StaticResource ThemeCone}" Margin="0,0,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
               <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
-                <Panel IsHitTestVisible="False">
+                <Panel IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
                   <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsFeedingConverter}" />
+                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
                   <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsFeedingConverter}" />
+                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" />
                   <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
-                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsFeedingConverter}" />
+                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
+                </Panel>
+                <Panel IsHitTestVisible="False" IsVisible="{Binding Tank.IsFeedingConverter}">
+                  <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                  <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
+                  <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
                 </Panel>
                 <Path Classes="glow" Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
                   <Path.Effect>
@@ -605,31 +610,38 @@
               <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateChip}" />
             </DataTemplate>
           </Panel.DataTemplates>
-          <StackPanel>
+          <StackPanel Grid.IsSharedSizeScope="True">
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
             <Border Classes="Panel" BorderThickness="0" Background="Transparent">
               <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
                 <SelectableTextBlock Text="Miner" FontWeight="Bold" />
-                <Panel x:Name="PanelConverter" Width="128" Height="112" Margin="0,-28" HorizontalAlignment="Center" Classes.glowing="{Binding IsMining}">
-                  <Path Classes="glow" Data="M16,12 L112,12 L64,96 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
-                    <Path.Effect>
-                      <BlurEffect Radius="16" />
-                    </Path.Effect>
-                  </Path>
-                  <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Panel Width="64" Height="56">
-                      <Panel Clip="M0,0 L64,0 L32,56 Z">
-                        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
-                        <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,100%">
-                          <Border.RenderTransform>
-                            <ScaleTransform ScaleY="{Binding FillingConverter}" />
-                          </Border.RenderTransform>
-                        </Border>
+                <Grid Margin="0,-90,40,-28">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
+                    <ColumnDefinition Width="*" />
+                  </Grid.ColumnDefinitions>
+                  <Panel x:Name="PanelConverter" Grid.Column="1" Width="128" Height="112" Margin="0,0,-16,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
+                    <Path Classes="glow" Data="M16,12 L112,12 L64,96 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
+                      <Path.Effect>
+                        <BlurEffect Radius="16" />
+                      </Path.Effect>
+                    </Path>
+                    <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      <Panel Width="64" Height="56">
+                        <Panel Clip="M0,0 L64,0 L32,56 Z">
+                          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
+                          <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,100%">
+                            <Border.RenderTransform>
+                              <ScaleTransform ScaleY="{Binding FillingConverter}" />
+                            </Border.RenderTransform>
+                          </Border>
+                        </Panel>
+                        <Path Data="M1,1 L63,1 L32,54 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
                       </Panel>
-                      <Path Data="M1,1 L63,1 L32,54 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                    </Panel>
-                  </Button>
-                </Panel>
+                    </Button>
+                  </Panel>
+                </Grid>
                 <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" />
               </StackPanel>
             </Border>
