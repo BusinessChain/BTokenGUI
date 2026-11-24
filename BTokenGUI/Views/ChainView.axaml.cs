@@ -356,7 +356,7 @@ public partial class ChainView : UserControl
 
     public void Place(Visual canvas)
     {
-      Control portUpper = IsTipUpper ? FindPort(FindTip(Chain), "portBottom") : FindPort(FindCone(Chain, "pool"), "portBottom");
+      Control portUpper = IsTipUpper ? FindPort(FindTip(Chain), "portBottom") : FindPort(FindCone(Chain, "tankAnchor"), "portBottom");
       Control portLower = IsTipUpper ? FindPort(FindCone(Chain, "tank"), "portTop") : FindPort(FindTip(Chain), "portTop");
 
       Point? contactUpper = IsTipUpper && IsTipFrozen ? ContactTip : portUpper?.TranslatePoint(ContactPortUpper, canvas);
