@@ -39,12 +39,6 @@
         </ItemsPanelTemplate>
       </Setter>
     </Style>
-    <Style Selector="Panel.loweredBlocks">
-      <Setter Property="Margin" Value="0,18,0,-18" />
-    </Style>
-    <Style Selector="Panel.loweredTank">
-      <Setter Property="Margin" Value="0,28,0,-28" />
-    </Style>
     <Style Selector="ItemsControl.heap">
       <Setter Property="Height" Value="140" />
       <Setter Property="Margin" Value="-40,-40,-40,0" />
@@ -140,7 +134,7 @@
     <StreamGeometry x:Key="GeometryCap">M2,10 A34,14 0 0 1 70,10 A34,5 0 0 1 2,10 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,112</StreamGeometry>
-    <StreamGeometry x:Key="GeometryPipeAnchor">M-21,363 L-21,341 C-21,321 34,321 34,301 L34,-12 A12,12 0 0 0 22,-24 L-36,-24 A12,12 0 0 0 -48,-12 L-48,-10</StreamGeometry>
+    <StreamGeometry x:Key="GeometryPipeAnchor">M-21,379 L-21,357 C-21,337 34,337 34,317 L34,-12 A12,12 0 0 0 22,-24 L-36,-24 A12,12 0 0 0 -48,-12 L-48,-10</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
@@ -182,14 +176,16 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
-    <ControlTheme x:Key="ThemePlug" TargetType="TemplatedControl">
-      <Setter Property="Width" Value="10" />
-      <Setter Property="Height" Value="16" />
-      <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+    <ControlTheme x:Key="ThemeReceptacleDown" TargetType="TemplatedControl">
+      <Setter Property="Width" Value="16" />
+      <Setter Property="Height" Value="12" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="IsHitTestVisible" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Data="M0.5,0.5 L9.5,0.5 L9.5,9 L0.5,9 Z" Stroke="#1E232B" StrokeThickness="0.6">
+            <Path Data="M1,3 L1,8 A7,2.5 0 0 0 15,8 L15,3 Z">
               <Path.Fill>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
                   <GradientStop Offset="0" Color="#2A303A" />
@@ -199,17 +195,40 @@
                 </LinearGradientBrush>
               </Path.Fill>
             </Path>
-            <Path Data="M1,3 H9 M1,5.5 H9 M1,8 H9" Stroke="#2A303A" StrokeThickness="0.8" Opacity="0.8" />
-            <Path Data="M1.5,9 L8.5,9 L8.5,11 L1.5,11 Z" Fill="#3A4250" />
-            <Path Data="M2.5,11 L7.5,11 L7.5,14.5 A2.5,1.5 0 0 1 2.5,14.5 Z" Stroke="#1E232B" StrokeThickness="0.5">
+            <Path Data="M1,7 A7,2.5 0 0 0 15,7 L15,8 A7,2.5 0 0 1 1,8 Z" Fill="#9AA4B2" Opacity="0.8" />
+            <Path Data="M1,3 L1,8 A7,2.5 0 0 0 15,8 L15,3" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" />
+            <Path Data="M1,3 A7,2.5 0 1 1 15,3 A7,2.5 0 1 1 1,3 Z" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1">
               <Path.Fill>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
-                  <GradientStop Offset="0" Color="#6E7888" />
-                  <GradientStop Offset="0.4" Color="#E6ECF3" />
-                  <GradientStop Offset="1" Color="#4A5260" />
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                  <GradientStop Offset="0" Color="#E6ECF3" />
+                  <GradientStop Offset="1" Color="#6E7888" />
                 </LinearGradientBrush>
               </Path.Fill>
             </Path>
+            <Path Data="M3,2.2 A6,2 0 0 1 8,1" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="ThemePlug" TargetType="TemplatedControl">
+      <Setter Property="Width" Value="10" />
+      <Setter Property="Height" Value="11" />
+      <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Path Data="M0.5,0.5 L9.5,0.5 L9.5,10.5 L0.5,10.5 Z" Stroke="#1E232B" StrokeThickness="0.6">
+              <Path.Fill>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                  <GradientStop Offset="0" Color="#2A303A" />
+                  <GradientStop Offset="0.3" Color="#C9D1DC" />
+                  <GradientStop Offset="0.65" Color="#6B7686" />
+                  <GradientStop Offset="1" Color="#1E232B" />
+                </LinearGradientBrush>
+              </Path.Fill>
+            </Path>
+            <Path Data="M1,2.5 H9 M1,4.5 H9 M1,6.5 H9" Stroke="#2A303A" StrokeThickness="0.8" Opacity="0.8" />
+            <Path Data="M0.5,8.5 L9.5,8.5 L9.5,10.5 L0.5,10.5 Z" Fill="#3A4250" Stroke="#1E232B" StrokeThickness="0.6" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -313,11 +332,7 @@
               <Path Data="M2,10 L31.5,60 M70,10 L40.5,60" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
               <Path Data="M2,10 A34,5 0 0 0 70,10" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="3" StrokeLineCap="Round" />
               <Path Data="M64.4,12.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,14.3 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,15 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,14.3 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,12.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="White" Opacity="0.7" />
-              <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="28,58,0,0" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,50%">
-                <TemplatedControl.RenderTransform>
-                  <ScaleTransform ScaleY="-1" />
-                </TemplatedControl.RenderTransform>
-              </TemplatedControl>
+              <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacleDown}" Margin="28,57,0,0" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" />
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -517,15 +532,15 @@
               <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Panel Classes="shelves" Grid.Column="1" Width="800" Margin="-400,0,-343,0" HorizontalAlignment="Right">
-              <ContentControl Classes="pool" Theme="{StaticResource ThemeCone}" Margin="18,0,0,-24" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsVisible="{Binding IsTXPoolVisible}">
+              <ContentControl Classes="pool" Theme="{StaticResource ThemeCone}" Margin="18,0,0,2" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsVisible="{Binding IsTXPoolVisible}">
                 <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
               </ContentControl>
               <ContentControl Classes="shelf" IsVisible="{Binding IsBlocksMinedPoolVisible}">
                 <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
               </ContentControl>
             </Panel>
-            <Panel Grid.Row="1" Grid.Column="0" ClipToBounds="True" Classes.loweredBlocks="{Binding IsTXPoolVisible}">
-              <Panel Width="160" Margin="-160,0,0,40" HorizontalAlignment="Right" IsHitTestVisible="False">
+            <Panel Grid.Row="1" Grid.Column="0" ClipToBounds="True">
+              <Panel Width="160" Margin="-160,0,0,58" HorizontalAlignment="Right" IsHitTestVisible="False">
                 <Panel.OpacityMask>
                   <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
                     <GradientStop Offset="0" Color="Transparent" />
@@ -536,12 +551,12 @@
                 <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.5" Margin="52,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
               </Panel>
             </Panel>
-            <Panel Grid.Row="1" Grid.Column="1" Classes.loweredBlocks="{Binding IsTXPoolVisible}">
-              <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,40" />
+            <Panel Grid.Row="1" Grid.Column="1">
+              <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
               <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-28,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
                 <ItemsControl.ItemsPanel>
                   <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="36" Margin="0,36,40,40" />
+                    <StackPanel Orientation="Horizontal" Spacing="36" Margin="0,36,40,58" />
                   </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -619,47 +634,45 @@
                 <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
               </Panel>
             </Panel>
-            <Panel Grid.Row="2" Grid.Column="1" Classes.loweredTank="{Binding IsTXPoolVisible}">
-              <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,0,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
-                <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
-                  <Panel IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
-                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
-                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" />
-                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
-                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
-                  </Panel>
-                  <Panel IsHitTestVisible="False" IsVisible="{Binding Tank.IsFeedingConverter}">
-                    <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-                    <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-                    <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
-                  </Panel>
-                  <Path Classes="glow" Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
-                    <Path.Effect>
-                      <BlurEffect Radius="6" />
-                    </Path.Effect>
-                  </Path>
-                  <Path Classes="glow" Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
-                    <Path.Effect>
-                      <BlurEffect Radius="6" />
-                    </Path.Effect>
-                  </Path>
-                  <Button Command="{Binding Tank.OpenPanelCommand}" Height="68" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
-                  <Path Data="{StaticResource GeometryConeInterior}" Fill="#FF8A1F" Opacity="0.9" RenderTransformOrigin="36,60" IsVisible="{Binding !Tank.IsFeedingConverter}" IsHitTestVisible="False">
-                    <Path.RenderTransform>
-                      <ScaleTransform ScaleX="{Binding FillingPowder}" ScaleY="{Binding FillingPowder}" />
-                    </Path.RenderTransform>
-                  </Path>
-                  <Path Classes="glow" Data="{StaticResource GeometryCone}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="4" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
-                    <Path.Effect>
-                      <BlurEffect Radius="10" />
-                    </Path.Effect>
-                  </Path>
-                  <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
+            <ContentControl Classes="tank" Grid.Row="2" Grid.Column="1" Theme="{StaticResource ThemeCone}" Margin="0,0,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+              <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
+                <Panel IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
+                  <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
+                  <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
+                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" />
+                  <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
+                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
                 </Panel>
-              </ContentControl>
-            </Panel>
+                <Panel IsHitTestVisible="False" IsVisible="{Binding Tank.IsFeedingConverter}">
+                  <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                  <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
+                  <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
+                </Panel>
+                <Path Classes="glow" Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
+                  <Path.Effect>
+                    <BlurEffect Radius="6" />
+                  </Path.Effect>
+                </Path>
+                <Path Classes="glow" Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
+                  <Path.Effect>
+                    <BlurEffect Radius="6" />
+                  </Path.Effect>
+                </Path>
+                <Button Command="{Binding Tank.OpenPanelCommand}" Height="68" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+                <Path Data="{StaticResource GeometryConeInterior}" Fill="#FF8A1F" Opacity="0.9" RenderTransformOrigin="36,60" IsVisible="{Binding !Tank.IsFeedingConverter}" IsHitTestVisible="False">
+                  <Path.RenderTransform>
+                    <ScaleTransform ScaleX="{Binding FillingPowder}" ScaleY="{Binding FillingPowder}" />
+                  </Path.RenderTransform>
+                </Path>
+                <Path Classes="glow" Data="{StaticResource GeometryCone}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="4" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
+                  <Path.Effect>
+                    <BlurEffect Radius="10" />
+                  </Path.Effect>
+                </Path>
+                <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
+              </Panel>
+            </ContentControl>
             <Canvas Grid.Row="0" Grid.Column="1" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTXPoolVisible}">
               <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" StrokeJoin="Round" />
               <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" StrokeJoin="Round" />
@@ -698,7 +711,7 @@
             <Border Classes="Panel" BorderThickness="0" Background="Transparent">
               <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
                 <SelectableTextBlock Text="Miner" FontWeight="Bold" />
-                <Grid Margin="0,-71,40,-28">
+                <Grid Margin="0,-99,40,-28">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" />
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
@@ -730,6 +743,7 @@
             </Border>
             <ContentControl x:Name="ContentBlockchainBToken" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           </StackPanel>
+          <Canvas x:Name="CanvasPlugs" IsHitTestVisible="False" />
           <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
           <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
         </Panel>

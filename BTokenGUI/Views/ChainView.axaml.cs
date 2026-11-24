@@ -26,12 +26,14 @@ public partial class ChainView : UserControl
   const double SECONDS_STAGGER_SLIDE = 0.25;
   const double SPACING_ROUTE = 6;
   const double SPEED_PIPE = 320;
-  const double LENGTH_PLUG = 16;
+  const double LENGTH_PLUG = 11;
   const double WIDTH_PLUG = 10;
-  const double REACH_PIPE = 14;
-  const double BOW_PIPE = 18;
+  const double LEAD_PIPE = 6;
+  const double BOW_PIPE = 12;
+  const double TENSION_PIPE = 0.55;
 
-  static readonly Point BorePort = new(8, 4.2);
+  static readonly Point ContactPortUpper = new(8, 8);
+  static readonly Point ContactPortLower = new(8, 5.6);
 
   ContentPresenter PresenterBlockLeaving;
 
@@ -47,22 +49,24 @@ public partial class ChainView : UserControl
 
     Pipes =
     [
-      CreatePipe(() => FindPort(FindCone(ContentBlockchainBitcoin, "pool"), "portBottom"), () => FindPort(FindTip(ContentBlockchainBitcoin), "portTop")),
-      CreatePipe(() => FindPort(FindTip(ContentBlockchainBitcoin), "portBottom"), () => FindPort(FindCone(ContentBlockchainBitcoin, "tank"), "portTop")),
-      CreatePipe(() => FindPort(FindTip(ContentBlockchainBToken), "portBottom"), () => FindPort(FindCone(ContentBlockchainBToken, "tank"), "portTop"))
+      CreatePipe(() => FindPort(FindCone(ContentBlockchainBitcoin, "pool"), "portBottom"), () => FindPort(FindTip(ContentBlockchainBitcoin), "portTop"), isPlugUpperBehind: false),
+      CreatePipe(() => FindPort(FindTip(ContentBlockchainBitcoin), "portBottom"), () => FindPort(FindCone(ContentBlockchainBitcoin, "tank"), "portTop"), isPlugUpperBehind: true),
+      CreatePipe(() => FindPort(FindTip(ContentBlockchainBToken), "portBottom"), () => FindPort(FindCone(ContentBlockchainBToken, "tank"), "portTop"), isPlugUpperBehind: true)
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
   }
 
-  (Func<Control>, Func<Control>, Path, Path, TemplatedControl, TemplatedControl) CreatePipe(Func<Control> getPortUpper, Func<Control> getPortLower)
+  (Func<Control>, Func<Control>, Path, Path, TemplatedControl, TemplatedControl) CreatePipe(Func<Control> getPortUpper, Func<Control> getPortLower, bool isPlugUpperBehind)
   {
     Path outline = new() { Stroke = new SolidColorBrush(Color.Parse("#7D8794")), StrokeThickness = 8 };
     Path core = new() { Stroke = new SolidColorBrush(Color.Parse("#F2F4F7")), StrokeThickness = 6 };
     TemplatedControl plugUpper = new() { Theme = (ControlTheme)this.FindResource("ThemePlug"), RenderTransform = new ScaleTransform(1, -1) };
     TemplatedControl plugLower = new() { Theme = (ControlTheme)this.FindResource("ThemePlug") };
 
-    CanvasPipes.Children.AddRange([outline, core, plugUpper, plugLower]);
+    CanvasPipes.Children.AddRange([outline, core]);
+    (isPlugUpperBehind ? CanvasPipes : CanvasPlugs).Children.Add(plugUpper);
+    CanvasPlugs.Children.Add(plugLower);
 
     return (getPortUpper, getPortLower, outline, core, plugUpper, plugLower);
   }
@@ -88,9 +92,9 @@ public partial class ChainView : UserControl
   {
     foreach ((Func<Control> getPortUpper, Func<Control> getPortLower, Path outline, Path core, TemplatedControl plugUpper, TemplatedControl plugLower) in Pipes)
     {
-      Point? boreUpper = getPortUpper()?.TranslatePoint(BorePort, CanvasPipes);
-      Point? boreLower = getPortLower()?.TranslatePoint(BorePort, CanvasPipes);
-      bool isPlaced = boreUpper != null && boreLower != null;
+      Point? contactUpper = getPortUpper()?.TranslatePoint(ContactPortUpper, CanvasPipes);
+      Point? contactLower = getPortLower()?.TranslatePoint(ContactPortLower, CanvasPipes);
+      bool isPlaced = contactUpper != null && contactLower != null;
 
       outline.IsVisible = isPlaced;
       core.IsVisible = isPlaced;
@@ -100,20 +104,28 @@ public partial class ChainView : UserControl
       if (!isPlaced)
         continue;
 
-      Point start = new(boreUpper.Value.X, boreUpper.Value.Y + LENGTH_PLUG);
-      Point end = new(boreLower.Value.X, boreLower.Value.Y - LENGTH_PLUG);
+      Point start = new(contactUpper.Value.X, contactUpper.Value.Y + LENGTH_PLUG);
+      Point end = new(contactLower.Value.X, contactLower.Value.Y - LENGTH_PLUG);
 
-      if (Canvas.GetLeft(plugUpper) == start.X - WIDTH_PLUG / 2 && Canvas.GetTop(plugUpper) == boreUpper.Value.Y
+      if (Canvas.GetLeft(plugUpper) == start.X - WIDTH_PLUG / 2 && Canvas.GetTop(plugUpper) == start.Y - LENGTH_PLUG
         && Canvas.GetLeft(plugLower) == end.X - WIDTH_PLUG / 2 && Canvas.GetTop(plugLower) == end.Y)
         continue;
 
       Canvas.SetLeft(plugUpper, start.X - WIDTH_PLUG / 2);
-      Canvas.SetTop(plugUpper, boreUpper.Value.Y);
+      Canvas.SetTop(plugUpper, start.Y - LENGTH_PLUG);
       Canvas.SetLeft(plugLower, end.X - WIDTH_PLUG / 2);
       Canvas.SetTop(plugLower, end.Y);
 
-      Geometry geometry = Geometry.Parse(FormattableString.Invariant(
-        $"M{start.X},{start.Y} C{start.X + BOW_PIPE},{start.Y + REACH_PIPE} {end.X + BOW_PIPE},{end.Y - REACH_PIPE} {end.X},{end.Y}"));
+      Point leadStart = new(start.X, start.Y + LEAD_PIPE);
+      Point leadEnd = new(end.X, end.Y - LEAD_PIPE);
+      Point middle = new((leadStart.X + leadEnd.X) / 2 + BOW_PIPE, (leadStart.Y + leadEnd.Y) / 2);
+      double reach = (leadEnd.Y - leadStart.Y) / 2 * TENSION_PIPE;
+
+      Geometry geometry = Geometry.Parse(FormattableString.Invariant($"""
+        M{start.X},{start.Y} L{leadStart.X},{leadStart.Y}
+        C{leadStart.X},{leadStart.Y + reach} {middle.X},{middle.Y - reach} {middle.X},{middle.Y}
+        C{middle.X},{middle.Y + reach} {leadEnd.X},{leadEnd.Y - reach} {leadEnd.X},{leadEnd.Y} L{end.X},{end.Y}
+        """));
 
       outline.Data = geometry;
       core.Data = geometry;
