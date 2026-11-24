@@ -3,14 +3,14 @@
              xmlns:vm="using:BTokenGUI.ViewModels"
              xmlns:models="using:BTokenGUI.Models"
              xmlns:views="using:BTokenGUI.Views"
-             x:Class="BTokenGUI.Views.ChainView"
+             x:Class="BTokenGUI.Views.MiningView"
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
     <Style Selector="ContentControl.shelf">
       <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="MinWidth" Value="160" />
+      <Setter Property="MinWidth" Value="108" />
       <Setter Property="MinHeight" Value="56" />
-      <Setter Property="Margin" Value="36,0,0,38" />
+      <Setter Property="Margin" Value="18,0,0,38" />
       <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
@@ -46,6 +46,7 @@
       <Setter Property="Margin" Value="0,0,55,0" />
     </Style>
     <Style Selector="ItemsControl.heap">
+      <Setter Property="Clip" Value="M42,50 A34,5 0 0 1 110,50 L80.5,100 L71.5,100 Z" />
       <Setter Property="IsHitTestVisible" Value="False" />
       <Setter Property="Height" Value="140" />
       <Setter Property="Margin" Value="-40,-40,-40,0" />
@@ -282,13 +283,14 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Rectangle Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="{TemplateBinding BorderBrush}" Opacity="0.9">
-              <Rectangle.Effect>
+            <Ellipse Width="25.2" Height="25.2" Fill="{TemplateBinding BorderBrush}" Opacity="0.9">
+              <Ellipse.Effect>
                 <BlurEffect Radius="6" />
-              </Rectangle.Effect>
-            </Rectangle>
-            <Path Data="M10,14 H12 M10,18 H12 M20,14 H22 M20,18 H22 M14,10 V12 M18,10 V12 M14,20 V22 M18,20 V22" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" />
-            <Border Width="8" Height="8" CornerRadius="1.5" BorderThickness="0.75" BorderBrush="{TemplateBinding Foreground}" Background="{TemplateBinding Background}" />
+              </Ellipse.Effect>
+            </Ellipse>
+            <Ellipse Width="18" Height="18" Fill="{TemplateBinding Background}" Stroke="White" StrokeThickness="0.75" />
+            <Ellipse Width="16.65" Height="16.65" Stroke="White" StrokeThickness="1.35" StrokeDashArray="2,2.67" Opacity="0.85" />
+            <Ellipse Width="14.7" Height="14.7" Stroke="White" StrokeThickness="0.6" Opacity="0.7" />
             <ContentPresenter Content="{TemplateBinding Content}" />
           </Panel>
         </ControlTemplate>
@@ -478,8 +480,8 @@
               <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateFlyoutAnchor}" />
             </Flyout>
           </Button.Flyout>
-          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{Binding BrushPair}" Foreground="{Binding BrushPair}" Background="{Binding BrushPair}">
-            <Ellipse Width="4" Height="4" Stroke="#FFF6DC" StrokeThickness="1" />
+          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{Binding BrushPair}" Background="{Binding BrushPair}">
+            <Path Width="5.4" Height="6.75" Stretch="Uniform" Data="M0.37,1.63 L1.63,0.37 L5.27,0.37 L5.27,5.83 L4.01,7.09 L0.37,7.09 Z M0.37,1.63 L4.01,1.63 L5.27,0.37 M4.01,1.63 L4.01,7.09" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeJoin="Round" />
           </ContentControl>
         </Button>
       </Panel>
@@ -531,14 +533,14 @@
               </StackPanel>
             </Flyout>
           </Button.Flyout>
-          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F" Foreground="#FFC46B">
+          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F">
             <ContentControl.Background>
               <RadialGradientBrush>
                 <GradientStop Offset="0" Color="#FFD27A" />
                 <GradientStop Offset="1" Color="#FF6A00" />
               </RadialGradientBrush>
             </ContentControl.Background>
-            <Rectangle Width="3" Height="3" Fill="#FFF6DC" />
+            <Path Width="6.5" Height="8" Stretch="Uniform" Data="M3,2 V10 M3,2 H6 A2,2 0 0 1 6,6 H3 M6,6 A2.2,2 0 0 1 6,10 H2 M2,2 H3 M4,0.8 V2 M6,0.8 V2 M4,10 V11.2 M6,10 V11.2" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
           </ContentControl>
         </Button>
         <Path Classes="flash" Data="M10,10 L22,10 L22,22 L10,22 Z" Fill="White" Opacity="0">
@@ -649,7 +651,7 @@
                   <BlurEffect Radius="8" />
                 </Path.Effect>
               </Path>
-              <Button Command="{Binding $parent[views:ChainView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+              <Button Command="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
               <Panel IsHitTestVisible="False">
                 <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
                 <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
@@ -721,7 +723,7 @@
       </RadialGradientBrush>
     </Border.Background>
     <DockPanel Margin="20">
-      <SelectableTextBlock DockPanel.Dock="Top" Text="Chain" FontWeight="Bold" Margin="0,0,0,10" />
+      <SelectableTextBlock DockPanel.Dock="Top" Text="Mining" FontWeight="Bold" Margin="0,0,0,10" />
       <ScrollViewer VerticalScrollBarVisibility="Hidden" IsVisible="{Binding BlockchainBToken.IsPlaced}">
         <Panel>
           <Panel.DataTemplates>
@@ -741,7 +743,7 @@
             <Border Classes="Panel" BorderThickness="0" Background="Transparent">
               <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
                 <SelectableTextBlock Text="Miner" FontWeight="Bold" />
-                <Grid Margin="0,-99,40,-28">
+                <Grid Margin="0,-109,40,-18">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" />
                     <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />

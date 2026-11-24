@@ -12,8 +12,8 @@
       <TabItem Header="Node">
         <views:NodeView />
       </TabItem>
-      <TabItem Header="Chain">
-        <views:ChainView />
+      <TabItem Header="Mining">
+        <views:MiningView />
       </TabItem>
       <TabItem Header="Networks">
         <views:NetworksView />

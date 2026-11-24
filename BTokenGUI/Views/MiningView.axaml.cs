@@ -18,7 +18,7 @@ using BTokenGUI.Models;
 
 namespace BTokenGUI.Views;
 
-public partial class ChainView : UserControl
+public partial class MiningView : UserControl
 {
   const double OFFSET_CENTER_GEM = 16;
   const double SECONDS_FLIGHT = 0.8;
@@ -44,7 +44,7 @@ public partial class ChainView : UserControl
   FlexPipe[] Pipes;
 
 
-  public ChainView()
+  public MiningView()
   {
     InitializeComponent();
 
