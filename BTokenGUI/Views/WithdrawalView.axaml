@@ -14,6 +14,31 @@
         </Grid>
         <SelectableTextBlock Text="{Binding WalletWithdrawal.Address, StringFormat='Funding address: {0}'}" IsVisible="{Binding WalletWithdrawal.Address, Converter={x:Static ObjectConverters.IsNotNull}}" TextWrapping="Wrap" />
         <SelectableTextBlock Text="{Binding WalletWithdrawal.Funds, StringFormat='Funds: {0}', TargetNullValue='Funds: unknown while the accounts synchronize'}" TextWrapping="Wrap" />
+        <StackPanel Spacing="6" IsVisible="{Binding WalletWithdrawal.IsFeedingConverter, FallbackValue=False}">
+          <SelectableTextBlock Text="Outputs" FontWeight="SemiBold" />
+          <ScrollViewer MaxHeight="240">
+            <ItemsControl ItemsSource="{Binding WalletWithdrawal.Chips}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="models:Blockchain+Chip">
+                  <Button Command="{Binding LoadTXCommand}" Margin="0,0,0,4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <Button.Flyout>
+                      <Flyout>
+                        <StackPanel Spacing="12" MaxWidth="420">
+                          <SelectableTextBlock Text="Output TX" FontWeight="Bold" />
+                          <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
+                        </StackPanel>
+                      </Flyout>
+                    </Button.Flyout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                      <TextBlock Grid.Column="0" Text="{Binding Hash}" TextTrimming="CharacterEllipsis" />
+                      <TextBlock Grid.Column="1" Text="{Binding Value, StringFormat='{}{0} sats'}" />
+                    </Grid>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </StackPanel>
         <Border Classes="Panel" Margin="0">
           <StackPanel Spacing="12" Margin="12">
             <SelectableTextBlock Text="Withdrawal" FontWeight="SemiBold" />

@@ -39,6 +39,9 @@
         </ItemsPanelTemplate>
       </Setter>
     </Style>
+    <Style Selector="Panel.lowered">
+      <Setter Property="Margin" Value="0,18,0,-18" />
+    </Style>
     <Style Selector="ItemsControl.heap">
       <Setter Property="Height" Value="140" />
       <Setter Property="Margin" Value="-40,-40,-40,0" />
@@ -133,9 +136,8 @@
     <StreamGeometry x:Key="GeometryConeInterior">M2,10 A34,5 0 0 1 70,10 L40.5,60 L31.5,60 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryConeCollar">M30,60 L42,60 L42,67 L30,67 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
-    <StreamGeometry x:Key="GeometryTubeTip">M36,66 L36,101</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,112</StreamGeometry>
-    <StreamGeometry x:Key="GeometryPipeAnchor">M-17,354 L-17,334 C-17,322 6,322 6,310 L6,-6 A12,12 0 0 0 -6,-18 L-27,-18 A12,12 0 0 0 -39,-6 L-39,0</StreamGeometry>
+    <StreamGeometry x:Key="GeometryPipeAnchor">M-21,322 L-21,300 C-21,280 34,280 34,260 L34,-12 A12,12 0 0 0 22,-24 L-36,-24 A12,12 0 0 0 -48,-12 L-48,-6</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
@@ -294,26 +296,6 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
-    <DataTemplate x:Key="TemplateField" x:DataType="models:Blockchain+Block+Field">
-      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Margin="0,2">
-        <SelectableTextBlock Grid.Column="0" Text="{Binding Value}" TextWrapping="Wrap" />
-        <SelectableTextBlock Grid.Column="1" Text="{Binding Name}" />
-      </Grid>
-    </DataTemplate>
-    <DataTemplate x:Key="TemplateEntry">
-      <Border Classes="Panel" Margin="0,0,0,6">
-        <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource TemplateField}" Margin="8" />
-      </Border>
-    </DataTemplate>
-    <DataTemplate x:Key="TemplateTX" x:DataType="models:Blockchain+TX">
-      <StackPanel Spacing="12">
-        <ItemsControl ItemsSource="{Binding Fields}" ItemTemplate="{StaticResource TemplateField}" />
-        <SelectableTextBlock Text="Inputs" FontWeight="SemiBold" />
-        <ItemsControl ItemsSource="{Binding Inputs}" ItemTemplate="{StaticResource TemplateEntry}" />
-        <SelectableTextBlock Text="Outputs" FontWeight="SemiBold" />
-        <ItemsControl ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource TemplateEntry}" />
-      </StackPanel>
-    </DataTemplate>
     <DataTemplate x:Key="TemplateBlockDetails" x:DataType="models:Blockchain+Block">
       <StackPanel Spacing="12">
         <ItemsControl ItemsSource="{Binding Fields}">
@@ -399,9 +381,9 @@
         <Panel.RenderTransform>
           <ScaleTransform />
         </Panel.RenderTransform>
-        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Command="{Binding LoadTXCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Button.Flyout>
-            <Flyout Opening="LoadTXFlyout">
+            <Flyout>
               <StackPanel Spacing="12" MaxWidth="420">
                 <SelectableTextBlock Text="Output TX" FontWeight="Bold" />
                 <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
@@ -436,22 +418,15 @@
               <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Panel Classes="shelves" Grid.Column="1" Width="800" Margin="-400,0,-343,0" HorizontalAlignment="Right">
-              <ContentControl Theme="{StaticResource ThemeCone}" Margin="36,0,0,-7" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsVisible="{Binding IsTXPoolVisible}">
-                <Panel>
-                  <Panel IsHitTestVisible="False">
-                    <Path Data="{StaticResource GeometryTubeTip}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-                    <Path Data="{StaticResource GeometryTubeTip}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-                    <Path Data="{StaticResource GeometryTubeTip}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
-                  </Panel>
-                  <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
-                </Panel>
+              <ContentControl Theme="{StaticResource ThemeCone}" Margin="18,0,0,-37" HorizontalAlignment="Center" VerticalAlignment="Bottom" IsVisible="{Binding IsTXPoolVisible}">
+                <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
               </ContentControl>
               <ContentControl Classes="shelf" IsVisible="{Binding IsBlocksMinedPoolVisible}">
                 <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
               </ContentControl>
             </Panel>
-            <Panel Grid.Row="1" Grid.Column="0" Margin="0,0,0,40" ClipToBounds="True">
-              <Panel Width="160" Margin="-160,0,0,0" HorizontalAlignment="Right" IsHitTestVisible="False">
+            <Panel Grid.Row="1" Grid.Column="0" ClipToBounds="True" Classes.lowered="{Binding IsTXPoolVisible}">
+              <Panel Width="160" Margin="-160,0,0,40" HorizontalAlignment="Right" IsHitTestVisible="False">
                 <Panel.OpacityMask>
                   <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
                     <GradientStop Offset="0" Color="Transparent" />
@@ -462,7 +437,7 @@
                 <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.5" Margin="52,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
               </Panel>
             </Panel>
-            <Panel Grid.Row="1" Grid.Column="1">
+            <Panel Grid.Row="1" Grid.Column="1" Classes.lowered="{Binding IsTXPoolVisible}">
               <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,40" />
               <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-28,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
                 <ItemsControl.ItemsPanel>
@@ -581,7 +556,7 @@
                     <BlurEffect Radius="10" />
                   </Path.Effect>
                 </Path>
-                <ItemsControl Classes="heap" ItemsSource="{Binding Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
+                <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
               </Panel>
             </ContentControl>
             <Canvas Grid.Row="0" Grid.Column="1" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTXPoolVisible}">

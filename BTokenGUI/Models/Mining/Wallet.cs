@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -16,6 +17,8 @@ public partial class Mining
     public bool IsAutoOffered { get; }
 
     public bool IsFeedingConverter { get; }
+
+    public ObservableCollection<Blockchain.Chip> Chips { get; } = [];
 
     [ObservableProperty]
     public partial string Address { get; set; }

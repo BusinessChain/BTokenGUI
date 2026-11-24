@@ -1,10 +1,31 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="using:BTokenGUI.Models"
              x:Class="BTokenGUI.App"
              RequestedThemeVariant="Dark">
 
   <Application.Resources>
     <SolidColorBrush x:Key="BrushWindowBackground" Color="#090E1A" />
+    <DataTemplate x:Key="TemplateField" x:DataType="models:Blockchain+Block+Field">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Margin="0,2">
+        <SelectableTextBlock Grid.Column="0" Text="{Binding Value}" TextWrapping="Wrap" />
+        <SelectableTextBlock Grid.Column="1" Text="{Binding Name}" />
+      </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="TemplateEntry">
+      <Border Classes="Panel" Margin="0,0,0,6">
+        <ItemsControl ItemsSource="{Binding}" ItemTemplate="{StaticResource TemplateField}" Margin="8" />
+      </Border>
+    </DataTemplate>
+    <DataTemplate x:Key="TemplateTX" x:DataType="models:Blockchain+TX">
+      <StackPanel Spacing="12">
+        <ItemsControl ItemsSource="{Binding Fields}" ItemTemplate="{StaticResource TemplateField}" />
+        <SelectableTextBlock Text="Inputs" FontWeight="SemiBold" />
+        <ItemsControl ItemsSource="{Binding Inputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+        <SelectableTextBlock Text="Outputs" FontWeight="SemiBold" />
+        <ItemsControl ItemsSource="{Binding Outputs}" ItemTemplate="{StaticResource TemplateEntry}" />
+      </StackPanel>
+    </DataTemplate>
   </Application.Resources>
 
   <Application.Styles>

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BTokenGUI.Models;
 
@@ -13,6 +14,8 @@ public partial class Blockchain
     public int Index { get; }
 
     public string HashBlock { get; }
+
+    public long Value { get; }
 
     [ObservableProperty]
     public partial TX TX { get; set; }
@@ -29,10 +32,12 @@ public partial class Blockchain
       Hash = output.GetProperty("hashTX").GetString();
       Index = output.GetProperty("index").GetInt32();
       HashBlock = output.GetProperty("hashBlock").GetString();
+      Value = output.GetProperty("value").GetInt64();
       NameBlockchain = nameBlockchain;
     }
 
-    public async Task LoadTX()
+    [RelayCommand]
+    async Task LoadTX()
     {
       if (TX != null || IsLoadingTX)
         return;

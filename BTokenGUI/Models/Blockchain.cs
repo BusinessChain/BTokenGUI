@@ -16,7 +16,6 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Block> BlocksMined { get; } = [];
-  public ObservableCollection<Chip> Chips { get; } = [];
   public Mining.Wallet Tank { get; }
   public bool IsTXPoolVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
@@ -183,8 +182,8 @@ public partial class Blockchain : ObservableObject
     if (Tank.Funds is not long funds || !TaskSlideBlocks.IsCompleted || Blocks.Count == 0 || Blocks[^1].IsFlying)
       return;
 
-    foreach (Chip chip in Chips.Where(chip => chip.IsExploding && !chip.IsFlying).ToList())
-      Chips.Remove(chip);
+    foreach (Chip chip in Tank.Chips.Where(chip => chip.IsExploding && !chip.IsFlying).ToList())
+      Tank.Chips.Remove(chip);
 
     if (anchorer is JsonElement anchorerJSON)
       PlaceChipsOutputs(anchorerJSON);
@@ -208,15 +207,15 @@ public partial class Blockchain : ObservableObject
     Dictionary<(string, int), JsonElement> outputsWithoutChip = anchorer.GetProperty("outputsSpendable").EnumerateArray()
       .ToDictionary(outputJSON => (outputJSON.GetProperty("hashTX").GetString(), outputJSON.GetProperty("index").GetInt32()));
 
-    foreach (Chip chip in Chips.ToList())
+    foreach (Chip chip in Tank.Chips.ToList())
     {
       if (outputsWithoutChip.Remove((chip.Hash, chip.Index)) || chip.IsFlying || chip.IsExploding)
         continue;
 
       if (outputsConsumed.Contains((chip.Hash, chip.Index)))
       {
-        Chips.Remove(chip);
-        chip.Origin = Chips;
+        Tank.Chips.Remove(chip);
+        chip.Origin = Tank.Chips;
         chip.IsFlying = true;
         Flights.Add(chip);
       }
@@ -230,16 +229,16 @@ public partial class Blockchain : ObservableObject
 
       object origin = hashesAnchor.Contains(chip.Hash) ? null : Blocks.FirstOrDefault(block => block.Hash == chip.HashBlock) ?? Blocks[^1];
 
-      Move(chip, origin, Chips, Chips.Count);
+      Move(chip, origin, Tank.Chips, Tank.Chips.Count);
     }
   }
 
   void PlaceChipsPowder(long funds)
   {
     if (IsPlaced && funds > FundsTank)
-      Move(new Chip(), Blocks[^1], Chips, Chips.Count);
+      Move(new Chip(), Blocks[^1], Tank.Chips, Tank.Chips.Count);
 
-    if (!Chips.Any(chip => chip.IsFlying))
+    if (!Tank.Chips.Any(chip => chip.IsFlying))
       FillingPowder = Tank.Filling;
   }
 

@@ -179,11 +179,6 @@ public partial class ChainView : UserControl
     _ = ((Blockchain.Block)((Flyout)sender).Target.DataContext).LoadTXs();
   }
 
-  void LoadTXFlyout(object sender, EventArgs e)
-  {
-    _ = ((Blockchain.Chip)((Flyout)sender).Target.DataContext).LoadTX();
-  }
-
   static Task Animate(Animatable target, double secondsDelay, double seconds, Easing easing, params (AvaloniaProperty Property, double[] Values)[] tracks)
   {
     Animation animation = new()
