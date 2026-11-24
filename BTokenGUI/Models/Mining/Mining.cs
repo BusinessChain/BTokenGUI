@@ -28,6 +28,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
 
   long BudgetNode;
 
+  Models.Wallet WalletGUI;
+
   public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 
   public Wallet WalletBitcoin { get; }
@@ -68,8 +70,9 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public partial decimal? LevelWithdrawalAuto { get; set; }
 
 
-  public Mining()
+  public Mining(Models.Wallet walletGUI)
   {
+    WalletGUI = walletGUI;
     WalletBitcoin = new(this, "withdrawBitcoin", "Bitcoin tank", false);
     WalletBToken = new(this, "withdrawRevenueMiner", "BToken tank", true);
   }
@@ -224,12 +227,16 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     try
     {
       if (IsWithdrawalAutoChosen)
+      {
         await Node.SendRequest("setWithdrawalAutoMiner", new Dictionary<string, object>
         {
           ["address"] = AddressWithdrawal,
           ["fee"] = FeeWithdrawal,
           ["level"] = LevelWithdrawalAuto
         });
+
+        WalletGUI.AddressWithdrawalAuto = AddressWithdrawal;
+      }
       else
       {
         if (WalletWithdrawal.IsAutoActive)

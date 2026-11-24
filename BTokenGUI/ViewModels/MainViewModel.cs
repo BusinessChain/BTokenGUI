@@ -23,7 +23,7 @@ public partial class MainViewModel : ObservableObject
 
   public Blockchain BlockchainBToken { get; }
 
-  public Mining Mining { get; } = new();
+  public Mining Mining { get; }
 
   public Wallet Wallet { get; } = new();
 
@@ -33,6 +33,7 @@ public partial class MainViewModel : ObservableObject
 
   public MainViewModel()
   {
+    Mining = new(Wallet);
     BlockchainBToken = new("BToken", isAboveMiner: false, isTXPoolVisible: false, isBlocksMinedPoolVisible: true, blockchainParent: BlockchainBitcoin, tank: Mining.WalletBToken);
 
     _ = PollNode();

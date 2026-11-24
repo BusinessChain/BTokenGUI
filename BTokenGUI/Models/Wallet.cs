@@ -40,6 +40,9 @@ public partial class Wallet : ObservableObject
   [ObservableProperty]
   public partial string StateBackupLast { get; set; }
 
+  [ObservableProperty]
+  public partial string AddressWithdrawalAuto { get; set; }
+
   string PathKey;
   string KeyPrivate;
   byte[] KeyPublic;
@@ -49,6 +52,7 @@ public partial class Wallet : ObservableObject
   string HashTipLast;
 
   const string ID_HEIGHT_SCANNED_LAST = "heightScannedLast";
+  const string ID_ADDRESS_WITHDRAWAL_AUTO = "addressWithdrawalAuto";
   const string NAME_FIELD_VALUE = "value";
 
 
@@ -70,6 +74,13 @@ public partial class Wallet : ObservableObject
     TXsStored = liteDatabase.GetCollection<BsonDocument>("transactions");
     StateStored = liteDatabase.GetCollection<BsonDocument>("state");
     HashesBlockScanned = liteDatabase.GetCollection<BsonDocument>("hashesBlockScanned");
+
+    AddressWithdrawalAuto = StateStored.FindById(ID_ADDRESS_WITHDRAWAL_AUTO)?[NAME_FIELD_VALUE].AsString;
+  }
+
+  partial void OnAddressWithdrawalAutoChanged(string value)
+  {
+    StateStored.Upsert(new BsonDocument { ["_id"] = ID_ADDRESS_WITHDRAWAL_AUTO, [NAME_FIELD_VALUE] = value });
   }
 
   List<string> LoadKeysPrivate()
