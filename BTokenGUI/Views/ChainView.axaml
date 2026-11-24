@@ -46,6 +46,7 @@
       <Setter Property="Margin" Value="0,0,55,0" />
     </Style>
     <Style Selector="ItemsControl.heap">
+      <Setter Property="IsHitTestVisible" Value="False" />
       <Setter Property="Height" Value="140" />
       <Setter Property="Margin" Value="-40,-40,-40,0" />
       <Setter Property="VerticalAlignment" Value="Top" />
@@ -693,7 +694,7 @@
                     <BlurEffect Radius="10" />
                   </Path.Effect>
                 </Path>
-                <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
+                <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" />
               </Panel>
             </ContentControl>
             <ContentControl Classes="tankAnchor" Grid.Row="2" Grid.Column="1" Theme="{StaticResource ThemeTankAnchor}" Margin="0,0,-31,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
