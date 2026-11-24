@@ -407,14 +407,18 @@ public partial class ChainView : UserControl
         Canvas.SetTop(PlugsCone[i], end.Y);
 
         Point leadEnd = new(end.X, end.Y - LEAD_PIPE);
-        Point middle = new((leadStart.X + leadEnd.X) / 2 + (leadEnd.X < leadStart.X ? -BOW_PIPE : BOW_PIPE), (leadStart.Y + leadEnd.Y) / 2);
+        Point middle = new((leadStart.X + leadEnd.X) / 2 + BOW_PIPE, (leadStart.Y + leadEnd.Y) / 2);
         double reach = (leadEnd.Y - leadStart.Y) / 2 * TENSION_PIPE;
+        double reachBranch = (leadEnd.Y - leadStart.Y) / 2;
 
-        Branches[i] = Geometry.Parse(FormattableString.Invariant($"""
-          M{start.X},{start.Y} L{leadStart.X},{leadStart.Y}
-          C{leadStart.X},{leadStart.Y + reach} {middle.X},{middle.Y - reach} {middle.X},{middle.Y}
-          C{middle.X},{middle.Y + reach} {leadEnd.X},{leadEnd.Y - reach} {leadEnd.X},{leadEnd.Y} L{end.X},{end.Y}
-          """));
+        string curve = leadEnd.X == leadStart.X
+          ? FormattableString.Invariant($"""
+            C{leadStart.X},{leadStart.Y + reach} {middle.X},{middle.Y - reach} {middle.X},{middle.Y}
+            C{middle.X},{middle.Y + reach} {leadEnd.X},{leadEnd.Y - reach} {leadEnd.X},{leadEnd.Y}
+            """)
+          : FormattableString.Invariant($"C{leadStart.X},{leadStart.Y + reachBranch} {leadEnd.X},{leadEnd.Y - reachBranch} {leadEnd.X},{leadEnd.Y}");
+
+        Branches[i] = Geometry.Parse(FormattableString.Invariant($"M{start.X},{start.Y} L{leadStart.X},{leadStart.Y} {curve} L{end.X},{end.Y}"));
       }
 
       GeometryGroup geometry = new() { Children = [.. Branches.Where(branch => branch != null)] };
