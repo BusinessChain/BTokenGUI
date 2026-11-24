@@ -64,10 +64,12 @@ public partial class Blockchain : ObservableObject
 
     IsTipExtending = false;
 
-    if (TaskSlideBlocks.IsCompleted && snapshotState.TryGetProperty("anchorer", out JsonElement anchorer))
+    bool hasAnchorer = snapshotState.TryGetProperty("anchorer", out JsonElement anchorer);
+
+    if (TaskSlideBlocks.IsCompleted && hasAnchorer)
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
 
-    PlaceChips();
+    PlaceChips(hasAnchorer ? anchorer : null);
 
     IsPlaced = true;
   }
@@ -176,7 +178,7 @@ public partial class Blockchain : ObservableObject
       place.Remove(anchor);
   }
 
-  void PlaceChips()
+  void PlaceChips(JsonElement? anchorer)
   {
     if (Tank.Funds is not long funds || !TaskSlideBlocks.IsCompleted || Blocks.Count == 0 || Blocks[^1].IsFlying)
       return;
@@ -184,6 +186,56 @@ public partial class Blockchain : ObservableObject
     foreach (Chip chip in Chips.Where(chip => chip.IsExploding && !chip.IsFlying).ToList())
       Chips.Remove(chip);
 
+    if (anchorer is JsonElement anchorerJSON)
+      PlaceChipsOutputs(anchorerJSON);
+    else
+      PlaceChipsFilling(funds);
+
+    FundsTank = funds;
+  }
+
+  void PlaceChipsOutputs(JsonElement anchorer)
+  {
+    List<JsonElement> anchorsJSON = anchorer.GetProperty("anchors").EnumerateArray().ToList();
+
+    HashSet<string> hashesAnchor = anchorsJSON.Select(anchorJSON => anchorJSON.GetProperty("hash").GetString()).ToHashSet();
+
+    HashSet<(string, int)> outputsConsumed = anchorsJSON
+      .SelectMany(anchorJSON => anchorJSON.GetProperty("inputs").EnumerateArray())
+      .Select(inputJSON => (inputJSON.GetProperty("tXIDOutput").GetString(), inputJSON.GetProperty("indexOutput").GetInt32()))
+      .ToHashSet();
+
+    Dictionary<(string, int), JsonElement> outputsWithoutChip = anchorer.GetProperty("outputsSpendable").EnumerateArray()
+      .ToDictionary(outputJSON => (outputJSON.GetProperty("hashTX").GetString(), outputJSON.GetProperty("index").GetInt32()));
+
+    foreach (Chip chip in Chips.ToList())
+    {
+      if (outputsWithoutChip.Remove((chip.Hash, chip.Index)) || chip.IsFlying || chip.IsExploding)
+        continue;
+
+      if (outputsConsumed.Contains((chip.Hash, chip.Index)))
+      {
+        Chips.Remove(chip);
+        chip.Origin = Chips;
+        chip.IsFlying = true;
+        Flights.Add(chip);
+      }
+      else
+        chip.IsExploding = true;
+    }
+
+    foreach (JsonElement outputJSON in outputsWithoutChip.Values)
+    {
+      Chip chip = new(outputJSON);
+
+      object origin = hashesAnchor.Contains(chip.Hash) ? null : Blocks.FirstOrDefault(block => block.Hash == chip.HashBlock) ?? Blocks[^1];
+
+      Move(chip, origin, Chips, Chips.Count);
+    }
+  }
+
+  void PlaceChipsFilling(long funds)
+  {
     int countChipsFilling = (int)Math.Ceiling(Tank.Filling * COUNT_CHIPS_TANK_FULL);
 
     foreach (Chip chip in Chips.Skip(countChipsFilling).Where(chip => !chip.IsFlying))
@@ -193,8 +245,6 @@ public partial class Blockchain : ObservableObject
 
     for (int i = 0; i < countChipsNew; i++)
       Move(new Chip(), Blocks[^1], Chips, Chips.Count);
-
-    FundsTank = funds;
   }
 
   void Move<T>(T good, object origin, ObservableCollection<T> destination, int index) where T : Good

@@ -58,7 +58,7 @@ public partial class ChainView : UserControl
 
       await blockchain.TaskSlideBlocks;
 
-      Control controlDestination = FindControl(good, itemsFlights);
+      Control controlDestination = FindControl(good, itemsFlights) ?? (good is Blockchain.Chip ? PanelConverter : null);
 
       if (controlDestination?.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
         await Animate(

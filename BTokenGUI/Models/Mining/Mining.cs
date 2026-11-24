@@ -129,7 +129,6 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     long fundsBitcoin = WalletBitcoin.Funds.Value;
     BudgetNode = snapshotMiner.GetProperty("budget").GetInt64();
     long scaleBitcoin = COUNT_PERIODS_BUDGET_DAY * BudgetNode;
-    WalletBitcoin.Filling = fundsBitcoin == 0 ? 0 : (double)fundsBitcoin / (fundsBitcoin + scaleBitcoin);
 
     if (scaleBitcoin == 0)
       FillingConverter = 0;
