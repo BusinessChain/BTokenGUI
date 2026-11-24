@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -6,6 +7,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Shapes;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -21,6 +23,8 @@ public partial class ChainView : UserControl
   const double SECONDS_FLIGHT = 0.8;
   const double SECONDS_SLIDE = 0.5;
   const double SECONDS_STAGGER_SLIDE = 0.25;
+  const double SPACING_ROUTE = 6;
+  const double SPEED_PIPE = 320;
 
   ContentPresenter PresenterBlockLeaving;
 
@@ -44,12 +48,26 @@ public partial class ChainView : UserControl
 
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
-    Control controlOrigin = good.Origin == null ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
+    Path pipe = good is Blockchain.Anchor && good.Origin == null
+      ? this.GetVisualDescendants().OfType<Path>().FirstOrDefault(path => path.Classes.Contains("pipeAnchor") && path.DataContext == blockchain)
+      : null;
 
-    if (controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), itemsFlights) is Point pointStart)
+    List<Point> route = [];
+
+    if (pipe != null)
+      route.AddRange(SampleRoute(pipe.Data).Select(point => pipe.TranslatePoint(point, itemsFlights)).OfType<Point>());
+    else
     {
-      Canvas.SetLeft(container, pointStart.X - OFFSET_CENTER_GEM);
-      Canvas.SetTop(container, pointStart.Y - OFFSET_CENTER_GEM);
+      Control controlOrigin = good.Origin == null ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
+
+      if (controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), itemsFlights) is Point pointOrigin)
+        route.Add(pointOrigin);
+    }
+
+    if (route.Count > 0)
+    {
+      Canvas.SetLeft(container, route[0].X - OFFSET_CENTER_GEM);
+      Canvas.SetTop(container, route[0].Y - OFFSET_CENTER_GEM);
       container.Opacity = 1;
 
       await blockchain.TaskSlideBlocks;
@@ -57,16 +75,36 @@ public partial class ChainView : UserControl
       Control controlDestination = FindControl(good, itemsFlights) ?? (good is Blockchain.Chip ? PanelConverter : null);
 
       if (controlDestination?.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
+      {
+        if (pipe == null)
+          route.Add(pointEnd);
+        else
+          route.AddRange(SampleRoute(new LineGeometry(route[^1], pointEnd)).Skip(1));
+
         await Animate(
           container,
           0,
-          SECONDS_FLIGHT,
-          new CubicEaseInOut(),
-          (Canvas.LeftProperty, [pointStart.X - OFFSET_CENTER_GEM, pointEnd.X - OFFSET_CENTER_GEM]),
-          (Canvas.TopProperty, [pointStart.Y - OFFSET_CENTER_GEM, pointEnd.Y - OFFSET_CENTER_GEM]));
+          pipe == null ? SECONDS_FLIGHT : (route.Count - 1) * SPACING_ROUTE / SPEED_PIPE,
+          pipe == null ? new CubicEaseInOut() : new LinearEasing(),
+          (Canvas.LeftProperty, route.Select(point => point.X - OFFSET_CENTER_GEM).ToArray()),
+          (Canvas.TopProperty, route.Select(point => point.Y - OFFSET_CENTER_GEM).ToArray()));
+      }
     }
 
     blockchain.Land(good);
+  }
+
+  static List<Point> SampleRoute(Geometry geometry)
+  {
+    double length = geometry.ContourLength;
+    int countSteps = Math.Max(1, (int)Math.Ceiling(length / SPACING_ROUTE));
+    List<Point> points = [];
+
+    for (int i = 0; i <= countSteps; i++)
+      if (geometry.TryGetPointAtDistance(length * i / countSteps, out Point point))
+        points.Add(point);
+
+    return points;
   }
 
   void PresentBlockLeaving(object sender, ContainerClearingEventArgs e)
