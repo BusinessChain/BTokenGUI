@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -58,23 +57,12 @@ public partial class Blockchain
 
       IsLoadingTXs = true;
 
-      try
-      {
-        JsonElement tXsJSON = await Node.SendRequest("getTXsBlock", new Dictionary<string, object>
-        {
-          ["blockchain"] = NameBlockchain,
-          ["hash"] = Hash
-        });
+      List<JsonElement> tXsJSON = await LoadTXsBlock(NameBlockchain, Hash);
 
-        if (tXsJSON.ValueKind == JsonValueKind.Array)
-          TXs = tXsJSON.EnumerateArray().Select(tX => new TX(tX)).ToList();
-      }
-      catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or RPCException)
-      { }
-      finally
-      {
-        IsLoadingTXs = false;
-      }
+      if (tXsJSON != null)
+        TXs = tXsJSON.Select(tX => new TX(tX)).ToList();
+
+      IsLoadingTXs = false;
     }
 
     public record Field(string Name, string Value);

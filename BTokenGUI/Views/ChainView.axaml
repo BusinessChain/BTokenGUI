@@ -398,15 +398,25 @@
         <Panel.RenderTransform>
           <ScaleTransform />
         </Panel.RenderTransform>
-        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F" Foreground="#FFC46B">
-          <ContentControl.Background>
-            <RadialGradientBrush>
-              <GradientStop Offset="0" Color="#FFD27A" />
-              <GradientStop Offset="1" Color="#FF6A00" />
-            </RadialGradientBrush>
-          </ContentControl.Background>
-          <Rectangle Width="3" Height="3" Fill="#FFF6DC" />
-        </ContentControl>
+        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Button.Flyout>
+            <Flyout Opening="LoadTXFlyout">
+              <StackPanel Spacing="12" MaxWidth="420">
+                <SelectableTextBlock Text="Output TX" FontWeight="Bold" />
+                <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F" Foreground="#FFC46B">
+            <ContentControl.Background>
+              <RadialGradientBrush>
+                <GradientStop Offset="0" Color="#FFD27A" />
+                <GradientStop Offset="1" Color="#FF6A00" />
+              </RadialGradientBrush>
+            </ContentControl.Background>
+            <Rectangle Width="3" Height="3" Fill="#FFF6DC" />
+          </ContentControl>
+        </Button>
         <Path Classes="flash" Data="M10,10 L22,10 L22,22 L10,22 Z" Fill="White" Opacity="0">
           <Path.Effect>
             <BlurEffect Radius="6" />
@@ -565,7 +575,7 @@
                     <BlurEffect Radius="10" />
                   </Path.Effect>
                 </Path>
-                <ItemsControl Classes="heap" ItemsSource="{Binding Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="False" />
+                <ItemsControl Classes="heap" ItemsSource="{Binding Chips}" ItemTemplate="{StaticResource TemplateChip}" IsHitTestVisible="{Binding Tank.IsFeedingConverter}" />
               </Panel>
             </ContentControl>
           </Grid>

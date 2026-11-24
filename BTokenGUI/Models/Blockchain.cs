@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -225,7 +226,7 @@ public partial class Blockchain : ObservableObject
 
     foreach (JsonElement outputJSON in outputsWithoutChip.Values)
     {
-      Chip chip = new(outputJSON);
+      Chip chip = new(outputJSON, Name);
 
       object origin = hashesAnchor.Contains(chip.Hash) ? null : Blocks.FirstOrDefault(block => block.Hash == chip.HashBlock) ?? Blocks[^1];
 
@@ -240,6 +241,25 @@ public partial class Blockchain : ObservableObject
 
     if (!Chips.Any(chip => chip.IsFlying))
       FillingPowder = Tank.Filling;
+  }
+
+  static async Task<List<JsonElement>> LoadTXsBlock(string nameBlockchain, string hashBlock)
+  {
+    try
+    {
+      JsonElement tXsJSON = await Node.SendRequest("getTXsBlock", new Dictionary<string, object>
+      {
+        ["blockchain"] = nameBlockchain,
+        ["hash"] = hashBlock
+      });
+
+      if (tXsJSON.ValueKind == JsonValueKind.Array)
+        return tXsJSON.EnumerateArray().ToList();
+    }
+    catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or RPCException)
+    { }
+
+    return null;
   }
 
   void Move<T>(T good, object origin, ObservableCollection<T> destination, int index) where T : Good
