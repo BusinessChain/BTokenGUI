@@ -17,6 +17,7 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Block> BlocksMined { get; } = [];
+  public ObservableCollection<Chip> TXsPool { get; } = [];
   public Mining.Wallet Tank { get; }
   public bool IsTankAnchorVisible { get; }
   public bool IsBlocksMinedPoolVisible { get; }
@@ -85,7 +86,23 @@ public partial class Blockchain : ObservableObject
 
     PlaceChips(hasAnchorer ? anchorer : null);
 
+    if (snapshotState.TryGetProperty("tXPool", out JsonElement tXPool))
+      PlaceTXsPool(tXPool);
+
     IsPlaced = true;
+  }
+
+  void PlaceTXsPool(JsonElement tXPool)
+  {
+    Dictionary<string, JsonElement> tXsWithoutChip = tXPool.EnumerateArray()
+      .ToDictionary(tXJSON => tXJSON.GetProperty("hash").GetString());
+
+    foreach (Chip chip in TXsPool.ToList())
+      if (!tXsWithoutChip.Remove(chip.Hash))
+        TXsPool.Remove(chip);
+
+    foreach (JsonElement tXJSON in tXsWithoutChip.Values)
+      TXsPool.Add(new Chip(tXJSON));
   }
 
   void PlaceBlocks(List<JsonElement> headersJSON, List<JsonElement> blocksMinedJSON)

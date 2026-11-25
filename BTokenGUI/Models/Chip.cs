@@ -36,6 +36,12 @@ public partial class Blockchain
       NameBlockchain = nameBlockchain;
     }
 
+    public Chip(JsonElement tX)
+    {
+      Hash = tX.GetProperty("hash").GetString();
+      TX = new TX(tX);
+    }
+
     [RelayCommand]
     async Task LoadTX()
     {

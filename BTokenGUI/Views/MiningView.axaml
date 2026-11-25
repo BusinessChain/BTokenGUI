@@ -588,6 +588,23 @@
         </Path>
       </Panel>
     </DataTemplate>
+    <DataTemplate x:Key="TemplateChipTX" x:DataType="models:Blockchain+Chip">
+      <Panel Width="32" Height="32">
+        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Button.Flyout>
+            <Flyout>
+              <StackPanel Spacing="12" MaxWidth="420">
+                <SelectableTextBlock Text="Pool TX" FontWeight="Bold" />
+                <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Background="{DynamicResource SystemControlHighlightAccentBrush}">
+            <Path Width="7" Height="7" Stretch="Uniform" Data="M1,2.5 H8 M6,0.5 L8,2.5 L6,4.5 M8,7.5 H1 M3,5.5 L1,7.5 L3,9.5" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
+          </ContentControl>
+        </Button>
+      </Panel>
+    </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
       <DockPanel Margin="10">
         <Grid RowDefinitions="Auto,Auto,Auto" Margin="0,0,40,0">
@@ -782,6 +799,9 @@
                   <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <ContentControl Classes="tankPool" Grid.Column="1" Theme="{StaticResource ThemeCone}" Margin="0,-22,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
+                  <ItemsControl Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" />
+                </ContentControl>
                 <Panel x:Name="PanelConverter" Grid.Column="1" Width="164" Height="140" Margin="0,0,-34,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
                   <Path Classes="glow" Data="{StaticResource GeometrySphereGlow}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
                     <Path.Effect>
