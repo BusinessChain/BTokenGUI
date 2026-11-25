@@ -403,6 +403,8 @@ public partial class MiningView : UserControl
 
     PanelBlocks panelBlocks = (PanelBlocks)itemsBlocks.ItemsPanelRoot;
 
+    containerNew.Measure(Size.Infinity);
+
     double[] offsetsStart = containersSliding
       .Select(container => container == containerNew ? panelBlocks.GetDistanceSlot() : container.Bounds.X - panelBlocks.GetPosition(container))
       .ToArray();
