@@ -6,39 +6,6 @@
              x:Class="BTokenGUI.Views.MiningView"
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
-    <Style Selector="ContentControl.shelf">
-      <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="MinWidth" Value="108" />
-      <Setter Property="MinHeight" Value="56" />
-      <Setter Property="Margin" Value="18,10,0,28" />
-      <Setter Property="ClipToBounds" Value="False" />
-      <Setter Property="Template">
-        <ControlTemplate>
-          <Panel>
-            <Panel Height="58" Margin="0,0,-30,-30" VerticalAlignment="Bottom" Opacity="0.35" IsHitTestVisible="False">
-              <Panel.Effect>
-                <BlurEffect Radius="8" />
-              </Panel.Effect>
-              <Path Width="30" HorizontalAlignment="Left" Data="M18,0 L30,0 L30,58 L0,28 L0,18 Z" Fill="Black" />
-              <Border Margin="30,0,48,0" Background="Black" />
-              <Path Width="48" HorizontalAlignment="Right" Data="M0,0 L18,0 L48,30 L48,40 L30,58 L0,58 Z" Fill="Black" />
-            </Panel>
-            <TemplatedControl Theme="{StaticResource ThemePlank}" />
-            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" Margin="21,6,21,18" />
-          </Panel>
-        </ControlTemplate>
-      </Setter>
-    </Style>
-    <Style Selector="ContentControl.shelf > ItemsControl">
-      <Setter Property="Margin" Value="-40" />
-      <Setter Property="HorizontalAlignment" Value="Center" />
-      <Setter Property="VerticalAlignment" Value="Bottom" />
-      <Setter Property="ItemsPanel">
-        <ItemsPanelTemplate>
-          <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" ItemSpacing="6" Margin="40" />
-        </ItemsPanelTemplate>
-      </Setter>
-    </Style>
     <Style Selector="ContentControl.tank">
       <Setter Property="Margin" Value="0,0,12,0" />
     </Style>
@@ -62,22 +29,6 @@
         </ItemsPanelTemplate>
       </Setter>
     </Style>
-    <Style Selector="Ellipse.shadowShelf">
-      <Setter Property="IsVisible" Value="False" />
-      <Setter Property="Width" Value="26" />
-      <Setter Property="Height" Value="8" />
-      <Setter Property="VerticalAlignment" Value="Bottom" />
-      <Setter Property="IsHitTestVisible" Value="False" />
-      <Setter Property="Fill">
-        <RadialGradientBrush>
-          <GradientStop Offset="0" Color="#B0000000" />
-          <GradientStop Offset="1" Color="#00000000" />
-        </RadialGradientBrush>
-      </Setter>
-    </Style>
-    <Style Selector="ContentControl.shelf Ellipse.shadowShelf">
-      <Setter Property="IsVisible" Value="True" />
-    </Style>
     <Style Selector=":is(Control).flying">
       <Setter Property="Opacity" Value="0" />
     </Style>
@@ -91,6 +42,9 @@
     </Style>
     <Style Selector="ItemsControl.flights :is(Control).flying">
       <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="ItemsControl.blocks">
+      <Setter Property="ClipToBounds" Value="False" />
     </Style>
     <Style Selector="Panel.glowing > Path.glow">
       <Style.Animations>
@@ -415,56 +369,6 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
-    <ControlTheme x:Key="ThemePlank" TargetType="TemplatedControl">
-      <Setter Property="Height" Value="28" />
-      <Setter Property="VerticalAlignment" Value="Bottom" />
-      <Setter Property="IsHitTestVisible" Value="False" />
-      <Setter Property="ClipToBounds" Value="False" />
-      <Setter Property="Background" Value="{StaticResource BrushWindowBackground}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
-      <Setter Property="Template">
-        <ControlTemplate>
-          <Panel>
-            <Border Height="18" Margin="1,1,19,0" VerticalAlignment="Top" Background="{TemplateBinding Background}" RenderTransformOrigin="0%,100%">
-              <Border.RenderTransform>
-                <SkewTransform AngleX="-45" />
-              </Border.RenderTransform>
-              <Panel>
-                <Border Background="{TemplateBinding BorderBrush}" Opacity="0.68" />
-                <Border>
-                  <Border.Background>
-                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                      <GradientStop Offset="0" Color="#48000000" />
-                      <GradientStop Offset="1" Color="#18FFFFFF" />
-                    </LinearGradientBrush>
-                  </Border.Background>
-                </Border>
-              </Panel>
-            </Border>
-            <Panel Width="20" HorizontalAlignment="Right" Clip="M1,19 L19,1 L19,9 L1,27 Z">
-              <Border Background="{TemplateBinding Background}" />
-              <Border Background="{TemplateBinding BorderBrush}" Opacity="0.2" />
-            </Panel>
-            <Border Height="10" Margin="0,18,18,0" VerticalAlignment="Top" CornerRadius="1" BorderThickness="2" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
-              <Panel>
-                <Border Background="{TemplateBinding BorderBrush}" Opacity="0.36" />
-                <Border>
-                  <Border.Background>
-                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                      <GradientStop Offset="0" Color="#18FFFFFF" />
-                      <GradientStop Offset="1" Color="#48000000" />
-                    </LinearGradientBrush>
-                  </Border.Background>
-                </Border>
-              </Panel>
-            </Border>
-            <Border Height="2" Margin="18,0,0,0" VerticalAlignment="Top" CornerRadius="1" Background="{TemplateBinding BorderBrush}" />
-            <Path Width="20" HorizontalAlignment="Left" Data="M1,19 L19,1" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeLineCap="Round" />
-            <Path Width="20" HorizontalAlignment="Right" Data="M1,19 L19,1 L19,9 L1,27" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeLineCap="Round" StrokeJoin="Round" />
-          </Panel>
-        </ControlTemplate>
-      </Setter>
-    </ControlTheme>
     <ControlTheme x:Key="ThemeRail" TargetType="TemplatedControl">
       <Setter Property="Height" Value="10" />
       <Setter Property="VerticalAlignment" Value="Center" />
@@ -530,44 +434,6 @@
         </Button>
       </Panel>
     </DataTemplate>
-    <DataTemplate x:Key="TemplateBlockMined" x:DataType="models:Blockchain+Block">
-      <Panel Width="28" Height="32" Margin="2,0" Classes.flying="{Binding IsFlying}" Classes.exploding="{Binding IsExploding}" RenderTransformOrigin="50%,50%">
-        <Panel.RenderTransform>
-          <ScaleTransform />
-        </Panel.RenderTransform>
-        <Ellipse Classes="shadowShelf" Margin="0,0,4,-3" />
-        <Path Classes="flash" Width="23" Height="30" Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 L0.5,29.5 Z" Fill="White" Opacity="0" IsHitTestVisible="False">
-          <Path.Effect>
-            <BlurEffect Radius="8" />
-          </Path.Effect>
-        </Path>
-        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <Button.Flyout>
-            <Flyout Opening="OpenFlyoutBlock">
-              <ScrollViewer MaxHeight="600">
-                <StackPanel Spacing="12" MaxWidth="420">
-                  <SelectableTextBlock Text="Mined block" FontWeight="Bold" />
-                  <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
-                </StackPanel>
-              </ScrollViewer>
-            </Flyout>
-          </Button.Flyout>
-          <Panel Width="23" Height="30">
-            <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 L0.5,29.5 Z" Fill="{StaticResource BrushWindowBackground}" />
-            <Path Data="M6.5,0.5 L22.5,0.5 L22.5,23.5 L6.5,23.5 Z" Fill="{Binding BrushPair}" Opacity="0.36" />
-            <Path Data="M0.5,6.5 L6.5,0.5 L6.5,23.5 L0.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.2" />
-            <Path Data="M0.5,29.5 L6.5,23.5 L22.5,23.5 L16.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.5" />
-            <Path Data="M6.5,0.5 L6.5,23.5 L22.5,23.5 M6.5,23.5 L0.5,29.5" Stroke="{Binding BrushPair}" StrokeThickness="0.5" Opacity="0.5" />
-            <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L16.5,6.5 Z" Fill="{StaticResource BrushWindowBackground}" />
-            <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L16.5,6.5 Z" Fill="{Binding BrushPair}" Opacity="0.68" />
-            <Path Data="M0.5,6.5 L16.5,6.5 L16.5,29.5 L0.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.36" />
-            <Path Data="M16.5,6.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 Z" Fill="{StaticResource BrushWindowBackground}" />
-            <Path Data="M16.5,6.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.2" />
-            <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 L0.5,29.5 Z M0.5,6.5 L16.5,6.5 L22.5,0.5 M16.5,6.5 L16.5,29.5" Stroke="{Binding BrushPair}" StrokeThickness="1" StrokeJoin="Round" />
-          </Panel>
-        </Button>
-      </Panel>
-    </DataTemplate>
     <DataTemplate x:Key="TemplateChip" x:DataType="models:Blockchain+Chip">
       <Panel Width="32" Height="32" Classes.flying="{Binding IsFlying}" Classes.exploding="{Binding IsExploding}" RenderTransformOrigin="50%,50%">
         <Panel.RenderTransform>
@@ -604,19 +470,14 @@
             <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
-          <Panel Classes="shelves" Grid.Column="1" Width="800" Margin="-400,0,-343,0" HorizontalAlignment="Right">
-            <ContentControl Classes="shelf" IsVisible="{Binding IsBlocksMinedPoolVisible}">
-              <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
-            </ContentControl>
-          </Panel>
           <TemplatedControl Grid.Row="1" Grid.Column="0" Theme="{StaticResource ThemeRail}" Width="28" HorizontalAlignment="Right" BorderThickness="1,1,0,1" Margin="0,0,0,58" />
           <Panel Grid.Row="1" Grid.Column="1">
             <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
             <views:ReaderTime Margin="0,0,0,58" IsHitTestVisible="False" />
-            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="-112,-36,-40,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
+            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                  <views:PanelBlocks Margin="112,36,40,58" />
+                  <views:PanelBlocks Margin="0,0,0,58" />
                 </ItemsPanelTemplate>
               </ItemsControl.ItemsPanel>
               <ItemsControl.ItemTemplate>
@@ -765,9 +626,6 @@
           <Panel.DataTemplates>
             <DataTemplate DataType="models:Blockchain+Anchor">
               <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateAnchor}" />
-            </DataTemplate>
-            <DataTemplate DataType="models:Blockchain+Block">
-              <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockMined}" />
             </DataTemplate>
             <DataTemplate DataType="models:Blockchain+Chip">
               <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateChip}" />

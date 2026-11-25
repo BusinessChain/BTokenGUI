@@ -9,7 +9,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
-using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -141,10 +140,9 @@ public partial class MiningView : UserControl
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
     bool isOutflow = good.Origin == null;
-    bool isHatching = isOutflow && good is Blockchain.Block;
     Control controlPlace = FindControl(good, itemsFlights);
     bool isInflow = controlPlace == null && good is Blockchain.Chip;
-    Control controlOrigin = isHatching ? PanelBlockCreator : isOutflow ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
+    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
 
     if (FindCenter(controlOrigin, itemsFlights) is Point pointOrigin)
     {
@@ -156,31 +154,7 @@ public partial class MiningView : UserControl
 
       await blockchain.TaskSlideBlocks;
 
-      if (isHatching)
-      {
-        Task taskCreation = PlayCreation();
-
-        await Task.Delay(TimeSpan.FromSeconds(SECONDS_DRAW));
-        container.Opacity = 1;
-        await taskCreation;
-
-        foreach (Control control in new Control[] { PortOutlet, PortInlet, PanelConverter })
-          if (FindCenter(control, itemsFlights) is Point point)
-            ExtendRoute(route, point);
-
-        PortOutlet.Classes.Add("open");
-        PortInlet.Classes.Add("open");
-
-        await AnimateRoute(container, route, SECONDS_INFLOW, new LinearEasing());
-
-        PortOutlet.Classes.Remove("open");
-        PortInlet.Classes.Remove("open");
-
-        await AnimateGlow(container);
-
-        route = [route[^1]];
-      }
-      else if (isInflow || isOutflow)
+      if (isInflow || isOutflow)
         await Task.Delay(TimeSpan.FromSeconds(SECONDS_CREATION + (isOutflow ? SECONDS_INFLOW + SECONDS_REACTION : 0)));
 
       container.Opacity = 1;
@@ -199,17 +173,11 @@ public partial class MiningView : UserControl
         else
           route.Add(pointEnd);
 
-        if (isHatching)
-          PortHatch.Classes.Add("open");
-
         await AnimateRoute(
           container,
           route,
           isInflow ? SECONDS_INFLOW : isPiped ? (route.Count - 1) * SPACING_ROUTE / (isOutflow ? SPEED_OUTFLOW : SPEED_PIPE) : SECONDS_FLIGHT,
           isPiped ? new LinearEasing() : new CubicEaseInOut());
-
-        if (isHatching)
-          PortHatch.Classes.Remove("open");
 
         if (isInflow && FindCenter(PanelConverter, CanvasFlash) is Point pointSphere)
         {
@@ -236,45 +204,6 @@ public partial class MiningView : UserControl
     return Animate(flash, 0, SECONDS_REACTION, new LinearEasing(), (Visual.OpacityProperty, [0, 1, 1, 0]));
   }
 
-  async Task PlayCreation()
-  {
-    if (FindCenter(FindPort(ContentTankPool, "portNozzle"), CanvasEffects) is not Point pointNozzle || FindCenter(PanelBlockCreator, CanvasEffects) is not Point pointCreator)
-      return;
-
-    await Task.WhenAll(ItemsTXsPool.GetRealizedContainers().ToList().Select(container => DrawTX(container, pointNozzle, pointCreator)));
-  }
-
-  async Task DrawTX(Control container, Point pointNozzle, Point pointCreator)
-  {
-    if (FindCenter(container, CanvasEffects) is not Point pointChip)
-      return;
-
-    ContentPresenter copy = new()
-    {
-      Content = container.DataContext,
-      ContentTemplate = (IDataTemplate)this.FindResource("TemplateChipTX"),
-      IsHitTestVisible = false
-    };
-
-    List<Point> route = [pointChip];
-    ExtendRoute(route, pointNozzle);
-    ExtendRoute(route, pointCreator);
-
-    Canvas.SetLeft(copy, pointChip.X - OFFSET_CENTER_GEM);
-    Canvas.SetTop(copy, pointChip.Y - OFFSET_CENTER_GEM);
-    CanvasEffects.Children.Add(copy);
-    container.Opacity = 0;
-
-    await AnimateRoute(copy, route, SECONDS_DRAW, new LinearEasing());
-
-    route.Reverse();
-
-    await AnimateRoute(copy, route, SECONDS_DRAW, new LinearEasing());
-
-    CanvasEffects.Children.Remove(copy);
-    container.Opacity = 1;
-  }
-
   static Task AnimateRoute(Animatable target, List<Point> route, double seconds, Easing easing)
   {
     return Animate(
@@ -288,9 +217,6 @@ public partial class MiningView : UserControl
 
   List<Point> TraceRouteDuct(Blockchain blockchain, Blockchain.Good good, bool isInflow, bool isOutflow, Visual target)
   {
-    if (isOutflow && good is Blockchain.Block)
-      return FindCenter(PortHatch, target) is Point pointHatch ? [pointHatch] : [];
-
     if (isOutflow && good is Blockchain.Anchor)
       return FindPath("pipeAnchor", blockchain) is Path pipe ? TraceRoutePath(pipe, target) : [];
 

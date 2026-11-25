@@ -16,11 +16,9 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Good> Flights { get; } = [];
-  public ObservableCollection<Block> BlocksMined { get; } = [];
   public ObservableCollection<Chip> TXsPool { get; } = [];
   public Mining.Wallet Tank { get; }
   public bool IsTankAnchorVisible { get; }
-  public bool IsBlocksMinedPoolVisible { get; }
   public bool IsTipExtending;
   public Task TaskSlideBlocks = Task.CompletedTask;
   [ObservableProperty]
@@ -33,11 +31,10 @@ public partial class Blockchain : ObservableObject
   long? FundsTank;
 
 
-  public Blockchain(string name, bool isTankAnchorVisible, bool isBlocksMinedPoolVisible, Blockchain blockchainParent, Mining.Wallet tank)
+  public Blockchain(string name, bool isTankAnchorVisible, Blockchain blockchainParent, Mining.Wallet tank)
   {
     Name = name;
     IsTankAnchorVisible = isTankAnchorVisible;
-    IsBlocksMinedPoolVisible = isBlocksMinedPoolVisible;
     BlockchainParent = blockchainParent;
     Tank = tank;
   }
@@ -66,16 +63,12 @@ public partial class Blockchain : ObservableObject
 
     List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().Reverse().ToList();
 
-    List<JsonElement> blocksMinedJSON = snapshotState.TryGetProperty("blocksAwaitingAnchor", out JsonElement blocksAwaitingAnchor)
-      ? blocksAwaitingAnchor.EnumerateArray().ToList()
-      : [];
-
     IsTipExtending = IsPlaced
       && blocksJSON.Count > 1
       && blocksJSON.Count == Blocks.Count
       && blocksJSON[^2].GetProperty("hash").GetString() == Blocks[^1].Hash;
 
-    PlaceBlocks(blocksJSON, blocksMinedJSON);
+    PlaceBlocks(blocksJSON);
 
     IsTipExtending = false;
 
@@ -105,60 +98,27 @@ public partial class Blockchain : ObservableObject
       TXsPool.Add(new Chip(tXJSON));
   }
 
-  void PlaceBlocks(List<JsonElement> headersJSON, List<JsonElement> blocksMinedJSON)
+  void PlaceBlocks(List<JsonElement> blocksJSON)
   {
-    Dictionary<string, (Block Block, ObservableCollection<Block> Place)> placesBlock = Blocks
-      .Select(block => (block, Blocks))
-      .Concat(BlocksMined.Select(block => (block, BlocksMined)))
-      .ToDictionary(placeBlock => placeBlock.block.Hash);
+    HashSet<string> hashesBlock = blocksJSON.Select(blockJSON => blockJSON.GetProperty("hash").GetString()).ToHashSet();
 
-    (List<JsonElement> BlocksJSON, ObservableCollection<Block> Destination)[] destinationsBlocks = [(headersJSON, Blocks), (blocksMinedJSON, BlocksMined)];
+    foreach (Block block in Blocks.Where(block => !hashesBlock.Contains(block.Hash)).ToList())
+      Blocks.Remove(block);
 
-    Dictionary<string, ObservableCollection<Block>> destinationsBlock = [];
+    int indexInsert = 0;
 
-    foreach ((List<JsonElement> blocksJSON, ObservableCollection<Block> destination) in destinationsBlocks)
-      foreach (JsonElement blockJSON in blocksJSON)
-        destinationsBlock.TryAdd(blockJSON.GetProperty("hash").GetString(), destination);
-
-    foreach ((Block block, ObservableCollection<Block> place) in placesBlock.Values)
+    foreach (JsonElement blockJSON in blocksJSON)
     {
-      bool isVanished = !destinationsBlock.TryGetValue(block.Hash, out ObservableCollection<Block> destination);
+      string hash = blockJSON.GetProperty("hash").GetString();
+      int indexBlock = Blocks.ToList().FindIndex(block => block.Hash == hash);
 
-      if (isVanished && place == BlocksMined && IsPlaced && !block.IsFlying && !block.IsExploding)
-        block.IsExploding = true;
-      else if (isVanished || destination != place && !block.IsFlying)
-        place.Remove(block);
-    }
-
-    foreach ((List<JsonElement> blocksJSON, ObservableCollection<Block> destination) in destinationsBlocks)
-    {
-      int indexInsert = 0;
-
-      foreach (JsonElement blockJSON in blocksJSON)
+      if (indexBlock < 0)
       {
-        string hash = blockJSON.GetProperty("hash").GetString();
-
-        if (destinationsBlock[hash] == destination)
-        {
-          if (placesBlock.TryGetValue(hash, out (Block Block, ObservableCollection<Block> Place) placeBlock))
-          {
-            if (!placeBlock.Block.IsFlying && placeBlock.Place != destination)
-            {
-              placeBlock.Block.Update(blockJSON);
-              Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
-            }
-          }
-          else if (destination == BlocksMined)
-            Move(new Block(blockJSON, Name, BlockchainParent != null), null, destination, indexInsert);
-          else
-            destination.Insert(indexInsert, new Block(blockJSON, Name, BlockchainParent != null));
-        }
-
-        int indexBlock = destination.ToList().FindIndex(block => block.Hash == hash);
-
-        if (indexBlock >= 0)
-          indexInsert = indexBlock + 1;
+        indexBlock = indexInsert;
+        Blocks.Insert(indexBlock, new Block(blockJSON, Name, BlockchainParent != null));
       }
+
+      indexInsert = indexBlock + 1;
     }
   }
 
