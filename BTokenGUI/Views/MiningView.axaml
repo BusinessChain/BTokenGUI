@@ -670,6 +670,7 @@
                         </TextBlock.Effect>
                       </TextBlock>
                     </Viewbox>
+                    <Path Data="M56,49 L50,45 L50,53 Z" Fill="#F2F4F7" IsHitTestVisible="False" />
                   </Panel>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
