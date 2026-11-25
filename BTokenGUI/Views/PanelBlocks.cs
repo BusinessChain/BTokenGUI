@@ -13,7 +13,9 @@ public class PanelBlocks : Panel
 {
   const double SPACING_BLOCKS = 36;
   const double OFFSET_STOPPER = 20;
-  const double V0 = 3.15e-4;
+  const double WIDTH_FACE_FRONT = 36;
+  const double GAP_MIN_BLOCKS = 5;
+  const double SECONDS_AGE_TIP_PACKED = 3000;
   const int MILLISECONDS_COMPRESSION = 250;
   const double DISTANCE_MIN_TICKS = 2;
   const int MINUTES_READER = 120;
@@ -104,29 +106,35 @@ public class PanelBlocks : Panel
 
     for (int i = Children.Count - 1; i >= 0; i--)
     {
-      double width = Children[i].DesiredSize.Width;
-
-      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i])) - width / 2, limitRight - width);
+      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i])) - Children[i].DesiredSize.Width / 2, limitRight - WIDTH_FACE_FRONT - GAP_MIN_BLOCKS);
       limitRight = positions[i];
     }
 
-    double limitLeft = OFFSET_STOPPER - Margin.Left;
+    double limitLeft = GetPositionStopper();
 
     for (int i = 0; i < Children.Count; i++)
     {
       positions[i] = Math.Max(positions[i], limitLeft);
-      limitLeft = positions[i] + Children[i].DesiredSize.Width;
+      limitLeft = positions[i] + WIDTH_FACE_FRONT + GAP_MIN_BLOCKS;
     }
 
     return positions;
   }
 
+  double GetPositionStopper()
+  {
+    return this.FindAncestorOfType<ScrollViewer>().TranslatePoint(new Point(), this).Value.X + OFFSET_STOPPER;
+  }
+
   double GetPositionCenter(double age)
   {
-    double positionStopper = OFFSET_STOPPER - Margin.Left;
-    double distanceStart = GetWidthFull() - Children[^1].DesiredSize.Width / 2 - positionStopper;
+    double positionStopper = GetPositionStopper();
+    double widthHalf = Children[^1].DesiredSize.Width / 2;
+    double distanceStart = GetWidthFull() - widthHalf - positionStopper;
+    double distancePacked = widthHalf + (Children.Count - 1) * (WIDTH_FACE_FRONT + GAP_MIN_BLOCKS);
+    double v0 = Math.Log(distanceStart / distancePacked) / SECONDS_AGE_TIP_PACKED;
 
-    return positionStopper + distanceStart * Math.Exp(-V0 * age);
+    return positionStopper + distanceStart * Math.Exp(-v0 * age);
   }
 
   double[] GetTimestamps()

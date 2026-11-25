@@ -598,9 +598,9 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
       <DockPanel Margin="10">
-        <Grid RowDefinitions="Auto,Auto,Auto" Margin="0,0,40,0">
+        <Grid RowDefinitions="Auto,Auto,Auto" ShowGridLines="True">
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
@@ -609,17 +609,7 @@
               <ItemsControl ItemsSource="{Binding BlocksMined}" ItemTemplate="{StaticResource TemplateBlockMined}" />
             </ContentControl>
           </Panel>
-          <Panel Grid.Row="1" Grid.Column="0" ClipToBounds="True">
-            <Panel Width="160" Margin="-160,0,0,58" HorizontalAlignment="Right" IsHitTestVisible="False">
-              <Panel.OpacityMask>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
-                  <GradientStop Offset="0" Color="Transparent" />
-                  <GradientStop Offset="1" Color="Black" />
-                </LinearGradientBrush>
-              </Panel.OpacityMask>
-              <TemplatedControl Theme="{StaticResource ThemeRail}" />
-            </Panel>
-          </Panel>
+          <TemplatedControl Grid.Row="1" Grid.Column="0" Theme="{StaticResource ThemeRail}" Width="28" HorizontalAlignment="Right" BorderThickness="1,1,0,1" Margin="0,0,0,58" />
           <Panel Grid.Row="1" Grid.Column="1">
             <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
             <views:ReaderTime Margin="0,0,0,58" IsHitTestVisible="False" />
@@ -670,7 +660,7 @@
                         </TextBlock.Effect>
                       </TextBlock>
                     </Viewbox>
-                    <Path Data="M56,49 L50,45 L50,53 Z" Fill="#F2F4F7" IsHitTestVisible="False" />
+                    <Path Data="M56,49 L50,45 L50,53 Z" Fill="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}" IsHitTestVisible="False" />
                   </Panel>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
@@ -692,7 +682,7 @@
               </Grid>
             </Canvas>
           </Panel>
-          <Panel Grid.Row="2" Grid.ColumnSpan="3" Width="68" Height="52" Margin="0,78,-40,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
+          <Panel Grid.Row="2" Grid.ColumnSpan="3" Width="68" Height="52" Margin="0,78,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
             <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
               <Path.Effect>
                 <BlurEffect Radius="8" />
@@ -786,9 +776,9 @@
           <Canvas x:Name="CanvasPipes" IsHitTestVisible="False" />
           <StackPanel Grid.IsSharedSizeScope="True">
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" Margin="0,48,0,0" />
-            <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" Margin="10,-56,50,-20">
+            <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" Margin="10,-56,10,-20">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>

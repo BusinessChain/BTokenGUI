@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.VisualTree;
 
 namespace BTokenGUI.Views;
 
@@ -13,6 +14,8 @@ public class ReaderTime : Control
   const double HEIGHT_TICK_TEN_MINUTES = 10;
 
   static readonly ImmutablePen PenTick = new(Color.Parse("#F2F4F7").ToUInt32(), 1);
+  static readonly ImmutablePen PenBoundsPanel = new(Colors.Yellow.ToUInt32(), 1);
+  static readonly ImmutablePen PenBoundsItems = new(Colors.Magenta.ToUInt32(), 2);
 
   public PanelBlocks PanelBlocks;
 
@@ -35,5 +38,11 @@ public class ReaderTime : Control
 
       context.DrawLine(PenTick, new Point(position, center - height / 2), new Point(position, center + height / 2));
     }
+
+    context.DrawRectangle(null, PenBoundsPanel, new Rect(PanelBlocks.TranslatePoint(new Point(), this).Value, PanelBlocks.Bounds.Size).Deflate(0.5));
+
+    ItemsControl itemsBlocks = PanelBlocks.FindAncestorOfType<ItemsControl>();
+
+    context.DrawRectangle(null, PenBoundsItems, new Rect(itemsBlocks.TranslatePoint(new Point(), this).Value, itemsBlocks.Bounds.Size).Deflate(1));
   }
 }
