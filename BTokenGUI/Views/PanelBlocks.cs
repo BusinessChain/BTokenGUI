@@ -3,7 +3,6 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using BTokenGUI.Models;
 
 namespace BTokenGUI.Views;
@@ -19,7 +18,6 @@ public class PanelBlocks : Panel
   public static readonly AttachedProperty<double> OffsetProperty = AvaloniaProperty.RegisterAttached<PanelBlocks, Control, double>("Offset");
 
   DispatcherTimer TimerCompression = new() { Interval = TimeSpan.FromMilliseconds(MILLISECONDS_COMPRESSION) };
-  ReaderTime ReaderTime;
 
 
   static PanelBlocks()
@@ -62,38 +60,27 @@ public class PanelBlocks : Panel
       height = Math.Max(height, child.DesiredSize.Height);
     }
 
-    return new Size(GetWidthFull(), height);
-  }
+    double widthMin = Children.Sum(child => child.DesiredSize.Width) + Math.Max(0, Children.Count - 1) * SPACING_BLOCKS + Children.Select(child => child.DesiredSize.Width).LastOrDefault();
 
-  public double GetWidthFull()
-  {
-    return Children.Sum(child => child.DesiredSize.Width) + Math.Max(0, Children.Count - 1) * SPACING_BLOCKS + Children.Select(child => child.DesiredSize.Width).LastOrDefault();
+    return new Size(widthMin, height);
   }
 
   protected override Size ArrangeOverride(Size finalSize)
   {
-    double[] positions = GetPositions();
+    double[] positions = GetPositions(finalSize.Width);
 
     for (int i = 0; i < Children.Count; i++)
       Children[i].Arrange(new Rect(positions[i] + Children[i].GetValue(OffsetProperty), 0, Children[i].DesiredSize.Width, finalSize.Height));
-
-    if (ReaderTime == null)
-    {
-      ReaderTime = ((Panel)this.FindAncestorOfType<ItemsControl>().Parent).Children.OfType<ReaderTime>().First();
-      ReaderTime.PanelBlocks = this;
-    }
-
-    ReaderTime.InvalidateVisual();
 
     return finalSize;
   }
 
   public double GetPosition(Control child)
   {
-    return GetPositions()[Children.IndexOf(child)];
+    return GetPositions(Bounds.Width)[Children.IndexOf(child)];
   }
 
-  double[] GetPositions()
+  double[] GetPositions(double widthRail)
   {
     double[] timestamps = GetTimestamps();
     double timeNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
@@ -102,7 +89,7 @@ public class PanelBlocks : Panel
 
     for (int i = Children.Count - 1; i >= 0; i--)
     {
-      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i])) - Children[i].DesiredSize.Width / 2, limitRight - WIDTH_FACE_FRONT - GAP_MIN_BLOCKS);
+      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i]), widthRail) - Children[i].DesiredSize.Width / 2, limitRight - WIDTH_FACE_FRONT - GAP_MIN_BLOCKS);
       limitRight = positions[i];
     }
 
@@ -117,10 +104,10 @@ public class PanelBlocks : Panel
     return positions;
   }
 
-  double GetPositionCenter(double age)
+  double GetPositionCenter(double age, double widthRail)
   {
     double widthHalf = Children[^1].DesiredSize.Width / 2;
-    double distanceStart = GetWidthFull() - widthHalf;
+    double distanceStart = widthRail - widthHalf;
     double distancePacked = widthHalf + (Children.Count - 1) * (WIDTH_FACE_FRONT + GAP_MIN_BLOCKS);
     double v0 = Math.Log(distanceStart / distancePacked) / SECONDS_AGE_TIP_PACKED;
 
