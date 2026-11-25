@@ -23,15 +23,16 @@ public partial class MiningView : UserControl
 {
   const double OFFSET_CENTER_GEM = 16;
   const double SECONDS_FLIGHT = 0.8;
-  const double SECONDS_INFLOW = 1.2;
-  const double SECONDS_REACTION = 0.6;
-  const double SECONDS_IMPULSE = 0.4;
-  const double SECONDS_DRAW = 0.5;
+  const double SECONDS_INFLOW = 6;
+  const double SECONDS_REACTION = 3;
+  const double SECONDS_IMPULSE = 2;
+  const double SECONDS_DRAW = 2.5;
   const double SECONDS_CREATION = SECONDS_IMPULSE + 2 * SECONDS_DRAW;
   const double SECONDS_SLIDE = 0.5;
   const double SECONDS_STAGGER_SLIDE = 0.25;
   const double SPACING_ROUTE = 6;
   const double SPEED_PIPE = 320;
+  const double SPEED_OUTFLOW = 64;
   const double LENGTH_PLUG = 11;
   const double WIDTH_PLUG = 10;
   const double LEAD_PIPE = 6;
@@ -197,7 +198,7 @@ public partial class MiningView : UserControl
         await AnimateRoute(
           container,
           route,
-          isInflow ? SECONDS_INFLOW : isPiped ? (route.Count - 1) * SPACING_ROUTE / SPEED_PIPE : SECONDS_FLIGHT,
+          isInflow ? SECONDS_INFLOW : isPiped ? (route.Count - 1) * SPACING_ROUTE / (isOutflow ? SPEED_OUTFLOW : SPEED_PIPE) : SECONDS_FLIGHT,
           isPiped ? new LinearEasing() : new CubicEaseInOut());
 
         if (isHatching)

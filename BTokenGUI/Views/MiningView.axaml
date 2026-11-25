@@ -137,7 +137,7 @@
     </Style>
     <Style Selector="Panel.pulsing > Path.pulse">
       <Style.Animations>
-        <Animation Duration="0:0:0.4" FillMode="Forward">
+        <Animation Duration="0:0:2" FillMode="Forward">
           <KeyFrame Cue="0%">
             <Setter Property="TranslateTransform.X" Value="0" />
             <Setter Property="Opacity" Value="0" />
@@ -157,7 +157,7 @@
     </Style>
     <Style Selector="Panel.reacting > Path.flash">
       <Style.Animations>
-        <Animation Duration="0:0:0.6" FillMode="Forward">
+        <Animation Duration="0:0:3" FillMode="Forward">
           <KeyFrame Cue="0%">
             <Setter Property="Opacity" Value="0" />
           </KeyFrame>
