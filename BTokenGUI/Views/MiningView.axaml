@@ -543,7 +543,7 @@
         </Path>
         <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Button.Flyout>
-            <Flyout Opening="LoadTXsFlyout">
+            <Flyout Opening="OpenFlyoutBlock">
               <ScrollViewer MaxHeight="600">
                 <StackPanel Spacing="12" MaxWidth="420">
                   <SelectableTextBlock Text="Mined block" FontWeight="Bold" />
@@ -623,10 +623,10 @@
           <Panel Grid.Row="1" Grid.Column="1">
             <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
             <views:ReaderTime Margin="0,0,0,58" IsHitTestVisible="False" />
-            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-40,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
+            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="-112,-36,-40,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                  <views:PanelBlocks Margin="0,36,40,58" />
+                  <views:PanelBlocks Margin="112,36,40,58" />
                 </ItemsPanelTemplate>
               </ItemsControl.ItemsPanel>
               <ItemsControl.ItemTemplate>
@@ -639,7 +639,7 @@
                     </Path>
                     <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                       <Button.Flyout>
-                        <Flyout Opening="LoadTXsFlyout">
+                        <Flyout Opening="OpenFlyoutBlock">
                           <ScrollViewer MaxHeight="600">
                             <StackPanel Spacing="12" MaxWidth="420">
                               <SelectableTextBlock Text="Block" FontWeight="Bold" />

@@ -443,9 +443,9 @@ public partial class MiningView : UserControl
     await AnimateRetraction(pipesTip, 1, 0);
   }
 
-  void LoadTXsFlyout(object sender, EventArgs e)
+  void OpenFlyoutBlock(object sender, EventArgs e)
   {
-    _ = ((Blockchain.Block)((Flyout)sender).Target.DataContext).LoadTXs();
+    _ = ((Blockchain.Block)((Flyout)sender).Target.DataContext).Open();
   }
 
   static Task Animate(Animatable target, double secondsDelay, double seconds, Easing easing, params (AvaloniaProperty Property, double[] Values)[] tracks)

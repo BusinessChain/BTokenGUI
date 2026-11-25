@@ -24,6 +24,7 @@ public partial class Blockchain
     public partial List<TX> TXs { get; set; }
 
     string NameBlockchain;
+    List<Field> FieldsHeader;
     bool IsLoadingTXs;
 
 
@@ -45,27 +46,37 @@ public partial class Blockchain
         .Select(anchor => anchor.GetProperty("hashBlockReferenced").GetString())
         .ToHashSet();
 
-      List<Field> fields = [];
+      FieldsHeader = [];
 
       foreach (JsonProperty property in block.EnumerateObject())
       {
         if (property.Value.ValueKind == JsonValueKind.Array)
           continue;
 
-        fields.Add(new Field(property.Name, property.Value.ToString()));
+        FieldsHeader.Add(new Field(property.Name, property.Value.ToString()));
 
         if (property.Name == "unixTimeSeconds")
-        {
           UnixTimeSeconds = property.Value.GetInt64();
-          fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(UnixTimeSeconds).ToLocalTime().ToString("G")));
+      }
+    }
+
+    public async Task Open()
+    {
+      List<Field> fields = [];
+
+      foreach (Field field in FieldsHeader)
+      {
+        fields.Add(field);
+
+        if (field.Name == "unixTimeSeconds")
+        {
+          DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(UnixTimeSeconds);
+          fields.Add(new Field("timestamp", $"{timestamp.ToLocalTime():G} ({FormatAge(DateTimeOffset.UtcNow - timestamp)})"));
         }
       }
 
       Fields = fields;
-    }
 
-    public async Task LoadTXs()
-    {
       if (TXs != null || IsLoadingTXs)
         return;
 
@@ -77,6 +88,20 @@ public partial class Blockchain
         TXs = tXsJSON.Select(tX => new TX(tX)).ToList();
 
       IsLoadingTXs = false;
+    }
+
+    static string FormatAge(TimeSpan age)
+    {
+      if (age.TotalMinutes < 1)
+        return $"{Math.Max(0, (int)age.TotalSeconds)} s";
+
+      if (age.TotalHours < 1)
+        return $"{(int)age.TotalMinutes} min";
+
+      if (age.TotalDays < 1)
+        return $"{(int)age.TotalHours} h {age.Minutes} min";
+
+      return $"{(int)age.TotalDays} d {age.Hours} h";
     }
 
     public record Field(string Name, string Value);
