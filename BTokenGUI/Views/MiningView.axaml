@@ -568,25 +568,15 @@
         <Panel.RenderTransform>
           <ScaleTransform />
         </Panel.RenderTransform>
-        <Button Command="{Binding LoadTXCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <Button.Flyout>
-            <Flyout>
-              <StackPanel Spacing="12" MaxWidth="420">
-                <SelectableTextBlock Text="Output TX" FontWeight="Bold" />
-                <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
-              </StackPanel>
-            </Flyout>
-          </Button.Flyout>
-          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F">
-            <ContentControl.Background>
-              <RadialGradientBrush>
-                <GradientStop Offset="0" Color="#FFD27A" />
-                <GradientStop Offset="1" Color="#FF6A00" />
-              </RadialGradientBrush>
-            </ContentControl.Background>
-            <Path Width="6.5" Height="8" Stretch="Uniform" Data="M3,2 V10 M3,2 H6 A2,2 0 0 1 6,6 H3 M6,6 A2.2,2 0 0 1 6,10 H2 M2,2 H3 M4,0.8 V2 M6,0.8 V2 M4,10 V11.2 M6,10 V11.2" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
-          </ContentControl>
-        </Button>
+        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <ContentControl.Background>
+            <RadialGradientBrush>
+              <GradientStop Offset="0" Color="#FFD27A" />
+              <GradientStop Offset="1" Color="#FF6A00" />
+            </RadialGradientBrush>
+          </ContentControl.Background>
+          <Path Width="6.5" Height="8" Stretch="Uniform" Data="M3,2 V10 M3,2 H6 A2,2 0 0 1 6,6 H3 M6,6 A2.2,2 0 0 1 6,10 H2 M2,2 H3 M4,0.8 V2 M6,0.8 V2 M4,10 V11.2 M6,10 V11.2" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
+        </ContentControl>
         <Path Classes="flash" Data="M10,10 L22,10 L22,22 L10,22 Z" Fill="White" Opacity="0">
           <Path.Effect>
             <BlurEffect Radius="6" />
@@ -596,19 +586,9 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateChipTX" x:DataType="models:Blockchain+Chip">
       <Panel Width="32" Height="32">
-        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <Button.Flyout>
-            <Flyout>
-              <StackPanel Spacing="12" MaxWidth="420">
-                <SelectableTextBlock Text="Pool TX" FontWeight="Bold" />
-                <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
-              </StackPanel>
-            </Flyout>
-          </Button.Flyout>
-          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Background="{DynamicResource SystemControlHighlightAccentBrush}">
-            <Path Width="7" Height="7" Stretch="Uniform" Data="M1,2.5 H8 M6,0.5 L8,2.5 L6,4.5 M8,7.5 H1 M3,5.5 L1,7.5 L3,9.5" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
-          </ContentControl>
-        </Button>
+        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Background="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Path Width="7" Height="7" Stretch="Uniform" Data="M1,2.5 H8 M6,0.5 L8,2.5 L6,4.5 M8,7.5 H1 M3,5.5 L1,7.5 L3,9.5" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
+        </ContentControl>
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
