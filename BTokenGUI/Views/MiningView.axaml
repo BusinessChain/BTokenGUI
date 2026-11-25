@@ -10,7 +10,7 @@
       <Setter Property="HorizontalAlignment" Value="Center" />
       <Setter Property="MinWidth" Value="108" />
       <Setter Property="MinHeight" Value="56" />
-      <Setter Property="Margin" Value="18,0,0,38" />
+      <Setter Property="Margin" Value="18,10,0,28" />
       <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
