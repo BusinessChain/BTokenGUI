@@ -12,8 +12,8 @@ namespace BTokenGUI.Views;
 public class PanelBlocks : Panel
 {
   const double SPACING_BLOCKS = 36;
-  const double SECONDS_COMPRESSION = 600;
-  const double FRICTION_RAIL = 1;
+  const double OFFSET_STOPPER = 20;
+  const double V0 = 3.15e-4;
   const int MILLISECONDS_COMPRESSION = 250;
   const double DISTANCE_MIN_TICKS = 2;
   const int MINUTES_READER = 120;
@@ -69,13 +69,15 @@ public class PanelBlocks : Panel
 
   public double GetWidthFull()
   {
-    return Children.Sum(child => child.DesiredSize.Width) + Math.Max(0, Children.Count - 1) * SPACING_BLOCKS;
+    return Children.Sum(child => child.DesiredSize.Width) + Math.Max(0, Children.Count - 1) * SPACING_BLOCKS + Children.Select(child => child.DesiredSize.Width).LastOrDefault();
   }
 
   protected override Size ArrangeOverride(Size finalSize)
   {
-    foreach (Control child in Children)
-      child.Arrange(new Rect(GetPosition(child) + child.GetValue(OffsetProperty), 0, child.DesiredSize.Width, finalSize.Height));
+    double[] positions = GetPositions();
+
+    for (int i = 0; i < Children.Count; i++)
+      Children[i].Arrange(new Rect(positions[i] + Children[i].GetValue(OffsetProperty), 0, Children[i].DesiredSize.Width, finalSize.Height));
 
     if (ReaderTime == null)
     {
@@ -90,39 +92,46 @@ public class PanelBlocks : Panel
 
   public double GetPosition(Control child)
   {
+    return GetPositions()[Children.IndexOf(child)];
+  }
+
+  double[] GetPositions()
+  {
     double[] timestamps = GetTimestamps();
     double timeNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
-    double position = GetWidthFull() - Children[^1].DesiredSize.Width - GetDisplacementTip(timestamps, timeNow);
+    double[] positions = new double[Children.Count];
+    double limitRight = double.PositiveInfinity;
 
-    for (int i = Children.Count - 1; i > Children.IndexOf(child); i--)
-      position -= Children[i - 1].DesiredSize.Width + GetWidthGap(timestamps, i, timeNow);
+    for (int i = Children.Count - 1; i >= 0; i--)
+    {
+      double width = Children[i].DesiredSize.Width;
 
-    return position;
+      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i])) - width / 2, limitRight - width);
+      limitRight = positions[i];
+    }
+
+    double limitLeft = OFFSET_STOPPER - Margin.Left;
+
+    for (int i = 0; i < Children.Count; i++)
+    {
+      positions[i] = Math.Max(positions[i], limitLeft);
+      limitLeft = positions[i] + Children[i].DesiredSize.Width;
+    }
+
+    return positions;
+  }
+
+  double GetPositionCenter(double age)
+  {
+    double positionStopper = OFFSET_STOPPER - Margin.Left;
+    double distanceStart = GetWidthFull() - Children[^1].DesiredSize.Width / 2 - positionStopper;
+
+    return positionStopper + distanceStart * Math.Exp(-V0 * age);
   }
 
   double[] GetTimestamps()
   {
     return Children.Select(control => (double)((Blockchain.Block)control.DataContext).UnixTimeSeconds).ToArray();
-  }
-
-  static double GetDisplacementTip(double[] timestamps, double time)
-  {
-    return Enumerable.Range(0, timestamps.Length).Sum(gap => GetWidthGap(timestamps, gap, timestamps[^1]) - GetWidthGap(timestamps, gap, time));
-  }
-
-  static double GetWidthGap(double[] timestamps, int gap, double time)
-  {
-    double pressure = 0;
-
-    for (int epoch = gap; epoch < timestamps.Length; epoch++)
-    {
-      double timeEnd = epoch + 1 < timestamps.Length ? Math.Min(timestamps[epoch + 1], time) : time;
-      double force = Math.Max(0, timeEnd - timestamps[epoch]) / SECONDS_COMPRESSION - FRICTION_RAIL * (epoch - gap);
-
-      pressure = Math.Max(pressure, force);
-    }
-
-    return SPACING_BLOCKS / (1 + pressure);
   }
 
   public List<(double Position, int Minute)> GetTicks()
@@ -132,10 +141,8 @@ public class PanelBlocks : Panel
     if (Children.Count == 0)
       return ticks;
 
-    double[] timestamps = GetTimestamps();
-    double widthFull = GetWidthFull();
     double[] positionsMinute = Enumerable.Range(0, MINUTES_READER + 1)
-      .Select(minute => widthFull - GetDisplacementTip(timestamps, timestamps[^1] + 60 * minute))
+      .Select(minute => GetPositionCenter(60 * minute) + Children[^1].DesiredSize.Width / 2)
       .ToArray();
 
     int minute = 0;
