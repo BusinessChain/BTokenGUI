@@ -22,15 +22,15 @@ namespace BTokenGUI.Views;
 public partial class MiningView : UserControl
 {
   const double OFFSET_CENTER_GEM = 16;
-  const double SECONDS_FLIGHT = 0.8;
+  const double SECONDS_FLIGHT = 2.4;
   const double SECONDS_INFLOW = 3;
   const double SECONDS_REACTION = 3;
   const double SECONDS_DRAW = 1.25;
   const double SECONDS_CREATION = 2 * SECONDS_DRAW;
-  const double SECONDS_SLIDE = 0.5;
-  const double SECONDS_STAGGER_SLIDE = 0.25;
+  const double SECONDS_SLIDE = 1.5;
+  const double SECONDS_STAGGER_SLIDE = 0.75;
   const double SPACING_ROUTE = 6;
-  const double SPEED_PIPE = 320;
+  const double SPEED_PIPE = 320.0 / 3;
   const double SPEED_OUTFLOW = 128;
   const double LENGTH_PLUG = 11;
   const double WIDTH_PLUG = 10;
@@ -38,7 +38,7 @@ public partial class MiningView : UserControl
   const double BOW_PIPE = 12;
   const double TENSION_PIPE = 0.55;
   const double RETRACTION_PLUG = 12;
-  const double SECONDS_PLUG = 0.3;
+  const double SECONDS_PLUG = 0.9;
   const int MILLISECONDS_FRAME_PLUG = 16;
 
   static readonly Point ContactPortUpper = new(8, 8);
@@ -168,7 +168,7 @@ public partial class MiningView : UserControl
         PortOutlet.Classes.Remove("open");
         PortInlet.Classes.Remove("open");
 
-        await Task.Delay(TimeSpan.FromSeconds(SECONDS_REACTION));
+        await AnimateGlow(container);
 
         route = [route[^1]];
       }
@@ -208,9 +208,10 @@ public partial class MiningView : UserControl
           Canvas.SetLeft(PanelFlash, pointSphere.X - PanelFlash.Width / 2);
           Canvas.SetTop(PanelFlash, pointSphere.Y - PanelFlash.Height / 2);
 
-          double[] scalesFlash = [0.3, 0.9, 1.1, 1.3];
+          double[] scalesFlash = [0.15, 0.45, 0.55, 0.65];
 
           await Task.WhenAll(
+            AnimateGlow(container),
             Animate(PanelFlash, 0, SECONDS_REACTION, new LinearEasing(), (Visual.OpacityProperty, [0, 0.85, 0.85, 0])),
             Animate(PanelFlash, 0, SECONDS_REACTION, new CubicEaseOut(), (ScaleTransform.ScaleXProperty, scalesFlash), (ScaleTransform.ScaleYProperty, scalesFlash)));
         }
@@ -218,6 +219,13 @@ public partial class MiningView : UserControl
     }
 
     blockchain.Land(good);
+  }
+
+  static Task AnimateGlow(Control container)
+  {
+    Path flash = container.GetVisualDescendants().OfType<Path>().First(path => path.Classes.Contains("flash"));
+
+    return Animate(flash, 0, SECONDS_REACTION, new LinearEasing(), (Visual.OpacityProperty, [0, 1, 1, 0]));
   }
 
   async Task PlayCreation()

@@ -553,10 +553,15 @@
             </Flyout>
           </Button.Flyout>
           <Panel Width="23" Height="30">
-            <Path Data="M6.5,0.5 L22.5,0.5 L22.5,23.5 L6.5,23.5 Z" Fill="{StaticResource BrushWindowBackground}" />
+            <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 L0.5,29.5 Z" Fill="{StaticResource BrushWindowBackground}" />
             <Path Data="M6.5,0.5 L22.5,0.5 L22.5,23.5 L6.5,23.5 Z" Fill="{Binding BrushPair}" Opacity="0.36" />
+            <Path Data="M0.5,6.5 L6.5,0.5 L6.5,23.5 L0.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.2" />
+            <Path Data="M0.5,29.5 L6.5,23.5 L22.5,23.5 L16.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.5" />
+            <Path Data="M6.5,0.5 L6.5,23.5 L22.5,23.5 M6.5,23.5 L0.5,29.5" Stroke="{Binding BrushPair}" StrokeThickness="0.5" Opacity="0.5" />
+            <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L16.5,6.5 Z" Fill="{StaticResource BrushWindowBackground}" />
             <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L16.5,6.5 Z" Fill="{Binding BrushPair}" Opacity="0.68" />
             <Path Data="M0.5,6.5 L16.5,6.5 L16.5,29.5 L0.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.36" />
+            <Path Data="M16.5,6.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 Z" Fill="{StaticResource BrushWindowBackground}" />
             <Path Data="M16.5,6.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 Z" Fill="{Binding BrushPair}" Opacity="0.2" />
             <Path Data="M0.5,6.5 L6.5,0.5 L22.5,0.5 L22.5,23.5 L16.5,29.5 L0.5,29.5 Z M0.5,6.5 L16.5,6.5 L22.5,0.5 M16.5,6.5 L16.5,29.5" Stroke="{Binding BrushPair}" StrokeThickness="1" StrokeJoin="Round" />
           </Panel>
@@ -618,7 +623,7 @@
           </Panel>
           <Panel Grid.Row="1" Grid.Column="1">
             <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
-            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-28,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
+            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-40,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                   <StackPanel Orientation="Horizontal" Spacing="36" Margin="0,36,40,58" />
