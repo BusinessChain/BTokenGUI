@@ -12,11 +12,13 @@ public partial class Blockchain
 {
   public partial class Block : Good
   {
-    public int Height { get; }
-    public long UnixTimeSeconds { get; }
-    public List<Field> Fields { get; }
+    public int Height { get; private set; }
+    public long UnixTimeSeconds { get; private set; }
     public ObservableCollection<Anchor> Anchors { get; } = [];
-    public HashSet<string> HashesAnchorWinner { get; }
+    public HashSet<string> HashesAnchorWinner { get; private set; }
+
+    [ObservableProperty]
+    public partial List<Field> Fields { get; set; }
 
     [ObservableProperty]
     public partial List<TX> TXs { get; set; }
@@ -33,25 +35,33 @@ public partial class Blockchain
       if (isPaired)
         BrushPair = CreateBrushPair(Hash);
 
+      Update(block);
+    }
+
+    public void Update(JsonElement block)
+    {
       Height = block.GetProperty("height").GetInt32();
       HashesAnchorWinner = block.GetProperty("anchorsWinner").EnumerateArray()
         .Select(anchor => anchor.GetProperty("hashBlockReferenced").GetString())
         .ToHashSet();
-      Fields = [];
+
+      List<Field> fields = [];
 
       foreach (JsonProperty property in block.EnumerateObject())
       {
         if (property.Value.ValueKind == JsonValueKind.Array)
           continue;
 
-        Fields.Add(new Field(property.Name, property.Value.ToString()));
+        fields.Add(new Field(property.Name, property.Value.ToString()));
 
         if (property.Name == "unixTimeSeconds")
         {
           UnixTimeSeconds = property.Value.GetInt64();
-          Fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(UnixTimeSeconds).ToLocalTime().ToString("G")));
+          fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(UnixTimeSeconds).ToLocalTime().ToString("G")));
         }
       }
+
+      Fields = fields;
     }
 
     public async Task LoadTXs()

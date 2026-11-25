@@ -293,29 +293,29 @@
       </Setter>
     </ControlTheme>
     <ControlTheme x:Key="ThemeCube" TargetType="ContentControl">
-      <Setter Property="Width" Value="72" />
+      <Setter Property="Width" Value="56" />
       <Setter Property="Height" Value="98" />
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Border Width="52" Height="78" Margin="19,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource BrushWindowBackground}" IsHitTestVisible="False">
+            <Border Width="36" Height="78" Margin="19,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource BrushWindowBackground}" IsHitTestVisible="False">
               <Border Background="{TemplateBinding BorderBrush}" Opacity="0.36" />
             </Border>
             <Panel IsHitTestVisible="False">
-              <Path Data="M1,19 L19,1 L19,79 L1,97 Z M1,97 L19,79 L71,79 L53,97 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M1,19 L19,1 L19,79 L1,97 Z M1,97 L19,79 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
               <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
-              <Path Data="M1,97 L19,79 L71,79 L53,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.5" />
-              <Path Data="M19,1 L19,79 L71,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
+              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.5" />
+              <Path Data="M19,1 L19,79 L55,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
             </Panel>
-            <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="28,78,0,0" />
+            <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="20,78,0,0" />
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
-              <Path Data="M1,19 L19,1 L71,1 L53,19 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L71,1 L53,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.68" />
-              <Path Data="M1,19 L53,19 L53,97 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.36" />
-              <Path Data="M53,19 L71,1 L71,79 L53,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M53,19 L71,1 L71,79 L53,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
-              <Path Data="M1,19 L19,1 L71,1 L71,79 L53,97 L1,97 Z M1,19 L53,19 L71,1 M53,19 L53,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
+              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.68" />
+              <Path Data="M1,19 L37,19 L37,97 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.36" />
+              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
+              <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z M1,19 L37,19 L55,1 M37,19 L37,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -618,7 +618,6 @@
                 </LinearGradientBrush>
               </Panel.OpacityMask>
               <TemplatedControl Theme="{StaticResource ThemeRail}" />
-              <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.5" Margin="52,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
             </Panel>
           </Panel>
           <Panel Grid.Row="1" Grid.Column="1">
@@ -632,8 +631,8 @@
               </ItemsControl.ItemsPanel>
               <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:Blockchain+Block">
-                  <Panel Width="72" Height="98" Classes.flying="{Binding IsFlying}">
-                    <Path Data="M1,19 L19,1 L71,1 L101,31 L101,109 L83,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+                  <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
+                    <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
                       <Path.Effect>
                         <BlurEffect Radius="8" />
                       </Path.Effect>
@@ -651,7 +650,7 @@
                       </Button.Flyout>
                     </Button>
                     <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
-                      <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="52" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                      <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                         <ItemsControl.ItemContainerTheme>
                           <ControlTheme TargetType="ContentPresenter">
                             <Setter Property="Margin" Value="0,-8" />
@@ -664,11 +663,13 @@
                         </ItemsControl.ItemsPanel>
                       </ItemsControl>
                     </ContentControl>
-                    <TextBlock Text="{Binding Height}" Width="52" Margin="1,22,0,0" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="12" FontWeight="Bold" Foreground="White" IsHitTestVisible="False">
-                      <TextBlock.Effect>
-                        <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
-                      </TextBlock.Effect>
-                    </TextBlock>
+                    <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+                      <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
+                        <TextBlock.Effect>
+                          <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
+                        </TextBlock.Effect>
+                      </TextBlock>
+                    </Viewbox>
                   </Panel>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>

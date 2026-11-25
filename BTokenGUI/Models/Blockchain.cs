@@ -143,7 +143,10 @@ public partial class Blockchain : ObservableObject
           if (placesBlock.TryGetValue(hash, out (Block Block, ObservableCollection<Block> Place) placeBlock))
           {
             if (!placeBlock.Block.IsFlying && placeBlock.Place != destination)
+            {
+              placeBlock.Block.Update(blockJSON);
               Move(placeBlock.Block, placeBlock.Place, destination, indexInsert);
+            }
           }
           else if (destination == BlocksMined)
             Move(new Block(blockJSON, Name, BlockchainParent != null), null, destination, indexInsert);
