@@ -14,6 +14,8 @@ public partial class Blockchain
 
     public object Origin { get; set; }
 
+    public Blockchain Chain { get; set; }
+
     [ObservableProperty]
     public partial bool IsFlying { get; set; }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Text.Json;
@@ -36,6 +37,8 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public Wallet WalletBitcoin { get; }
 
   public Wallet WalletBToken { get; }
+
+  public ObservableCollection<Blockchain.Good> Flights { get; } = [];
 
   [ObservableProperty]
   public partial decimal? Budget { get; set; }

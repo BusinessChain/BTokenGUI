@@ -54,7 +54,6 @@ public partial class MiningView : UserControl
     InitializeComponent();
 
     ItemsFlights.ContainerPrepared += StartFlight;
-    ItemsFlightsBToken.ContainerPrepared += StartFlight;
 
     Pipes =
     [
@@ -130,21 +129,20 @@ public partial class MiningView : UserControl
   }
   async void StartFlight(object sender, ContainerPreparedEventArgs e)
   {
-    ItemsControl itemsFlights = (ItemsControl)sender;
-    Blockchain blockchain = (Blockchain)itemsFlights.DataContext;
     Control container = e.Container;
     Blockchain.Good good = (Blockchain.Good)container.DataContext;
+    Blockchain blockchain = good.Chain;
 
     container.Opacity = 0;
 
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
     bool isOutflow = good.Origin == null;
-    Control controlPlace = FindControl(good, itemsFlights);
+    Control controlPlace = FindControl(good);
     bool isInflow = controlPlace == null && good is Blockchain.Chip;
-    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
+    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin) ?? ContentBlockchainBitcoin;
 
-    if (FindCenter(controlOrigin, itemsFlights) is Point pointOrigin)
+    if (FindCenter(controlOrigin, ItemsFlights) is Point pointOrigin)
     {
       List<Point> route = [pointOrigin];
 
@@ -159,9 +157,9 @@ public partial class MiningView : UserControl
 
       container.Opacity = 1;
 
-      if (FindCenter(isInflow ? PanelConverter : controlPlace, itemsFlights) is Point pointEnd)
+      if (FindCenter(isInflow ? PanelConverter : controlPlace, ItemsFlights) is Point pointEnd)
       {
-        List<Point> routeDuct = TraceRouteDuct(blockchain, good, isInflow, isOutflow, itemsFlights);
+        List<Point> routeDuct = TraceRouteDuct(blockchain, good, isInflow, isOutflow, ItemsFlights);
 
         foreach (Point point in routeDuct)
           ExtendRoute(route, point);
@@ -400,13 +398,13 @@ public partial class MiningView : UserControl
     return animation.RunAsync(target);
   }
 
-  Control FindControl(object shown, ItemsControl itemsFlights)
+  Control FindControl(object shown)
   {
     return this.GetVisualDescendants()
       .OfType<Control>()
       .FirstOrDefault(control => control is ItemsControl itemsControl
         ? itemsControl.ItemsSource == shown
-        : control.DataContext == shown && ItemsControl.ItemsControlFromItemContainer(control) is ItemsControl itemsOwner && itemsOwner != itemsFlights);
+        : control.DataContext == shown && ItemsControl.ItemsControlFromItemContainer(control) is ItemsControl itemsOwner && itemsOwner != ItemsFlights);
   }
 
   class FlexPipe

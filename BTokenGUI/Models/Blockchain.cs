@@ -15,7 +15,6 @@ public partial class Blockchain : ObservableObject
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
-  public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Chip> TXsPool { get; } = [];
   public Mining.Wallet Tank { get; }
   public bool IsTipExtending;
@@ -28,13 +27,15 @@ public partial class Blockchain : ObservableObject
   public partial bool IsFormAnchorsOpen { get; set; }
   Blockchain BlockchainParent;
   long? FundsTank;
+  ObservableCollection<Good> Flights;
 
 
-  public Blockchain(string name, Blockchain blockchainParent, Mining.Wallet tank)
+  public Blockchain(string name, Blockchain blockchainParent, Mining.Wallet tank, ObservableCollection<Good> flights)
   {
     Name = name;
     BlockchainParent = blockchainParent;
     Tank = tank;
+    Flights = flights;
   }
 
   [RelayCommand]
@@ -205,6 +206,7 @@ public partial class Blockchain : ObservableObject
       {
         Tank.Chips.Remove(chip);
         chip.Origin = Tank.Chips;
+        chip.Chain = this;
         chip.IsFlying = true;
         Flights.Add(chip);
       }
@@ -252,6 +254,7 @@ public partial class Blockchain : ObservableObject
   {
     (origin as ObservableCollection<T>)?.Remove(good);
     good.Origin = origin;
+    good.Chain = this;
     good.IsFlying = IsPlaced;
     destination.Insert(index, good);
 

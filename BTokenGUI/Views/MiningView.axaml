@@ -747,8 +747,7 @@
               </Ellipse>
             </Panel>
           </Canvas>
-          <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
-          <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
+          <ItemsControl x:Name="ItemsFlights" Classes="flights" ItemsSource="{Binding Mining.Flights}" />
         </Panel>
       </ScrollViewer>
     </DockPanel>
