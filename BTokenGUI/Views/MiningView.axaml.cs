@@ -278,15 +278,8 @@ public partial class MiningView : UserControl
     if (isOutflow && good is Blockchain.Anchor)
       return FindPath("pipeAnchor", blockchain) is Path pipe ? TraceRoutePath(pipe, target) : [];
 
-    if (isInflow || isOutflow && good is Blockchain.Chip)
-    {
-      List<Point> routeTube = FindPath("tubeConverter", blockchain) is Path tube ? TraceRoutePath(tube, target) : [];
-
-      if (isOutflow)
-        routeTube.Reverse();
-
-      return routeTube;
-    }
+    if (isInflow)
+      return FindPath("tubeConverter", blockchain) is Path tube ? TraceRoutePath(tube, target) : [];
 
     return TraceRouteFlex(blockchain, good).Select(point => CanvasPipes.TranslatePoint(point, target)).OfType<Point>().ToList();
   }

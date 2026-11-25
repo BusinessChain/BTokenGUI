@@ -227,11 +227,7 @@ public partial class Blockchain : ObservableObject
 
   void PlaceChipsOutputs(JsonElement anchorer)
   {
-    List<JsonElement> anchorsJSON = anchorer.GetProperty("anchors").EnumerateArray().ToList();
-
-    HashSet<string> hashesAnchor = anchorsJSON.Select(anchorJSON => anchorJSON.GetProperty("hash").GetString()).ToHashSet();
-
-    HashSet<(string, int)> outputsConsumed = anchorsJSON
+    HashSet<(string, int)> outputsConsumed = anchorer.GetProperty("anchors").EnumerateArray()
       .SelectMany(anchorJSON => anchorJSON.GetProperty("inputs").EnumerateArray())
       .Select(inputJSON => (inputJSON.GetProperty("tXIDOutput").GetString(), inputJSON.GetProperty("indexOutput").GetInt32()))
       .ToHashSet();
@@ -259,9 +255,7 @@ public partial class Blockchain : ObservableObject
     {
       Chip chip = new(outputJSON, Name);
 
-      object origin = hashesAnchor.Contains(chip.Hash) ? null : Blocks.FirstOrDefault(block => block.Hash == chip.HashBlock) ?? Blocks[^1];
-
-      Move(chip, origin, Tank.Chips, Tank.Chips.Count);
+      Move(chip, Blocks.FirstOrDefault(block => block.Hash == chip.HashBlock) ?? Blocks[^1], Tank.Chips, Tank.Chips.Count);
     }
   }
 
