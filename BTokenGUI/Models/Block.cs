@@ -13,6 +13,7 @@ public partial class Blockchain
   public partial class Block : Good
   {
     public int Height { get; }
+    public long UnixTimeSeconds { get; }
     public List<Field> Fields { get; }
     public ObservableCollection<Anchor> Anchors { get; } = [];
     public HashSet<string> HashesAnchorWinner { get; }
@@ -46,7 +47,10 @@ public partial class Blockchain
         Fields.Add(new Field(property.Name, property.Value.ToString()));
 
         if (property.Name == "unixTimeSeconds")
-          Fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64()).ToLocalTime().ToString("G")));
+        {
+          UnixTimeSeconds = property.Value.GetInt64();
+          Fields.Add(new Field("timestamp", DateTimeOffset.FromUnixTimeSeconds(UnixTimeSeconds).ToLocalTime().ToString("G")));
+        }
       }
     }
 
