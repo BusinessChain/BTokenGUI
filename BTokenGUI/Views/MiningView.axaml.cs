@@ -25,9 +25,8 @@ public partial class MiningView : UserControl
   const double SECONDS_FLIGHT = 0.8;
   const double SECONDS_INFLOW = 6;
   const double SECONDS_REACTION = 3;
-  const double SECONDS_IMPULSE = 2;
   const double SECONDS_DRAW = 2.5;
-  const double SECONDS_CREATION = SECONDS_IMPULSE + 2 * SECONDS_DRAW;
+  const double SECONDS_CREATION = 2 * SECONDS_DRAW;
   const double SECONDS_SLIDE = 0.5;
   const double SECONDS_STAGGER_SLIDE = 0.25;
   const double SPACING_ROUTE = 6;
@@ -153,7 +152,7 @@ public partial class MiningView : UserControl
       {
         Task taskCreation = PlayCreation();
 
-        await Task.Delay(TimeSpan.FromSeconds(SECONDS_IMPULSE + SECONDS_DRAW));
+        await Task.Delay(TimeSpan.FromSeconds(SECONDS_DRAW));
         container.Opacity = 1;
         await taskCreation;
 
@@ -218,10 +217,6 @@ public partial class MiningView : UserControl
 
   async Task PlayCreation()
   {
-    PanelChannel.Classes.Add("pulsing");
-    await Task.Delay(TimeSpan.FromSeconds(SECONDS_IMPULSE));
-    PanelChannel.Classes.Remove("pulsing");
-
     if (FindCenter(FindPort(ContentTankPool, "portNozzle"), CanvasCopies) is not Point pointNozzle || FindCenter(PanelBlockCreator, CanvasCopies) is not Point pointCreator)
       return;
 

@@ -135,26 +135,6 @@
         </Animation>
       </Style.Animations>
     </Style>
-    <Style Selector="Panel.pulsing > Path.pulse">
-      <Style.Animations>
-        <Animation Duration="0:0:2" FillMode="Forward">
-          <KeyFrame Cue="0%">
-            <Setter Property="TranslateTransform.X" Value="0" />
-            <Setter Property="Opacity" Value="0" />
-          </KeyFrame>
-          <KeyFrame Cue="20%">
-            <Setter Property="Opacity" Value="1" />
-          </KeyFrame>
-          <KeyFrame Cue="80%">
-            <Setter Property="Opacity" Value="1" />
-          </KeyFrame>
-          <KeyFrame Cue="100%">
-            <Setter Property="TranslateTransform.X" Value="-44" />
-            <Setter Property="Opacity" Value="0" />
-          </KeyFrame>
-        </Animation>
-      </Style.Animations>
-    </Style>
     <Style Selector="Panel.reacting > Path.flash">
       <Style.Animations>
         <Animation Duration="0:0:3" FillMode="Forward">
@@ -839,20 +819,12 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
-              <Panel x:Name="PanelChannel" Grid.Column="1" Width="48" Height="34" Margin="0,53,102,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
+              <Panel Grid.Column="1" Width="48" Height="34" Margin="0,53,102,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
                 <Path Data="M0,5 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1" Opacity="0.4" />
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushGlass}" />
                 <Path Data="M0,1 H48 M0,33 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
-                <Path Classes="pulse" Data="M42,17 a4,4 0 1 0 8,0 a4,4 0 1 0 -8,0" Fill="White" Opacity="0">
-                  <Path.RenderTransform>
-                    <TranslateTransform />
-                  </Path.RenderTransform>
-                  <Path.Effect>
-                    <BlurEffect Radius="3" />
-                  </Path.Effect>
-                </Path>
               </Panel>
               <Panel x:Name="PanelBlockCreator" Grid.Column="1" Width="72" Height="70" Margin="0,39,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                 <Path Data="{StaticResource GeometryChamber}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35">
