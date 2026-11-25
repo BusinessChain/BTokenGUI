@@ -801,6 +801,13 @@
                   <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Panel Grid.Column="1" Width="48" Height="34" Margin="0,53,102,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
+                  <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
+                  <Path Data="M0,1 H48 V33 H0 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
+                  <Path Data="M0,5 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1" Opacity="0.4" />
+                  <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushGlass}" />
+                  <Path Data="M0,1 H48 M0,33 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                </Panel>
                 <Panel Grid.Column="1" Width="72" Height="70" Margin="0,39,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Data="{StaticResource GeometryChamber}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35">
                     <Path.Effect>
