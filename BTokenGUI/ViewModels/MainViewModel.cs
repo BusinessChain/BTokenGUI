@@ -29,6 +29,7 @@ public partial class MainViewModel : ObservableObject
 
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
   const int COUNT_BLOCKS_NEWEST = 3;
+  const int COUNT_TXS_POOL = 15;
 
 
   public MainViewModel()
@@ -48,7 +49,7 @@ public partial class MainViewModel : ObservableObject
 
       try
       {
-        JsonElement snapshotState = await Node.SendRequest("getSnapshotState", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST }).ConfigureAwait(false);
+        JsonElement snapshotState = await Node.SendRequest("getSnapshotState", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST, ["countTXsPool"] = COUNT_TXS_POOL }).ConfigureAwait(false);
         JsonElement networksJSON = snapshotState.GetProperty("networks");
         JsonElement blockchainsJSON = snapshotState.GetProperty("blockchains");
 
