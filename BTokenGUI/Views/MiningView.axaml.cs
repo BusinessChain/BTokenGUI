@@ -401,12 +401,16 @@ public partial class MiningView : UserControl
       .OrderBy(itemsBlocks.IndexFromContainer)
       .ToArray();
 
-    double offset = ((PanelBlocks)itemsBlocks.ItemsPanelRoot).GetDistanceSlot();
+    PanelBlocks panelBlocks = (PanelBlocks)itemsBlocks.ItemsPanelRoot;
+
+    double[] offsetsStart = containersSliding
+      .Select(container => container == containerNew ? panelBlocks.GetDistanceSlot() : container.Bounds.X - panelBlocks.GetPosition(container))
+      .ToArray();
 
     PresenterBlockLeaving = null;
 
-    foreach (Control container in containersSliding)
-      container.SetValue(PanelBlocks.OffsetProperty, offset);
+    for (int i = 0; i < containersSliding.Length; i++)
+      containersSliding[i].SetValue(PanelBlocks.OffsetProperty, offsetsStart[i]);
 
     if (isSlidingIn)
       containerNew.Opacity = 0;
@@ -424,10 +428,10 @@ public partial class MiningView : UserControl
           {
             double progressContainer = Math.Clamp((progress * secondsSlide - SECONDS_STAGGER_SLIDE * (i + 1)) / SECONDS_SLIDE, 0, 1);
 
-            containersSliding[i].SetValue(PanelBlocks.OffsetProperty, offset * (1 - easingSlide.Ease(progressContainer)));
+            containersSliding[i].SetValue(PanelBlocks.OffsetProperty, offsetsStart[i] * (1 - easingSlide.Ease(progressContainer)));
           }
         }),
-        Animate(presenterLeaving, 0, SECONDS_SLIDE, new CubicEaseInOut(), (TranslateTransform.XProperty, [0, -offset])),
+        Animate(presenterLeaving, 0, SECONDS_SLIDE, new CubicEaseInOut(), (TranslateTransform.XProperty, [0, -offsetsStart[0]])),
         Animate(presenterLeaving, 0, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [1, 0.8, 0]))
       }
       .Concat(isSlidingIn ? [Animate(containerNew, SECONDS_STAGGER_SLIDE * containersSliding.Length, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [0, 1]))] : []));
