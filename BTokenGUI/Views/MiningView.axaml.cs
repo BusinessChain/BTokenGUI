@@ -23,15 +23,15 @@ public partial class MiningView : UserControl
 {
   const double OFFSET_CENTER_GEM = 16;
   const double SECONDS_FLIGHT = 0.8;
-  const double SECONDS_INFLOW = 6;
-  const double SECONDS_REACTION = 6;
-  const double SECONDS_DRAW = 2.5;
+  const double SECONDS_INFLOW = 3;
+  const double SECONDS_REACTION = 3;
+  const double SECONDS_DRAW = 1.25;
   const double SECONDS_CREATION = 2 * SECONDS_DRAW;
   const double SECONDS_SLIDE = 0.5;
   const double SECONDS_STAGGER_SLIDE = 0.25;
   const double SPACING_ROUTE = 6;
   const double SPEED_PIPE = 320;
-  const double SPEED_OUTFLOW = 64;
+  const double SPEED_OUTFLOW = 128;
   const double LENGTH_PLUG = 11;
   const double WIDTH_PLUG = 10;
   const double LEAD_PIPE = 6;
@@ -203,7 +203,7 @@ public partial class MiningView : UserControl
         if (isHatching)
           PortHatch.Classes.Remove("open");
 
-        if (isInflow && FindCenter(PanelConverter, CanvasEffects) is Point pointSphere)
+        if (isInflow && FindCenter(PanelConverter, CanvasFlash) is Point pointSphere)
         {
           Canvas.SetLeft(PanelFlash, pointSphere.X - PanelFlash.Width / 2);
           Canvas.SetTop(PanelFlash, pointSphere.Y - PanelFlash.Height / 2);
@@ -211,8 +211,8 @@ public partial class MiningView : UserControl
           double[] scalesFlash = [0.3, 0.9, 1.1, 1.3];
 
           await Task.WhenAll(
-            Animate(PanelFlash, 0, SECONDS_REACTION, new LinearEasing(), (Visual.OpacityProperty, [0, 1, 1, 0])),
-            Animate((ScaleTransform)PanelFlash.RenderTransform, 0, SECONDS_REACTION, new CubicEaseOut(), (ScaleTransform.ScaleXProperty, scalesFlash), (ScaleTransform.ScaleYProperty, scalesFlash)));
+            Animate(PanelFlash, 0, SECONDS_REACTION, new LinearEasing(), (Visual.OpacityProperty, [0, 0.85, 0.85, 0])),
+            Animate(PanelFlash, 0, SECONDS_REACTION, new CubicEaseOut(), (ScaleTransform.ScaleXProperty, scalesFlash), (ScaleTransform.ScaleYProperty, scalesFlash)));
         }
       }
     }
