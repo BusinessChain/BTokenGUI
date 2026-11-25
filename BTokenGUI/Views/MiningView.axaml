@@ -7,10 +7,10 @@
              x:DataType="vm:MainViewModel">
   <UserControl.Styles>
     <Style Selector="ContentControl.tank">
-      <Setter Property="Margin" Value="0,0,12,0" />
+      <Setter Property="Margin" Value="0,58,12,0" />
     </Style>
     <Style Selector="ContentControl.tank.besideTankAnchor">
-      <Setter Property="Margin" Value="0,0,55,0" />
+      <Setter Property="Margin" Value="0,58,55,0" />
     </Style>
     <Style Selector="ItemsControl.heap">
       <Setter Property="Clip" Value="M42,50 A34,5 0 0 1 110,50 L80.5,100 L71.5,100 Z" />
@@ -472,7 +472,7 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
       <DockPanel Margin="20,10">
-        <Grid RowDefinitions="Auto,Auto" RowSpacing="58" ShowGridLines="True">
+        <Grid RowDefinitions="Auto,Auto" ShowGridLines="True">
           <Panel>
             <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.Template>
@@ -534,7 +534,7 @@
               </ItemsControl.ItemTemplate>
             </ItemsControl>
           </Panel>
-          <Panel Grid.Row="1" Margin="0,0,76,0" ClipToBounds="True" IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
+          <Panel Grid.Row="1" Margin="0,58,76,0" ClipToBounds="True" IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
             <Canvas>
               <Grid Width="{Binding $parent[DockPanel].Bounds.Width}" ColumnDefinitions="*,*">
                 <Panel Grid.Column="1" Height="8" Margin="12,100,0,0" VerticalAlignment="Top" Classes.glowing="{Binding Tank.IsAutoActive}">
@@ -550,7 +550,7 @@
               </Grid>
             </Canvas>
           </Panel>
-          <Panel Grid.Row="1" Width="68" Height="52" Margin="0,78,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
+          <Panel Grid.Row="1" Width="68" Height="52" Margin="0,136,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
             <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
               <Path.Effect>
                 <BlurEffect Radius="8" />
@@ -604,13 +604,13 @@
               <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" />
             </Panel>
           </ContentControl>
-          <ContentControl Classes="tankAnchor" Grid.Row="1" Theme="{StaticResource ThemeTankAnchor}" Margin="0,0,-31,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
+          <ContentControl Classes="tankAnchor" Grid.Row="1" Theme="{StaticResource ThemeTankAnchor}" Margin="0,58,-31,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
             <Panel>
               <Button Command="{Binding OpenFormAnchorsCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
               <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
             </Panel>
           </ContentControl>
-          <Canvas Grid.Row="1" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTankAnchorVisible}">
+          <Canvas Grid.Row="1" Width="0" Height="0" Margin="0,58,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTankAnchorVisible}">
             <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" StrokeJoin="Round" />
             <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" StrokeJoin="Round" />
             <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" StrokeJoin="Round" Opacity="0.36" />
@@ -640,7 +640,7 @@
           <Canvas x:Name="CanvasPipes" IsHitTestVisible="False" />
           <StackPanel>
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" Margin="0,48,0,0" />
-            <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" Margin="20,-56,20,-20">
+            <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" Margin="20,-56,20,0">
               <Panel Width="48" Height="34" Margin="0,53,102,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
