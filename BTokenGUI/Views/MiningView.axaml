@@ -135,6 +135,26 @@
         </Animation>
       </Style.Animations>
     </Style>
+    <Style Selector="Panel.pulsing > Path.pulse">
+      <Style.Animations>
+        <Animation Duration="0:0:0.4" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="TranslateTransform.X" Value="0" />
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="20%">
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="80%">
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="TranslateTransform.X" Value="-44" />
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
     <Style Selector="Panel.reacting > Path.flash">
       <Style.Animations>
         <Animation Duration="0:0:0.6" FillMode="Forward">
@@ -820,14 +840,22 @@
                   <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Panel Grid.Column="1" Width="48" Height="34" Margin="0,53,102,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
+                <Panel x:Name="PanelChannel" Grid.Column="1" Width="48" Height="34" Margin="0,53,102,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
                   <Path Data="M0,1 H48 V33 H0 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
                   <Path Data="M0,5 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1" Opacity="0.4" />
                   <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushGlass}" />
                   <Path Data="M0,1 H48 M0,33 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                  <Path Classes="pulse" Data="M42,17 a4,4 0 1 0 8,0 a4,4 0 1 0 -8,0" Fill="White" Opacity="0">
+                    <Path.RenderTransform>
+                      <TranslateTransform />
+                    </Path.RenderTransform>
+                    <Path.Effect>
+                      <BlurEffect Radius="3" />
+                    </Path.Effect>
+                  </Path>
                 </Panel>
-                <Panel Grid.Column="1" Width="72" Height="70" Margin="0,39,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
+                <Panel x:Name="PanelBlockCreator" Grid.Column="1" Width="72" Height="70" Margin="0,39,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Data="{StaticResource GeometryChamber}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35">
                     <Path.Effect>
                       <BlurEffect Radius="8" />
@@ -844,8 +872,8 @@
                   <Path Data="{StaticResource GeometryLidChamber}" Fill="{StaticResource BrushGlass}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
                   <Path Data="M10,16 L10,50" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
                 </Panel>
-                <ContentControl Classes="tankPool" Grid.Column="1" Theme="{StaticResource ThemeCone}" Margin="0,-22,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
-                  <ItemsControl Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" />
+                <ContentControl x:Name="ContentTankPool" Classes="tankPool" Grid.Column="1" Theme="{StaticResource ThemeCone}" Margin="0,-22,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
+                  <ItemsControl x:Name="ItemsTXsPool" Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" />
                 </ContentControl>
                 <Panel x:Name="PanelConverter" Grid.Column="1" Width="164" Height="140" Margin="0,0,-34,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
                   <Path Classes="glow" Data="{StaticResource GeometrySphereGlow}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
@@ -906,6 +934,7 @@
             <ContentControl x:Name="ContentBlockchainBToken" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           </StackPanel>
           <Canvas x:Name="CanvasPlugs" IsHitTestVisible="False" />
+          <Canvas x:Name="CanvasCopies" IsHitTestVisible="False" />
           <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
           <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
         </Panel>
