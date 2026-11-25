@@ -24,7 +24,7 @@ public partial class MiningView : UserControl
   const double OFFSET_CENTER_GEM = 16;
   const double SECONDS_FLIGHT = 0.8;
   const double SECONDS_INFLOW = 6;
-  const double SECONDS_REACTION = 3;
+  const double SECONDS_REACTION = 6;
   const double SECONDS_DRAW = 2.5;
   const double SECONDS_CREATION = 2 * SECONDS_DRAW;
   const double SECONDS_SLIDE = 0.5;
