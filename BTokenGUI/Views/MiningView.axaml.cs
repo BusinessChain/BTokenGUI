@@ -59,7 +59,7 @@ public partial class MiningView : UserControl
     Pipes =
     [
       CreatePipe(ContentBlockchainBitcoin, GridMining),
-      CreatePipe(ContentBlockchainBToken, ContentBlockchainBToken)
+      CreatePipe(ContentBlockchainBToken, PanelTankBToken)
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();

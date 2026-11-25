@@ -465,140 +465,69 @@
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
-      <DockPanel Margin="20,10">
-        <Grid RowDefinitions="Auto,Auto" ShowGridLines="True">
-          <Border Grid.RowSpan="2" BorderBrush="Cyan" BorderThickness="1" IsHitTestVisible="False" />
-          <Panel>
-            <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
-              <ItemsControl.Template>
-                <ControlTemplate TargetType="ItemsControl">
-                  <Panel>
-                    <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
-                    <Border BorderBrush="Yellow" BorderThickness="1" IsHitTestVisible="False" />
-                    <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-                  </Panel>
-                </ControlTemplate>
-              </ItemsControl.Template>
-              <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                  <views:PanelBlocks />
-                </ItemsPanelTemplate>
-              </ItemsControl.ItemsPanel>
-              <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="models:Blockchain+Block">
-                  <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
-                    <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
-                      <Path.Effect>
-                        <BlurEffect Radius="8" />
-                      </Path.Effect>
-                    </Path>
-                    <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                      <Button.Flyout>
-                        <Flyout Opening="OpenFlyoutBlock">
-                          <ScrollViewer MaxHeight="600">
-                            <StackPanel Spacing="12" MaxWidth="420">
-                              <SelectableTextBlock Text="Block" FontWeight="Bold" />
-                              <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
-                            </StackPanel>
-                          </ScrollViewer>
-                        </Flyout>
-                      </Button.Flyout>
-                    </Button>
-                    <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
-                      <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <ItemsControl.ItemContainerTheme>
-                          <ControlTheme TargetType="ContentPresenter">
-                            <Setter Property="Margin" Value="0,-8" />
-                          </ControlTheme>
-                        </ItemsControl.ItemContainerTheme>
-                        <ItemsControl.ItemsPanel>
-                          <ItemsPanelTemplate>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
-                          </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                      </ItemsControl>
-                    </ContentControl>
-                    <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
-                      <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
-                        <TextBlock.Effect>
-                          <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
-                        </TextBlock.Effect>
-                      </TextBlock>
-                    </Viewbox>
-                  </Panel>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-          </Panel>
-          <Panel Grid.Row="1" IsVisible="{Binding !Tank.IsFeedingConverter}">
-            <Panel Margin="0,58,76,0" ClipToBounds="True" IsHitTestVisible="False">
-              <Canvas>
-                <Grid Width="{Binding $parent[DockPanel].Bounds.Width}" ColumnDefinitions="*,*">
-                  <Panel Grid.Column="1" Height="8" Margin="12,100,0,0" VerticalAlignment="Top" Classes.glowing="{Binding Tank.IsAutoActive}">
-                    <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" />
-                    <Border Height="5" Background="{StaticResource BrushWindowBackground}" />
-                    <Border Height="5" Background="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
-                    <Path Classes="glow" Data="M0,0 H1 V1 H0 Z" Stretch="Fill" Height="6" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}">
-                      <Path.Effect>
-                        <BlurEffect Radius="6" />
-                      </Path.Effect>
-                    </Path>
-                  </Panel>
-                </Grid>
-              </Canvas>
-            </Panel>
-            <Panel Width="68" Height="52" Margin="0,136,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-              <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
-                <Path.Effect>
-                  <BlurEffect Radius="8" />
-                </Path.Effect>
-              </Path>
-              <Button Command="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-              <Panel IsHitTestVisible="False">
-                <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
-                <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
-                <Path Data="{StaticResource GeometryWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                <Path Data="M66,14 L46,14 A6,6 0 0 0 40,20 L40,32 A6,6 0 0 0 46,38 L66,38" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
+      <Panel Margin="20,10">
+        <Border BorderBrush="Cyan" BorderThickness="1" IsHitTestVisible="False" />
+        <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
+          <ItemsControl.Template>
+            <ControlTemplate TargetType="ItemsControl">
+              <Panel>
+                <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
+                <Border BorderBrush="Yellow" BorderThickness="1" IsHitTestVisible="False" />
+                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
               </Panel>
-            </Panel>
-            <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,58,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
-              <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
-                <Panel IsHitTestVisible="False">
-                  <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
-                  <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" />
-                  <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
-                  <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
-                </Panel>
-                <Path Classes="glow" Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
+            </ControlTemplate>
+          </ItemsControl.Template>
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <views:PanelBlocks />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Blockchain+Block">
+              <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
+                <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
                   <Path.Effect>
-                    <BlurEffect Radius="6" />
+                    <BlurEffect Radius="8" />
                   </Path.Effect>
                 </Path>
-                <Path Classes="glow" Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
-                  <Path.Effect>
-                    <BlurEffect Radius="6" />
-                  </Path.Effect>
-                </Path>
-                <Button Command="{Binding Tank.OpenPanelCommand}" Height="68" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
-                <Path Data="{StaticResource GeometryConeInterior}" Fill="#FF8A1F" Opacity="0.9" RenderTransformOrigin="36,60" IsHitTestVisible="False">
-                  <Path.RenderTransform>
-                    <ScaleTransform ScaleX="{Binding FillingPowder}" ScaleY="{Binding FillingPowder}" />
-                  </Path.RenderTransform>
-                </Path>
-                <Path Classes="glow" Data="{StaticResource GeometryCone}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="4" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
-                  <Path.Effect>
-                    <BlurEffect Radius="10" />
-                  </Path.Effect>
-                </Path>
-                <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" />
+                <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                  <Button.Flyout>
+                    <Flyout Opening="OpenFlyoutBlock">
+                      <ScrollViewer MaxHeight="600">
+                        <StackPanel Spacing="12" MaxWidth="420">
+                          <SelectableTextBlock Text="Block" FontWeight="Bold" />
+                          <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
+                        </StackPanel>
+                      </ScrollViewer>
+                    </Flyout>
+                  </Button.Flyout>
+                </Button>
+                <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
+                  <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <ItemsControl.ItemContainerTheme>
+                      <ControlTheme TargetType="ContentPresenter">
+                        <Setter Property="Margin" Value="0,-8" />
+                      </ControlTheme>
+                    </ItemsControl.ItemContainerTheme>
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                  </ItemsControl>
+                </ContentControl>
+                <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+                  <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
+                    <TextBlock.Effect>
+                      <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
+                    </TextBlock.Effect>
+                  </TextBlock>
+                </Viewbox>
               </Panel>
-            </ContentControl>
-          </Panel>
-        </Grid>
-      </DockPanel>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Panel>
     </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">
@@ -725,6 +654,74 @@
               </Panel>
             </Grid>
             <ContentControl x:Name="ContentBlockchainBToken" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+            <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="20,0,20,10">
+              <Border BorderBrush="Lime" BorderThickness="1" IsHitTestVisible="False" />
+              <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
+                <Canvas>
+                  <Grid Width="{Binding #PanelTankBToken.Bounds.Width}" ColumnDefinitions="*,*">
+                    <Panel Grid.Column="1" Height="8" Margin="12,100,0,0" VerticalAlignment="Top" Classes.glowing="{Binding Tank.IsAutoActive}">
+                      <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+                      <Border Height="5" Background="{StaticResource BrushWindowBackground}" />
+                      <Border Height="5" Background="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
+                      <Path Classes="glow" Data="M0,0 H1 V1 H0 Z" Stretch="Fill" Height="6" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}">
+                        <Path.Effect>
+                          <BlurEffect Radius="6" />
+                        </Path.Effect>
+                      </Path>
+                    </Panel>
+                  </Grid>
+                </Canvas>
+              </Panel>
+              <Panel Width="68" Height="52" Margin="0,126,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+                  <Path.Effect>
+                    <BlurEffect Radius="8" />
+                  </Path.Effect>
+                </Path>
+                <Button Command="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <Panel IsHitTestVisible="False">
+                  <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
+                  <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
+                  <Path Data="{StaticResource GeometryWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                  <Path Data="M66,14 L46,14 A6,6 0 0 0 40,20 L40,32 A6,6 0 0 0 46,38 L66,38" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                  <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
+                </Panel>
+              </Panel>
+              <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
+                  <Panel IsHitTestVisible="False">
+                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
+                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
+                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" />
+                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
+                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
+                  </Panel>
+                  <Path Classes="glow" Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="6" />
+                    </Path.Effect>
+                  </Path>
+                  <Path Classes="glow" Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" OpacityMask="{StaticResource BrushFadeTube}" IsVisible="{Binding !Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="6" />
+                    </Path.Effect>
+                  </Path>
+                  <Button Command="{Binding Tank.OpenPanelCommand}" Height="68" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+                  <Path Data="{StaticResource GeometryConeInterior}" Fill="#FF8A1F" Opacity="0.9" RenderTransformOrigin="36,60" IsHitTestVisible="False">
+                    <Path.RenderTransform>
+                      <ScaleTransform ScaleX="{Binding FillingPowder}" ScaleY="{Binding FillingPowder}" />
+                    </Path.RenderTransform>
+                  </Path>
+                  <Path Classes="glow" Data="{StaticResource GeometryCone}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="4" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="10" />
+                    </Path.Effect>
+                  </Path>
+                  <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" />
+                </Panel>
+              </ContentControl>
+            </Panel>
           </StackPanel>
           <Canvas x:Name="CanvasPlugs" IsHitTestVisible="False" />
           <Canvas x:Name="CanvasEffects" IsHitTestVisible="False" />
