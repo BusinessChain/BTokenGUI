@@ -22,6 +22,8 @@ public partial class MiningView : UserControl
 {
   const double OFFSET_CENTER_GEM = 16;
   const double SECONDS_FLIGHT = 0.8;
+  const double SECONDS_INFLOW = 1.2;
+  const double SECONDS_REACTION = 0.6;
   const double SECONDS_SLIDE = 0.5;
   const double SECONDS_STAGGER_SLIDE = 0.25;
   const double SPACING_ROUTE = 6;
@@ -126,57 +128,93 @@ public partial class MiningView : UserControl
 
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
-    Path pipe = good is Blockchain.Anchor && good.Origin == null
-      ? this.GetVisualDescendants().OfType<Path>().FirstOrDefault(path => path.Classes.Contains("pipeAnchor") && path.DataContext == blockchain)
-      : null;
+    bool isOutflow = good.Origin == null;
+    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
 
-    List<Point> route = [];
-
-    if (pipe != null)
-      route.AddRange(SampleRoute(pipe.Data).Select(point => pipe.TranslatePoint(point, itemsFlights)).OfType<Point>());
-    else
+    if (FindCenter(controlOrigin, itemsFlights) is Point pointOrigin)
     {
-      Control controlOrigin = good.Origin == null ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
+      List<Point> route = [pointOrigin];
 
-      if (controlOrigin.TranslatePoint(new Point(controlOrigin.Bounds.Width / 2, controlOrigin.Bounds.Height / 2), itemsFlights) is Point pointOrigin)
-        route.Add(pointOrigin);
-    }
-
-    if (route.Count > 0)
-    {
-      Canvas.SetLeft(container, route[0].X - OFFSET_CENTER_GEM);
-      Canvas.SetTop(container, route[0].Y - OFFSET_CENTER_GEM);
-      container.Opacity = 1;
+      Canvas.SetLeft(container, pointOrigin.X - OFFSET_CENTER_GEM);
+      Canvas.SetTop(container, pointOrigin.Y - OFFSET_CENTER_GEM);
+      container.Opacity = isOutflow && good is not Blockchain.Block ? 0 : 1;
 
       await blockchain.TaskSlideBlocks;
 
-      Control controlDestination = FindControl(good, itemsFlights) ?? (good is Blockchain.Chip ? PanelConverter : null);
-
-      if (controlDestination?.TranslatePoint(new Point(controlDestination.Bounds.Width / 2, controlDestination.Bounds.Height / 2), itemsFlights) is Point pointEnd)
+      if (isOutflow)
       {
-        List<Point> routeFlex = TraceRouteFlex(blockchain, good);
+        await Task.Delay(TimeSpan.FromSeconds(SECONDS_INFLOW + SECONDS_REACTION));
+        container.Opacity = 1;
+      }
 
-        foreach (Point point in routeFlex.Select(point => CanvasPipes.TranslatePoint(point, itemsFlights)).OfType<Point>())
+      Control controlPlace = FindControl(good, itemsFlights);
+      bool isInflow = controlPlace == null && good is Blockchain.Chip;
+      bool isHatching = isOutflow && good is Blockchain.Block;
+
+      if (FindCenter(isInflow ? PanelConverter : controlPlace, itemsFlights) is Point pointEnd)
+      {
+        List<Point> routeDuct = TraceRouteDuct(blockchain, good, isInflow, isOutflow, itemsFlights);
+
+        foreach (Point point in routeDuct)
           ExtendRoute(route, point);
 
-        bool isPiped = pipe != null || routeFlex.Count > 0;
+        bool isPiped = isOutflow || routeDuct.Count > 0;
 
         if (isPiped)
           ExtendRoute(route, pointEnd);
         else
           route.Add(pointEnd);
 
+        if (isHatching)
+          PortHatch.Classes.Add("open");
+
         await Animate(
           container,
           0,
-          isPiped ? (route.Count - 1) * SPACING_ROUTE / SPEED_PIPE : SECONDS_FLIGHT,
+          isInflow ? SECONDS_INFLOW : isPiped ? (route.Count - 1) * SPACING_ROUTE / SPEED_PIPE : SECONDS_FLIGHT,
           isPiped ? new LinearEasing() : new CubicEaseInOut(),
           (Canvas.LeftProperty, route.Select(point => point.X - OFFSET_CENTER_GEM).ToArray()),
           (Canvas.TopProperty, route.Select(point => point.Y - OFFSET_CENTER_GEM).ToArray()));
+
+        if (isHatching)
+          PortHatch.Classes.Remove("open");
+
+        if (isInflow)
+        {
+          PanelConverter.Classes.Add("reacting");
+          await Task.Delay(TimeSpan.FromSeconds(SECONDS_REACTION));
+          PanelConverter.Classes.Remove("reacting");
+        }
       }
     }
 
     blockchain.Land(good);
+  }
+
+  List<Point> TraceRouteDuct(Blockchain blockchain, Blockchain.Good good, bool isInflow, bool isOutflow, Visual target)
+  {
+    if (isOutflow && good is Blockchain.Block)
+      return FindCenter(PortHatch, target) is Point pointHatch ? [pointHatch] : [];
+
+    if (isOutflow && good is Blockchain.Anchor)
+      return FindPath("pipeAnchor", blockchain) is Path pipe ? TraceRoutePath(pipe, target) : [];
+
+    if (isInflow || isOutflow && good is Blockchain.Chip)
+    {
+      List<Point> routeTube = FindPath("tubeConverter", blockchain) is Path tube ? TraceRoutePath(tube, target) : [];
+
+      if (isOutflow)
+        routeTube.Reverse();
+
+      return routeTube;
+    }
+
+    return TraceRouteFlex(blockchain, good).Select(point => CanvasPipes.TranslatePoint(point, target)).OfType<Point>().ToList();
+  }
+
+  static Point? FindCenter(Control control, Visual target)
+  {
+    return control?.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), target);
   }
 
   List<Point> TraceRouteFlex(Blockchain blockchain, Blockchain.Good good)
@@ -197,6 +235,16 @@ public partial class MiningView : UserControl
     route.Reverse();
 
     return route;
+  }
+
+  Path FindPath(string classPath, Blockchain blockchain)
+  {
+    return this.GetVisualDescendants().OfType<Path>().FirstOrDefault(path => path.Classes.Contains(classPath) && path.DataContext == blockchain);
+  }
+
+  static List<Point> TraceRoutePath(Path path, Visual target)
+  {
+    return SampleRoute(path.Data).Select(point => path.TranslatePoint(point, target)).OfType<Point>().ToList();
   }
 
   static void ExtendRoute(List<Point> route, Point point)

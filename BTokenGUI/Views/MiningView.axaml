@@ -135,6 +135,21 @@
         </Animation>
       </Style.Animations>
     </Style>
+    <Style Selector="Panel.reacting > Path.flash">
+      <Style.Animations>
+        <Animation Duration="0:0:0.6" FillMode="Forward">
+          <KeyFrame Cue="0%">
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+          <KeyFrame Cue="30%">
+            <Setter Property="Opacity" Value="1" />
+          </KeyFrame>
+          <KeyFrame Cue="100%">
+            <Setter Property="Opacity" Value="0" />
+          </KeyFrame>
+        </Animation>
+      </Style.Animations>
+    </Style>
   </UserControl.Styles>
   <UserControl.Resources>
     <StreamGeometry x:Key="GeometryCone">M2,10 A34,5 0 0 1 70,10 L40.5,60 L42,60 L42,67 L30,67 L30,60 L31.5,60 Z</StreamGeometry>
@@ -258,12 +273,16 @@
                 </LinearGradientBrush>
               </Path.Fill>
             </Path>
-            <Path Data="M2.5,3 L5.5,3 L5.5,37 L2.5,37 Z" Fill="#4A5260" Stroke="#1A1E25" StrokeThickness="0.5" />
-            <Path Data="M2.5,9 H5.5 M2.5,15 H5.5 M2.5,21 H5.5 M2.5,27 H5.5 M2.5,33 H5.5" Stroke="#1A1E25" StrokeThickness="0.5" />
+            <Path Data="M2.5,3 L5.5,3 L5.5,37 L2.5,37 Z" Fill="#05070A" Stroke="#1A1E25" StrokeThickness="0.5" />
+            <Path Classes="shutter" Data="M2.5,3 L5.5,3 L5.5,37 L2.5,37 Z" Fill="#4A5260" Stroke="#1A1E25" StrokeThickness="0.5" />
+            <Path Classes="shutter" Data="M2.5,9 H5.5 M2.5,15 H5.5 M2.5,21 H5.5 M2.5,27 H5.5 M2.5,33 H5.5" Stroke="#1A1E25" StrokeThickness="0.5" />
             <Path Data="M2,1.5 V12" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
           </Panel>
         </ControlTemplate>
       </Setter>
+      <Style Selector="^.open /template/ Path.shutter">
+        <Setter Property="IsVisible" Value="False" />
+      </Style>
     </ControlTheme>
     <ControlTheme x:Key="ThemePlug" TargetType="TemplatedControl">
       <Setter Property="Width" Value="10" />
@@ -726,7 +745,7 @@
                 <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
               </Panel>
               <Panel IsHitTestVisible="False" IsVisible="{Binding Tank.IsFeedingConverter}">
-                <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                <Path Classes="tubeConverter" Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
                 <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
                 <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
               </Panel>
@@ -840,7 +859,7 @@
                     </Path.Effect>
                   </Path>
                   <TemplatedControl Theme="{StaticResource ThemePortBlock}" Margin="28,50,0,0" />
-                  <TemplatedControl Theme="{StaticResource ThemePortBlock}" Margin="72,94,0,0" RenderTransform="rotate(-90deg)" />
+                  <TemplatedControl x:Name="PortHatch" Theme="{StaticResource ThemePortBlock}" Margin="72,94,0,0" RenderTransform="rotate(-90deg)" />
                   <Panel IsHitTestVisible="False">
                     <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
                     <Path Data="{StaticResource GeometrySphere}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
@@ -875,6 +894,11 @@
                     <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="55,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="99,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                   </Panel>
+                  <Path Classes="flash" Data="M52,70 A30,30 0 1 1 112,70 A30,30 0 1 1 52,70 Z" Fill="White" Opacity="0" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="12" />
+                    </Path.Effect>
+                  </Path>
                 </Panel>
               </Grid>
               <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" />
