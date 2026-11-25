@@ -623,6 +623,7 @@
           </Panel>
           <Panel Grid.Row="1" Grid.Column="1">
             <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
+            <views:ReaderTime Margin="0,0,0,58" IsHitTestVisible="False" />
             <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-40,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
