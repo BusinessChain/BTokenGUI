@@ -133,29 +133,47 @@ public partial class MiningView : UserControl
     await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Loaded);
 
     bool isOutflow = good.Origin == null;
-    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
+    bool isHatching = isOutflow && good is Blockchain.Block;
+    Control controlPlace = FindControl(good, itemsFlights);
+    bool isInflow = controlPlace == null && good is Blockchain.Chip;
+    Control controlOrigin = isHatching ? PanelBlockCreator : isOutflow ? PanelConverter : FindControl(good.Origin, itemsFlights) ?? ContentBlockchainBitcoin;
 
     if (FindCenter(controlOrigin, itemsFlights) is Point pointOrigin)
     {
       List<Point> route = [pointOrigin];
 
-      Control controlPlace = FindControl(good, itemsFlights);
-      bool isInflow = controlPlace == null && good is Blockchain.Chip;
-      bool isHatching = isOutflow && good is Blockchain.Block;
-
       Canvas.SetLeft(container, pointOrigin.X - OFFSET_CENTER_GEM);
       Canvas.SetTop(container, pointOrigin.Y - OFFSET_CENTER_GEM);
-      container.Opacity = isInflow || isOutflow && !isHatching ? 0 : 1;
+      container.Opacity = isInflow || isOutflow ? 0 : 1;
 
       await blockchain.TaskSlideBlocks;
 
       if (isHatching)
-        await PlayCreation();
-      else if (isInflow || isOutflow)
-        await Task.Delay(TimeSpan.FromSeconds(SECONDS_CREATION));
+      {
+        Task taskCreation = PlayCreation();
 
-      if (isOutflow)
-        await Task.Delay(TimeSpan.FromSeconds(SECONDS_INFLOW + SECONDS_REACTION));
+        await Task.Delay(TimeSpan.FromSeconds(SECONDS_IMPULSE + SECONDS_DRAW));
+        container.Opacity = 1;
+        await taskCreation;
+
+        foreach (Control control in new Control[] { PortOutlet, PortInlet, PanelConverter })
+          if (FindCenter(control, itemsFlights) is Point point)
+            ExtendRoute(route, point);
+
+        PortOutlet.Classes.Add("open");
+        PortInlet.Classes.Add("open");
+
+        await AnimateRoute(container, route, SECONDS_INFLOW, new LinearEasing());
+
+        PortOutlet.Classes.Remove("open");
+        PortInlet.Classes.Remove("open");
+
+        await Task.Delay(TimeSpan.FromSeconds(SECONDS_REACTION));
+
+        route = [route[^1]];
+      }
+      else if (isInflow || isOutflow)
+        await Task.Delay(TimeSpan.FromSeconds(SECONDS_CREATION + (isOutflow ? SECONDS_INFLOW + SECONDS_REACTION : 0)));
 
       container.Opacity = 1;
 

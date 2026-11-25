@@ -861,7 +861,7 @@
                       <BlurEffect Radius="8" />
                     </Path.Effect>
                   </Path>
-                  <TemplatedControl Theme="{StaticResource ThemePortBlock}" Margin="66,11,0,0" RenderTransform="rotate(180deg)" />
+                  <TemplatedControl x:Name="PortOutlet" Theme="{StaticResource ThemePortBlock}" Margin="66,11,0,0" RenderTransform="rotate(180deg)" />
                   <Path Data="{StaticResource GeometryChamber}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
                   <Path Data="{StaticResource GeometryChamber}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
                   <Path Data="M2,56 A34,6 0 0 1 70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
@@ -886,7 +886,7 @@
                       <BlurEffect Radius="8" />
                     </Path.Effect>
                   </Path>
-                  <TemplatedControl Theme="{StaticResource ThemePortBlock}" Margin="28,50,0,0" />
+                  <TemplatedControl x:Name="PortInlet" Theme="{StaticResource ThemePortBlock}" Margin="28,50,0,0" />
                   <TemplatedControl x:Name="PortHatch" Theme="{StaticResource ThemePortBlock}" Margin="72,94,0,0" RenderTransform="rotate(-90deg)" />
                   <Panel IsHitTestVisible="False">
                     <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
