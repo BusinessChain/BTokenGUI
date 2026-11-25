@@ -73,7 +73,7 @@ public partial class MiningView : UserControl
     TemplatedControl[] plugsCone = PortsCone.Select(_ => new TemplatedControl { Theme = (ControlTheme)this.FindResource("ThemePlug") }).ToArray();
 
     CanvasPipes.Children.AddRange([outline, core, plugTip]);
-    CanvasPlugs.Children.AddRange(plugsCone);
+    CanvasFront.Children.AddRange(plugsCone);
 
     return new FlexPipe(chain, ownerCones, outline, core, plugTip, plugsCone);
   }
@@ -179,7 +179,7 @@ public partial class MiningView : UserControl
           isInflow ? SECONDS_INFLOW : isPiped ? (route.Count - 1) * SPACING_ROUTE / (isOutflow ? SPEED_OUTFLOW : SPEED_PIPE) : SECONDS_FLIGHT,
           isPiped ? new LinearEasing() : new CubicEaseInOut());
 
-        if (isInflow && FindCenter(PanelConverter, CanvasFlash) is Point pointSphere)
+        if (isInflow && FindCenter(PanelConverter, CanvasFront) is Point pointSphere)
         {
           Canvas.SetLeft(PanelFlash, pointSphere.X - PanelFlash.Width / 2);
           Canvas.SetTop(PanelFlash, pointSphere.Y - PanelFlash.Height / 2);

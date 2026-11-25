@@ -720,11 +720,7 @@
               </ContentControl>
             </Panel>
           </StackPanel>
-          <Canvas x:Name="CanvasPlugs" IsHitTestVisible="False" />
-          <Canvas x:Name="CanvasEffects" IsHitTestVisible="False" />
-          <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
-          <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
-          <Canvas x:Name="CanvasFlash" IsHitTestVisible="False">
+          <Canvas x:Name="CanvasFront" IsHitTestVisible="False">
             <Panel x:Name="PanelFlash" Width="320" Height="320" Opacity="0" RenderTransformOrigin="50%,50%">
               <Panel.RenderTransform>
                 <ScaleTransform />
@@ -751,6 +747,8 @@
               </Ellipse>
             </Panel>
           </Canvas>
+          <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
+          <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
         </Panel>
       </ScrollViewer>
     </DockPanel>
