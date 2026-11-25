@@ -149,6 +149,8 @@
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphere">M42,70 A40,40 0 1 1 122,70 A40,40 0 1 1 42,70 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphereGlow">M38,70 A44,44 0 1 1 126,70 A44,44 0 1 1 38,70 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryChamber">M2,8 A34,6 0 0 1 70,8 L70,56 A34,6 0 0 1 2,56 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryLidChamber">M2,8 A34,6 0 1 1 70,8 A34,6 0 1 1 2,8 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
       <GradientStop Offset="0" Color="Black" />
@@ -799,6 +801,23 @@
                   <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Panel Grid.Column="1" Width="72" Height="70" Margin="0,39,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
+                  <Path Data="{StaticResource GeometryChamber}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35">
+                    <Path.Effect>
+                      <BlurEffect Radius="8" />
+                    </Path.Effect>
+                  </Path>
+                  <TemplatedControl Theme="{StaticResource ThemePortBlock}" Margin="66,11,0,0" RenderTransform="rotate(180deg)" />
+                  <Path Data="{StaticResource GeometryChamber}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
+                  <Path Data="{StaticResource GeometryChamber}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
+                  <Path Data="M2,56 A34,6 0 0 1 70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
+                  <Path Data="{StaticResource GeometryChamber}" Fill="{StaticResource BrushGlass}" />
+                  <Path Data="M2,8 L2,56 M70,8 L70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                  <Path Data="M2,56 A34,6 0 0 0 70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
+                  <Path Data="{StaticResource GeometryLidChamber}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" />
+                  <Path Data="{StaticResource GeometryLidChamber}" Fill="{StaticResource BrushGlass}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                  <Path Data="M10,16 L10,50" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
+                </Panel>
                 <ContentControl Classes="tankPool" Grid.Column="1" Theme="{StaticResource ThemeCone}" Margin="0,-22,164,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
                   <ItemsControl Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" />
                 </ContentControl>
