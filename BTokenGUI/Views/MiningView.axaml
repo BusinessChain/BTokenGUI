@@ -147,6 +147,8 @@
     <StreamGeometry x:Key="GeometryTankAnchorInterior">M70,45 A34,5 0 0 1 2,45 L31.5,-5 L40.5,-5 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryPipeAnchor">M-5,96 L-5,65</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
+    <StreamGeometry x:Key="GeometrySphere">M42,70 A40,40 0 1 1 122,70 A40,40 0 1 1 42,70 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometrySphereGlow">M38,70 A44,44 0 1 1 126,70 A44,44 0 1 1 38,70 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
       <GradientStop Offset="0" Color="Black" />
@@ -738,31 +740,36 @@
           <StackPanel Grid.IsSharedSizeScope="True">
             <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
             <StackPanel DataContext="{Binding Mining}" x:DataType="models:Mining" Spacing="10" Margin="10">
-              <Grid Margin="0,-66,40,-18">
+              <Grid Margin="0,-66,40,-10">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="3*" />
                   <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
                   <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Panel x:Name="PanelConverter" Grid.Column="1" Width="164" Height="112" Margin="0,0,-34,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
-                  <Path Classes="glow" Data="M16,12 L148,12 L82,96 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
+                <Panel x:Name="PanelConverter" Grid.Column="1" Width="164" Height="140" Margin="0,0,-34,0" HorizontalAlignment="Right" Classes.glowing="{Binding IsMining}">
+                  <Path Classes="glow" Data="{StaticResource GeometrySphereGlow}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
                     <Path.Effect>
                       <BlurEffect Radius="16" />
                     </Path.Effect>
                   </Path>
-                  <Button Command="{Binding OpenFormConverterCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Panel Width="100" Height="56">
-                      <Panel Clip="M0,0 L100,0 L50,56 Z">
-                        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" />
-                        <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" RenderTransformOrigin="50%,100%">
-                          <Border.RenderTransform>
-                            <ScaleTransform ScaleY="{Binding FillingConverter}" />
-                          </Border.RenderTransform>
-                        </Border>
-                      </Panel>
-                      <Path Data="M1,1 L99,1 L50,54 Z" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                    </Panel>
-                  </Button>
+                  <Path Data="{StaticResource GeometrySphere}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+                    <Path.Effect>
+                      <BlurEffect Radius="8" />
+                    </Path.Effect>
+                  </Path>
+                  <Panel IsHitTestVisible="False">
+                    <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
+                    <Path Data="{StaticResource GeometrySphere}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
+                    <Path Data="M42,70 A40,6 0 0 1 122,70" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
+                  </Panel>
+                  <Button Command="{Binding OpenFormConverterCommand}" Width="80" Height="80" Margin="42,30,0,0" Padding="0" CornerRadius="40" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                  <Panel IsHitTestVisible="False">
+                    <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushGlass}" />
+                    <Path Data="M42,70 A40,6 0 0 0 122,70" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
+                    <Path Data="{StaticResource GeometrySphere}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                    <Path Data="M54.3,54 A32,32 0 0 1 71.1,39.9" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
+                    <Path Data="M58,47 a3,2 0 1 0 6,0 a3,2 0 1 0 -6,0" Fill="White" Opacity="0.5" />
+                  </Panel>
                 </Panel>
               </Grid>
               <SelectableTextBlock Text="{Binding StateMiner}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" />
