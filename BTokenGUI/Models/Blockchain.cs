@@ -18,7 +18,6 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Good> Flights { get; } = [];
   public ObservableCollection<Chip> TXsPool { get; } = [];
   public Mining.Wallet Tank { get; }
-  public bool IsTankAnchorVisible { get; }
   public bool IsTipExtending;
   public Task TaskSlideBlocks = Task.CompletedTask;
   [ObservableProperty]
@@ -31,10 +30,9 @@ public partial class Blockchain : ObservableObject
   long? FundsTank;
 
 
-  public Blockchain(string name, bool isTankAnchorVisible, Blockchain blockchainParent, Mining.Wallet tank)
+  public Blockchain(string name, Blockchain blockchainParent, Mining.Wallet tank)
   {
     Name = name;
-    IsTankAnchorVisible = isTankAnchorVisible;
     BlockchainParent = blockchainParent;
     Tank = tank;
   }

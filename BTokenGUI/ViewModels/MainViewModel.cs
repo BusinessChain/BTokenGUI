@@ -35,8 +35,8 @@ public partial class MainViewModel : ObservableObject
   public MainViewModel()
   {
     Mining = new(Wallet);
-    BlockchainBitcoin = new("Bitcoin", isTankAnchorVisible: true, blockchainParent: null, tank: Mining.WalletBitcoin);
-    BlockchainBToken = new("BToken", isTankAnchorVisible: false, blockchainParent: BlockchainBitcoin, tank: Mining.WalletBToken);
+    BlockchainBitcoin = new("Bitcoin", blockchainParent: null, tank: Mining.WalletBitcoin);
+    BlockchainBToken = new("BToken", blockchainParent: BlockchainBitcoin, tank: Mining.WalletBToken);
 
     _ = PollNode();
   }

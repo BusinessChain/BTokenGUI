@@ -58,14 +58,14 @@ public partial class MiningView : UserControl
 
     Pipes =
     [
-      CreatePipe(ContentBlockchainBitcoin),
-      CreatePipe(ContentBlockchainBToken)
+      CreatePipe(ContentBlockchainBitcoin, GridMining),
+      CreatePipe(ContentBlockchainBToken, ContentBlockchainBToken)
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
   }
 
-  FlexPipe CreatePipe(ContentControl chain)
+  FlexPipe CreatePipe(ContentControl chain, Control ownerCones)
   {
     Path outline = new() { Stroke = new SolidColorBrush(Color.Parse("#7D8794")), StrokeThickness = 8 };
     Path core = new() { Stroke = new SolidColorBrush(Color.Parse("#F2F4F7")), StrokeThickness = 6 };
@@ -75,12 +75,12 @@ public partial class MiningView : UserControl
     CanvasPipes.Children.AddRange([outline, core, plugTip]);
     CanvasPlugs.Children.AddRange(plugsCone);
 
-    return new FlexPipe(chain, outline, core, plugTip, plugsCone);
+    return new FlexPipe(chain, ownerCones, outline, core, plugTip, plugsCone);
   }
 
-  static ContentControl FindCone(ContentControl chain, string classCone)
+  static ContentControl FindCone(Control ownerCones, string classCone)
   {
-    return chain.GetVisualDescendants().OfType<ContentControl>().FirstOrDefault(control => control.Classes.Contains(classCone));
+    return ownerCones.GetVisualDescendants().OfType<ContentControl>().FirstOrDefault(control => control.Classes.Contains(classCone));
   }
 
   static Control FindTip(ContentControl chain)
@@ -414,6 +414,8 @@ public partial class MiningView : UserControl
   {
     public ContentControl Chain;
     public bool IsTipFrozen;
+
+    Control OwnerCones;
     public double Retraction;
 
     Path Outline;
@@ -426,9 +428,10 @@ public partial class MiningView : UserControl
     Geometry[] Branches = new Geometry[PortsCone.Length];
 
 
-    public FlexPipe(ContentControl chain, Path outline, Path core, TemplatedControl plugTip, TemplatedControl[] plugsCone)
+    public FlexPipe(ContentControl chain, Control ownerCones, Path outline, Path core, TemplatedControl plugTip, TemplatedControl[] plugsCone)
     {
       Chain = chain;
+      OwnerCones = ownerCones;
       Outline = outline;
       Core = core;
       PlugTip = plugTip;
@@ -442,7 +445,7 @@ public partial class MiningView : UserControl
       ContactTip = contactTip;
 
       Point?[] contactsCone = PortsCone
-        .Select(port => FindPort(FindCone(Chain, port.ClassCone), port.ClassPort)?.TranslatePoint(ContactPortLower, canvas))
+        .Select(port => FindPort(FindCone(OwnerCones, port.ClassCone), port.ClassPort)?.TranslatePoint(ContactPortLower, canvas))
         .ToArray();
 
       bool isPlaced = contactTip != null && contactsCone.Any(contact => contact != null);
