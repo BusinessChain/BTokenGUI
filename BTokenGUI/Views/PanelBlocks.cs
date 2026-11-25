@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -12,13 +11,10 @@ namespace BTokenGUI.Views;
 public class PanelBlocks : Panel
 {
   const double SPACING_BLOCKS = 36;
-  const double OFFSET_STOPPER = 20;
   const double WIDTH_FACE_FRONT = 36;
   const double GAP_MIN_BLOCKS = 5;
   const double SECONDS_AGE_TIP_PACKED = 3000;
   const int MILLISECONDS_COMPRESSION = 250;
-  const double DISTANCE_MIN_TICKS = 2;
-  const int MINUTES_READER = 120;
 
   public static readonly AttachedProperty<double> OffsetProperty = AvaloniaProperty.RegisterAttached<PanelBlocks, Control, double>("Offset");
 
@@ -110,7 +106,7 @@ public class PanelBlocks : Panel
       limitRight = positions[i];
     }
 
-    double limitLeft = GetPositionStopper();
+    double limitLeft = 0;
 
     for (int i = 0; i < Children.Count; i++)
     {
@@ -121,57 +117,18 @@ public class PanelBlocks : Panel
     return positions;
   }
 
-  double GetPositionStopper()
-  {
-    return this.FindAncestorOfType<ScrollViewer>().TranslatePoint(new Point(), this).Value.X + OFFSET_STOPPER;
-  }
-
   double GetPositionCenter(double age)
   {
-    double positionStopper = GetPositionStopper();
     double widthHalf = Children[^1].DesiredSize.Width / 2;
-    double distanceStart = GetWidthFull() - widthHalf - positionStopper;
+    double distanceStart = GetWidthFull() - widthHalf;
     double distancePacked = widthHalf + (Children.Count - 1) * (WIDTH_FACE_FRONT + GAP_MIN_BLOCKS);
     double v0 = Math.Log(distanceStart / distancePacked) / SECONDS_AGE_TIP_PACKED;
 
-    return positionStopper + distanceStart * Math.Exp(-v0 * age);
+    return distanceStart * Math.Exp(-v0 * age);
   }
 
   double[] GetTimestamps()
   {
     return Children.Select(control => (double)((Blockchain.Block)control.DataContext).UnixTimeSeconds).ToArray();
-  }
-
-  public List<(double Position, int Minute)> GetTicks()
-  {
-    List<(double Position, int Minute)> ticks = [];
-
-    if (Children.Count == 0)
-      return ticks;
-
-    double[] positionsMinute = Enumerable.Range(0, MINUTES_READER + 1)
-      .Select(minute => GetPositionCenter(60 * minute) + Children[^1].DesiredSize.Width / 2)
-      .ToArray();
-
-    int minute = 0;
-    int step = 1;
-
-    while (minute + step <= MINUTES_READER)
-    {
-      if (positionsMinute[minute] - positionsMinute[minute + step] >= DISTANCE_MIN_TICKS)
-      {
-        minute += step;
-        ticks.Add((positionsMinute[minute], minute));
-      }
-      else if (step == 1)
-      {
-        step = 10;
-        minute -= minute % 10;
-      }
-      else
-        break;
-    }
-
-    return ticks;
   }
 }

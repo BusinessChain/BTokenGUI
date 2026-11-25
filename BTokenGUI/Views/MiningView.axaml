@@ -377,7 +377,15 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.4">
+            <Border>
+              <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                  <GradientStop Offset="0" Color="#E6ECF3" />
+                  <GradientStop Offset="0.35" Color="#C9D1DC" />
+                  <GradientStop Offset="0.7" Color="#6B7686" />
+                  <GradientStop Offset="1" Color="#4A5260" />
+                </LinearGradientBrush>
+              </Border.Background>
               <Border.OpacityMask>
                 <DrawingBrush TileMode="Tile" DestinationRect="0,0,40,10">
                   <DrawingBrush.Drawing>
@@ -386,7 +394,7 @@
                 </DrawingBrush>
               </Border.OpacityMask>
             </Border>
-            <Border BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" BorderThickness="{TemplateBinding BorderThickness}" />
+            <Border BorderBrush="#2A303A" BorderThickness="{TemplateBinding BorderThickness}" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -470,9 +478,8 @@
             <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
             <ColumnDefinition Width="*" />
           </Grid.ColumnDefinitions>
-          <TemplatedControl Grid.Row="1" Grid.Column="0" Theme="{StaticResource ThemeRail}" Width="28" HorizontalAlignment="Right" BorderThickness="1,1,0,1" Margin="0,0,0,58" />
           <Panel Grid.Row="1" Grid.Column="1">
-            <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="0,1,1,1" Margin="0,0,0,58" />
+            <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" Margin="0,0,0,58" />
             <views:ReaderTime Margin="0,0,0,58" IsHitTestVisible="False" />
             <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.ItemsPanel>
@@ -521,7 +528,6 @@
                         </TextBlock.Effect>
                       </TextBlock>
                     </Viewbox>
-                    <Path Data="M56,49 L50,45 L50,53 Z" Fill="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}" IsHitTestVisible="False" />
                   </Panel>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
