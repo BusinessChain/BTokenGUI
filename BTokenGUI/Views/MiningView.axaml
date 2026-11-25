@@ -832,8 +832,8 @@
           </Panel.DataTemplates>
           <Canvas x:Name="CanvasPipes" IsHitTestVisible="False" />
           <StackPanel Grid.IsSharedSizeScope="True">
-            <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" />
-            <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" Margin="10,-56,50,0">
+            <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" Margin="0,48,0,0" />
+            <Grid DataContext="{Binding Mining}" x:DataType="models:Mining" Margin="10,-56,50,-20">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="Auto" SharedSizeGroup="ColumnBlocks" />
