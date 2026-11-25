@@ -472,14 +472,13 @@
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
       <DockPanel Margin="20,10">
-        <Grid RowDefinitions="Auto,Auto,Auto" ShowGridLines="True">
-          <Panel Grid.Row="1">
+        <Grid RowDefinitions="Auto,Auto" RowSpacing="58" ShowGridLines="True">
+          <Panel>
             <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.Template>
                 <ControlTemplate TargetType="ItemsControl">
-                  <Panel Margin="0,0,0,58">
+                  <Panel>
                     <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
-                    <Border BorderBrush="Yellow" BorderThickness="1" IsHitTestVisible="False" />
                     <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
                   </Panel>
                 </ControlTemplate>
@@ -535,7 +534,7 @@
               </ItemsControl.ItemTemplate>
             </ItemsControl>
           </Panel>
-          <Panel Grid.Row="2" Margin="0,0,76,0" ClipToBounds="True" IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
+          <Panel Grid.Row="1" Margin="0,0,76,0" ClipToBounds="True" IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
             <Canvas>
               <Grid Width="{Binding $parent[DockPanel].Bounds.Width}" ColumnDefinitions="*,*">
                 <Panel Grid.Column="1" Height="8" Margin="12,100,0,0" VerticalAlignment="Top" Classes.glowing="{Binding Tank.IsAutoActive}">
@@ -551,7 +550,7 @@
               </Grid>
             </Canvas>
           </Panel>
-          <Panel Grid.Row="2" Width="68" Height="52" Margin="0,78,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
+          <Panel Grid.Row="1" Width="68" Height="52" Margin="0,78,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding !Tank.IsFeedingConverter}">
             <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
               <Path.Effect>
                 <BlurEffect Radius="8" />
@@ -566,7 +565,7 @@
               <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
             </Panel>
           </Panel>
-          <ContentControl Classes="tank" Classes.besideTankAnchor="{Binding IsTankAnchorVisible}" Grid.Row="2" Theme="{StaticResource ThemeCone}" HorizontalAlignment="Right" VerticalAlignment="Top">
+          <ContentControl Classes="tank" Classes.besideTankAnchor="{Binding IsTankAnchorVisible}" Grid.Row="1" Theme="{StaticResource ThemeCone}" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
               <Panel IsHitTestVisible="False" IsVisible="{Binding !Tank.IsFeedingConverter}">
                 <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
@@ -605,13 +604,13 @@
               <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" />
             </Panel>
           </ContentControl>
-          <ContentControl Classes="tankAnchor" Grid.Row="2" Theme="{StaticResource ThemeTankAnchor}" Margin="0,0,-31,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
+          <ContentControl Classes="tankAnchor" Grid.Row="1" Theme="{StaticResource ThemeTankAnchor}" Margin="0,0,-31,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsVisible="{Binding IsTankAnchorVisible}">
             <Panel>
               <Button Command="{Binding OpenFormAnchorsCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
               <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
             </Panel>
           </ContentControl>
-          <Canvas Grid.Row="2" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTankAnchorVisible}">
+          <Canvas Grid.Row="1" Width="0" Height="0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" IsVisible="{Binding IsTankAnchorVisible}">
             <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" StrokeJoin="Round" />
             <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" StrokeJoin="Round" />
             <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" StrokeJoin="Round" Opacity="0.36" />
