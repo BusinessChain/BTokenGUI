@@ -142,10 +142,10 @@
     <StreamGeometry x:Key="GeometryCap">M2,10 A34,14 0 0 1 70,10 A34,5 0 0 1 2,10 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryCapTankAnchor">M2,45 A34,14 0 0 0 70,45 A34,5 0 0 0 2,45 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
-    <StreamGeometry x:Key="GeometryTubeConverter">M36,66 L36,96</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTubeConverter">M36,66 C36,80 57,79 57,93</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankAnchor">M70,45 A34,14 0 0 1 2,45 L31.5,-5 L30,-5 L30,-12 L42,-12 L42,-5 L40.5,-5 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankAnchorInterior">M70,45 A34,5 0 0 1 2,45 L31.5,-5 L40.5,-5 Z</StreamGeometry>
-    <StreamGeometry x:Key="GeometryPipeAnchor">M-5,96 L-5,65</StreamGeometry>
+    <StreamGeometry x:Key="GeometryPipeAnchor">M-26,93 C-26,79 -5,80 -5,65</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphere">M42,70 A40,40 0 1 1 122,70 A40,40 0 1 1 42,70 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphereGlow">M38,70 A44,44 0 1 1 126,70 A44,44 0 1 1 38,70 Z</StreamGeometry>
@@ -786,6 +786,10 @@
                     </Path>
                     <Path Data="M97.8,85 a1.2,1.2 0 1 0 2.4,0 a1.2,1.2 0 1 0 -2.4,0" Fill="White" />
                     <Path Data="M92.5,82 A7,7 0 0 1 97,78.3" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.5" />
+                    <TemplatedControl Theme="{StaticResource ThemeReceptacle}" Margin="52,30,0,0" />
+                    <TemplatedControl Theme="{StaticResource ThemeReceptacle}" Margin="96,30,0,0" />
+                    <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="55,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="99,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                   </Panel>
                 </Panel>
               </Grid>
