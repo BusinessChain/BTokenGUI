@@ -39,7 +39,7 @@ public partial class MiningView : UserControl
   const double TENSION_PIPE = 0.55;
   const double RETRACTION_PLUG = 12;
   const double SECONDS_PLUG = 0.9;
-  const int MILLISECONDS_FRAME_PLUG = 16;
+  const int MILLISECONDS_FRAME = 16;
 
   static readonly Point ContactPortUpper = new(8, 8);
   static readonly Point ContactPortLower = new(8, 5.6);
@@ -102,23 +102,31 @@ public partial class MiningView : UserControl
       pipe.Place(CanvasPipes);
   }
 
-  async Task AnimateRetraction(List<FlexPipe> pipes, double retractionStart, double retractionEnd)
+  Task AnimateRetraction(List<FlexPipe> pipes, double retractionStart, double retractionEnd)
+  {
+    return AnimateFrames(SECONDS_PLUG, progress =>
+    {
+      foreach (FlexPipe pipe in pipes)
+      {
+        pipe.Retraction = retractionStart + (retractionEnd - retractionStart) * progress * progress * (3 - 2 * progress);
+        pipe.Place(CanvasPipes);
+      }
+    });
+  }
+
+  static async Task AnimateFrames(double seconds, Action<double> applyProgress)
   {
     DateTime timeStart = DateTime.UtcNow;
     double progress = 0;
 
     while (progress < 1)
     {
-      progress = Math.Min(1, (DateTime.UtcNow - timeStart).TotalSeconds / SECONDS_PLUG);
+      progress = Math.Min(1, (DateTime.UtcNow - timeStart).TotalSeconds / seconds);
 
-      foreach (FlexPipe pipe in pipes)
-      {
-        pipe.Retraction = retractionStart + (retractionEnd - retractionStart) * progress * progress * (3 - 2 * progress);
-        pipe.Place(CanvasPipes);
-      }
+      applyProgress(progress);
 
       if (progress < 1)
-        await Task.Delay(MILLISECONDS_FRAME_PLUG);
+        await Task.Delay(MILLISECONDS_FRAME);
     }
   }
   async void StartFlight(object sender, ContainerPreparedEventArgs e)
@@ -393,28 +401,38 @@ public partial class MiningView : UserControl
       .OrderBy(itemsBlocks.IndexFromContainer)
       .ToArray();
 
-    double offset = containersSliding[0].Bounds.Width + ((StackPanel)itemsBlocks.ItemsPanelRoot).Spacing;
+    double offset = ((PanelBlocks)itemsBlocks.ItemsPanelRoot).GetDistanceSlot();
 
     PresenterBlockLeaving = null;
 
     foreach (Control container in containersSliding)
-      container.RenderTransform = new TranslateTransform(offset, 0);
+      container.SetValue(PanelBlocks.OffsetProperty, offset);
 
     if (isSlidingIn)
       containerNew.Opacity = 0;
 
     await AnimateRetraction(pipesTip, 0, 1);
 
-    await Task.WhenAll(containersSliding
-      .Select((container, index) => Animate(container, SECONDS_STAGGER_SLIDE * (index + 1), SECONDS_SLIDE, new CubicEaseInOut(), (TranslateTransform.XProperty, [offset, 0])))
-      .Append(Animate(presenterLeaving, 0, SECONDS_SLIDE, new CubicEaseInOut(), (TranslateTransform.XProperty, [0, -offset])))
-      .Append(Animate(presenterLeaving, 0, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [1, 0.8, 0])))
+    double secondsSlide = SECONDS_STAGGER_SLIDE * containersSliding.Length + SECONDS_SLIDE;
+    CubicEaseInOut easingSlide = new();
+
+    await Task.WhenAll(new[]
+      {
+        AnimateFrames(secondsSlide, progress =>
+        {
+          for (int i = 0; i < containersSliding.Length; i++)
+          {
+            double progressContainer = Math.Clamp((progress * secondsSlide - SECONDS_STAGGER_SLIDE * (i + 1)) / SECONDS_SLIDE, 0, 1);
+
+            containersSliding[i].SetValue(PanelBlocks.OffsetProperty, offset * (1 - easingSlide.Ease(progressContainer)));
+          }
+        }),
+        Animate(presenterLeaving, 0, SECONDS_SLIDE, new CubicEaseInOut(), (TranslateTransform.XProperty, [0, -offset])),
+        Animate(presenterLeaving, 0, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [1, 0.8, 0]))
+      }
       .Concat(isSlidingIn ? [Animate(containerNew, SECONDS_STAGGER_SLIDE * containersSliding.Length, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [0, 1]))] : []));
 
     panel.Children.Remove(presenterLeaving);
-
-    foreach (Control container in containersSliding)
-      container.RenderTransform = null;
 
     pipesTip.ForEach(pipe => pipe.IsTipFrozen = false);
 

@@ -626,7 +626,7 @@
             <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" Margin="0,-36,-40,0" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                  <StackPanel Orientation="Horizontal" Spacing="36" Margin="0,36,40,58" />
+                  <views:PanelBlocks Margin="0,36,40,58" />
                 </ItemsPanelTemplate>
               </ItemsControl.ItemsPanel>
               <ItemsControl.ItemTemplate>
