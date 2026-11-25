@@ -286,7 +286,7 @@ public partial class MiningView : UserControl
     if (!((Blockchain)itemsBlocks.DataContext).IsTipExtending)
       return;
 
-    Panel panel = (Panel)itemsBlocks.Parent;
+    Panel panel = (Panel)itemsBlocks.Presenter.GetVisualParent();
     Point position = e.Container.TranslatePoint(new Point(), panel).Value;
 
     PresenterBlockLeaving = new ContentPresenter
@@ -314,7 +314,6 @@ public partial class MiningView : UserControl
 
   async Task SlideBlocks(ItemsControl itemsBlocks, Control containerNew)
   {
-    Panel panel = (Panel)itemsBlocks.Parent;
     ContentPresenter presenterLeaving = PresenterBlockLeaving;
     Blockchain.Block blockNew = (Blockchain.Block)containerNew.DataContext;
     bool isSlidingIn = !blockNew.IsFlying;
@@ -364,7 +363,7 @@ public partial class MiningView : UserControl
       }
       .Concat(isSlidingIn ? [Animate(containerNew, SECONDS_STAGGER_SLIDE * containersSliding.Length, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [0, 1]))] : []));
 
-    panel.Children.Remove(presenterLeaving);
+    (presenterLeaving?.Parent as Panel)?.Children.Remove(presenterLeaving);
 
     pipesTip.ForEach(pipe => pipe.IsTipFrozen = false);
 

@@ -465,69 +465,66 @@
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
-      <Panel Margin="20,10">
-        <Border BorderBrush="Cyan" BorderThickness="1" IsHitTestVisible="False" />
-        <ItemsControl Classes="blocks" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
-          <ItemsControl.Template>
-            <ControlTemplate TargetType="ItemsControl">
-              <Panel>
-                <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
-                <Border BorderBrush="Yellow" BorderThickness="1" IsHitTestVisible="False" />
-                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-              </Panel>
-            </ControlTemplate>
-          </ItemsControl.Template>
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <views:PanelBlocks />
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="models:Blockchain+Block">
-              <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
-                <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
-                  <Path.Effect>
-                    <BlurEffect Radius="8" />
-                  </Path.Effect>
-                </Path>
-                <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                  <Button.Flyout>
-                    <Flyout Opening="OpenFlyoutBlock">
-                      <ScrollViewer MaxHeight="600">
-                        <StackPanel Spacing="12" MaxWidth="420">
-                          <SelectableTextBlock Text="Block" FontWeight="Bold" />
-                          <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
-                        </StackPanel>
-                      </ScrollViewer>
-                    </Flyout>
-                  </Button.Flyout>
-                </Button>
-                <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
-                  <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <ItemsControl.ItemContainerTheme>
-                      <ControlTheme TargetType="ContentPresenter">
-                        <Setter Property="Margin" Value="0,-8" />
-                      </ControlTheme>
-                    </ItemsControl.ItemContainerTheme>
-                    <ItemsControl.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
-                      </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                  </ItemsControl>
-                </ContentControl>
-                <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
-                  <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
-                    <TextBlock.Effect>
-                      <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
-                    </TextBlock.Effect>
-                  </TextBlock>
-                </Viewbox>
-              </Panel>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
-      </Panel>
+      <ItemsControl Classes="blocks" Margin="20,10" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
+        <ItemsControl.Template>
+          <ControlTemplate TargetType="ItemsControl">
+            <Panel>
+              <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
+              <Border BorderBrush="Yellow" BorderThickness="1" IsHitTestVisible="False" />
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </Panel>
+          </ControlTemplate>
+        </ItemsControl.Template>
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <views:PanelBlocks />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="models:Blockchain+Block">
+            <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
+              <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+                <Path.Effect>
+                  <BlurEffect Radius="8" />
+                </Path.Effect>
+              </Path>
+              <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button.Flyout>
+                  <Flyout Opening="OpenFlyoutBlock">
+                    <ScrollViewer MaxHeight="600">
+                      <StackPanel Spacing="12" MaxWidth="420">
+                        <SelectableTextBlock Text="Block" FontWeight="Bold" />
+                        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
+                      </StackPanel>
+                    </ScrollViewer>
+                  </Flyout>
+                </Button.Flyout>
+              </Button>
+              <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
+                <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                  <ItemsControl.ItemContainerTheme>
+                    <ControlTheme TargetType="ContentPresenter">
+                      <Setter Property="Margin" Value="0,-8" />
+                    </ControlTheme>
+                  </ItemsControl.ItemContainerTheme>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </ContentControl>
+              <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+                <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
+                  <TextBlock.Effect>
+                    <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
+                  </TextBlock.Effect>
+                </TextBlock>
+              </Viewbox>
+            </Panel>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
     </DataTemplate>
   </UserControl.Resources>
   <Border Classes="Panel">
