@@ -135,21 +135,6 @@
         </Animation>
       </Style.Animations>
     </Style>
-    <Style Selector="Panel.reacting > Path.flash">
-      <Style.Animations>
-        <Animation Duration="0:0:3" FillMode="Forward">
-          <KeyFrame Cue="0%">
-            <Setter Property="Opacity" Value="0" />
-          </KeyFrame>
-          <KeyFrame Cue="30%">
-            <Setter Property="Opacity" Value="1" />
-          </KeyFrame>
-          <KeyFrame Cue="100%">
-            <Setter Property="Opacity" Value="0" />
-          </KeyFrame>
-        </Animation>
-      </Style.Animations>
-    </Style>
   </UserControl.Styles>
   <UserControl.Resources>
     <StreamGeometry x:Key="GeometryCone">M2,10 A34,5 0 0 1 70,10 L40.5,60 L42,60 L42,67 L30,67 L30,60 L31.5,60 Z</StreamGeometry>
@@ -893,17 +878,38 @@
                   <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="55,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                   <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="99,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Panel>
-                <Path Classes="flash" Data="M52,70 A30,30 0 1 1 112,70 A30,30 0 1 1 52,70 Z" Fill="White" Opacity="0" IsHitTestVisible="False">
-                  <Path.Effect>
-                    <BlurEffect Radius="12" />
-                  </Path.Effect>
-                </Path>
               </Panel>
             </Grid>
             <ContentControl x:Name="ContentBlockchainBToken" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
           </StackPanel>
           <Canvas x:Name="CanvasPlugs" IsHitTestVisible="False" />
-          <Canvas x:Name="CanvasCopies" IsHitTestVisible="False" />
+          <Canvas x:Name="CanvasEffects" IsHitTestVisible="False">
+            <Panel x:Name="PanelFlash" Width="320" Height="320" Opacity="0" RenderTransformOrigin="50%,50%">
+              <Panel.RenderTransform>
+                <ScaleTransform />
+              </Panel.RenderTransform>
+              <Ellipse Width="320" Height="320">
+                <Ellipse.Fill>
+                  <RadialGradientBrush>
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="0.25" Color="#FFF6DC" />
+                    <GradientStop Offset="0.55" Color="#A0FF8A1F" />
+                    <GradientStop Offset="1" Color="#00FF8A1F" />
+                  </RadialGradientBrush>
+                </Ellipse.Fill>
+              </Ellipse>
+              <Ellipse Width="80" Height="80" Fill="White">
+                <Ellipse.Effect>
+                  <BlurEffect Radius="16" />
+                </Ellipse.Effect>
+              </Ellipse>
+              <Ellipse Width="200" Height="200" Stroke="White" StrokeThickness="3" Opacity="0.8">
+                <Ellipse.Effect>
+                  <BlurEffect Radius="3" />
+                </Ellipse.Effect>
+              </Ellipse>
+            </Panel>
+          </Canvas>
           <ItemsControl x:Name="ItemsFlights" Classes="flights" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
           <ItemsControl x:Name="ItemsFlightsBToken" Classes="flights" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Flights}" x:DataType="models:Blockchain" />
         </Panel>

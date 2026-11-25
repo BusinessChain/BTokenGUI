@@ -203,11 +203,16 @@ public partial class MiningView : UserControl
         if (isHatching)
           PortHatch.Classes.Remove("open");
 
-        if (isInflow)
+        if (isInflow && FindCenter(PanelConverter, CanvasEffects) is Point pointSphere)
         {
-          PanelConverter.Classes.Add("reacting");
-          await Task.Delay(TimeSpan.FromSeconds(SECONDS_REACTION));
-          PanelConverter.Classes.Remove("reacting");
+          Canvas.SetLeft(PanelFlash, pointSphere.X - PanelFlash.Width / 2);
+          Canvas.SetTop(PanelFlash, pointSphere.Y - PanelFlash.Height / 2);
+
+          double[] scalesFlash = [0.3, 0.9, 1.1, 1.3];
+
+          await Task.WhenAll(
+            Animate(PanelFlash, 0, SECONDS_REACTION, new LinearEasing(), (Visual.OpacityProperty, [0, 1, 1, 0])),
+            Animate((ScaleTransform)PanelFlash.RenderTransform, 0, SECONDS_REACTION, new CubicEaseOut(), (ScaleTransform.ScaleXProperty, scalesFlash), (ScaleTransform.ScaleYProperty, scalesFlash)));
         }
       }
     }
@@ -217,7 +222,7 @@ public partial class MiningView : UserControl
 
   async Task PlayCreation()
   {
-    if (FindCenter(FindPort(ContentTankPool, "portNozzle"), CanvasCopies) is not Point pointNozzle || FindCenter(PanelBlockCreator, CanvasCopies) is not Point pointCreator)
+    if (FindCenter(FindPort(ContentTankPool, "portNozzle"), CanvasEffects) is not Point pointNozzle || FindCenter(PanelBlockCreator, CanvasEffects) is not Point pointCreator)
       return;
 
     await Task.WhenAll(ItemsTXsPool.GetRealizedContainers().ToList().Select(container => DrawTX(container, pointNozzle, pointCreator)));
@@ -225,7 +230,7 @@ public partial class MiningView : UserControl
 
   async Task DrawTX(Control container, Point pointNozzle, Point pointCreator)
   {
-    if (FindCenter(container, CanvasCopies) is not Point pointChip)
+    if (FindCenter(container, CanvasEffects) is not Point pointChip)
       return;
 
     ContentPresenter copy = new()
@@ -241,7 +246,7 @@ public partial class MiningView : UserControl
 
     Canvas.SetLeft(copy, pointChip.X - OFFSET_CENTER_GEM);
     Canvas.SetTop(copy, pointChip.Y - OFFSET_CENTER_GEM);
-    CanvasCopies.Children.Add(copy);
+    CanvasEffects.Children.Add(copy);
     container.Opacity = 0;
 
     await AnimateRoute(copy, route, SECONDS_DRAW, new LinearEasing());
@@ -250,7 +255,7 @@ public partial class MiningView : UserControl
 
     await AnimateRoute(copy, route, SECONDS_DRAW, new LinearEasing());
 
-    CanvasCopies.Children.Remove(copy);
+    CanvasEffects.Children.Remove(copy);
     container.Opacity = 1;
   }
 
