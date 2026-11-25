@@ -21,6 +21,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   };
 
   const int COUNT_PERIODS_BUDGET_DAY = 144;
+  const double SWEEP_GAUGE = 240;
 
   Dictionary<string, string> ErrorsProperty = [];
 
@@ -40,7 +41,7 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
   public partial decimal? Budget { get; set; }
 
   [ObservableProperty]
-  public partial double FillingConverter { get; set; }
+  public partial double AngleGaugeConverter { get; set; }
 
   [ObservableProperty]
   public partial bool IsMining { get; set; }
@@ -130,12 +131,16 @@ public partial class Mining : ObservableObject, INotifyDataErrorInfo
     BudgetNode = snapshotMiner.GetProperty("budget").GetInt64();
     long scaleBitcoin = COUNT_PERIODS_BUDGET_DAY * BudgetNode;
 
+    double rateConverter;
+
     if (scaleBitcoin == 0)
-      FillingConverter = 0;
+      rateConverter = 0;
     else if (fundsBitcoin == 0)
-      FillingConverter = 1;
+      rateConverter = 1;
     else
-      FillingConverter = Math.Min(1, (double)scaleBitcoin / fundsBitcoin);
+      rateConverter = Math.Min(1, (double)scaleBitcoin / fundsBitcoin);
+
+    AngleGaugeConverter = SWEEP_GAUGE * (rateConverter - 0.5);
 
     JsonElement levelWithdrawalAuto = snapshotMiner.GetProperty("levelWithdrawalAuto");
     LevelWithdrawalAutoNode = levelWithdrawalAuto.ValueKind == JsonValueKind.Null ? null : levelWithdrawalAuto.GetInt64();
