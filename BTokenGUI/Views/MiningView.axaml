@@ -720,18 +720,26 @@
                 </Canvas>
               </Panel>
               <Panel Width="68" Height="52" Margin="0,126,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <Path Data="{StaticResource GeometryWallet}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+                <Path Data="{StaticResource GeometryWallet}" Margin="-10,10,10,-10" Fill="Black" Opacity="0.35" RenderTransformOrigin="0,0" IsHitTestVisible="False">
+                  <Path.RenderTransform>
+                    <MatrixTransform Matrix="0.8944,0.1278,0,0.9583,0,0" />
+                  </Path.RenderTransform>
                   <Path.Effect>
                     <BlurEffect Radius="8" />
                   </Path.Effect>
                 </Path>
-                <Button Command="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                <Panel IsHitTestVisible="False">
-                  <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
-                  <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
-                  <Path Data="{StaticResource GeometryWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                  <Path Data="M66,14 L46,14 A6,6 0 0 0 40,20 L40,32 A6,6 0 0 0 46,38 L66,38" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                  <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
+                <Panel RenderTransformOrigin="0,0">
+                  <Panel.RenderTransform>
+                    <MatrixTransform Matrix="0.8944,0.1278,0,0.9583,0,0" />
+                  </Panel.RenderTransform>
+                  <Button Command="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                  <Panel IsHitTestVisible="False">
+                    <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
+                    <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.29" />
+                    <Path Data="{StaticResource GeometryWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                    <Path Data="M66,14 L46,14 A6,6 0 0 0 40,20 L40,32 A6,6 0 0 0 46,38 L66,38" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                    <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
+                  </Panel>
                 </Panel>
               </Panel>
               <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
