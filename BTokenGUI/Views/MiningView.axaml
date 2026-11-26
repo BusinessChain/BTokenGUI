@@ -88,8 +88,8 @@
     <StreamGeometry x:Key="GeometryCapTankAnchor">M2,45 A34,15.6 0 0 0 70,45 A34,8.5 0 0 0 2,45 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeCenter">M36,66 L36,76 C36,94 26,104 8,104 L4,104</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeConverter">M36,66 C36,80 57,79 57,93</StreamGeometry>
-    <StreamGeometry x:Key="GeometryTankAnchor">M70,45 A34,15.6 0 0 1 2,45 L2.372,43.746 L31.549,-5.166 L30,-5.166 L30,-12 L42,-12 L42,-5.166 L40.451,-5.166 L69.628,43.746 Z</StreamGeometry>
-    <StreamGeometry x:Key="GeometryTankAnchorInterior">M69.628,43.746 A34,8.5 0 1 1 2.372,43.746 L31.549,-5.166 L40.451,-5.166 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTankAnchor">M70,45 A34,15.6 0 0 1 2,45 L2.138,44.235 L20.065,-5.36 A16,4 0 0 1 51.935,-5.36 L69.862,44.235 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTankAnchorInterior">M69.862,44.235 A34,8.5 0 1 1 2.138,44.235 L20.065,-5.36 A16,4 0 0 1 51.935,-5.36 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryPipeAnchor">M-26,93 C-26,79 -5,80 -5,65</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphere">M42,70 A40,40 0 1 1 122,70 A40,40 0 1 1 42,70 Z</StreamGeometry>
@@ -117,6 +117,12 @@
       <GradientStop Offset="0" Color="#E6ECF3" />
       <GradientStop Offset="1" Color="#6E7888" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BrushSteel" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Offset="0" Color="#6E7888" />
+      <GradientStop Offset="0.7" Color="#E2E8EF" />
+      <GradientStop Offset="1" Color="#8A94A3" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="BrushTintGlass" Color="#BFD4E6" />
     <ControlTheme x:Key="ThemeReceptacle" TargetType="TemplatedControl">
       <Setter Property="Width" Value="16" />
       <Setter Property="Height" Value="12" />
@@ -131,24 +137,6 @@
             <Path Data="M3.5,4 A4.5,1.286 0 1 1 12.5,4 A4.5,1.286 0 1 1 3.5,4 Z" Fill="#4A5260" Stroke="#1A1E25" StrokeThickness="0.5" />
             <Path Data="M5,4.2 A3,0.857 0 1 1 11,4.2 A3,0.857 0 1 1 5,4.2 Z" Fill="#05070A" />
             <Path Data="M8,2.286 A6,1.714 0 0 1 13,3.052" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
-          </Panel>
-        </ControlTemplate>
-      </Setter>
-    </ControlTheme>
-    <ControlTheme x:Key="ThemeReceptacleBusbar" TargetType="TemplatedControl">
-      <Setter Property="Width" Value="25" />
-      <Setter Property="Height" Value="8" />
-      <Setter Property="HorizontalAlignment" Value="Left" />
-      <Setter Property="VerticalAlignment" Value="Top" />
-      <Setter Property="IsHitTestVisible" Value="False" />
-      <Setter Property="Template">
-        <ControlTemplate>
-          <Panel>
-            <Path Data="M1,1.372 H23 V6.213 H1 Z" Fill="{StaticResource BrushMetal}" />
-            <Path Data="M1,1.372 L1,0.947 H23 V1.372 Z" Fill="{StaticResource BrushMetalTop}" />
-            <Path Data="M1,1.372 H23 V6.213" Stroke="#1E232B" StrokeThickness="0.6" Opacity="0.6" />
-            <Path Data="M3,1.034 H21 V1.284 H3 Z" Fill="#05070A" />
-            <Path Data="M17,1.372 H23 V3.5" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" StrokeJoin="Round" Opacity="0.7" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -184,10 +172,10 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Data="M2,8.459 L2.034,8.72 L2.137,8.981 L2.307,9.239 L2.545,9.494 L2.849,9.745 L3.218,9.99 L3.65,10.228 L4.144,10.459 L4.696,10.681 L5.306,10.894 L5.971,11.096 L6.686,11.287 L7.45,11.466 L8.26,11.632 L9.111,11.785 L10,11.923 L10.923,12.046 L11.877,12.154 L12.857,12.247 L13.859,12.323 L14.879,12.382 L15.912,12.425 L16.954,12.45 L18,12.459 L19.046,12.45 L20.088,12.425 L21.121,12.382 L22.141,12.323 L23.143,12.247 L24.123,12.154 L25.077,12.046 L26,11.923 L26.889,11.785 L27.74,11.632 L28.55,11.466 L29.314,11.287 L30.029,11.096 L30.694,10.894 L31.304,10.681 L31.856,10.459 L32.35,10.228 L32.782,9.99 L33.151,9.745 L33.455,9.494 L33.693,9.239 L33.863,8.981 L33.966,8.72 L34,8.459 L34,7.006 L33.966,6.745 L33.863,6.484 L33.693,6.226 L33.455,5.971 L33.151,5.721 L32.782,5.476 L32.35,5.237 L31.856,5.006 L31.304,4.784 L30.694,4.571 L30.029,4.369 L29.314,4.178 L28.55,3.999 L27.74,3.833 L26.889,3.681 L26,3.542 L25.077,3.419 L24.123,3.311 L23.143,3.219 L22.141,3.143 L21.121,3.083 L20.088,3.041 L19.046,3.015 L18,3.006 L16.954,3.015 L15.912,3.041 L14.879,3.083 L13.859,3.143 L12.857,3.219 L11.877,3.311 L10.923,3.419 L10,3.542 L9.111,3.681 L8.26,3.833 L7.45,3.999 L6.686,4.178 L5.971,4.369 L5.306,4.571 L4.696,4.784 L4.144,5.006 L3.65,5.237 L3.218,5.476 L2.849,5.721 L2.545,5.971 L2.307,6.226 L2.137,6.484 L2.034,6.745 L2,7.006 Z" Fill="{StaticResource BrushMetal}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
-            <Path Data="M34,7.006 L33.966,6.745 L33.863,6.484 L33.693,6.226 L33.455,5.971 L33.151,5.721 L32.782,5.476 L32.35,5.237 L31.856,5.006 L31.304,4.784 L30.694,4.571 L30.029,4.369 L29.314,4.178 L28.55,3.999 L27.74,3.833 L26.889,3.681 L26,3.542 L25.077,3.419 L24.123,3.311 L23.143,3.219 L22.141,3.143 L21.121,3.083 L20.088,3.041 L19.046,3.015 L18,3.006 L16.954,3.015 L15.912,3.041 L14.879,3.083 L13.859,3.143 L12.857,3.219 L11.877,3.311 L10.923,3.419 L10,3.542 L9.111,3.681 L8.26,3.833 L7.45,3.999 L6.686,4.178 L5.971,4.369 L5.306,4.571 L4.696,4.784 L4.144,5.006 L3.65,5.237 L3.218,5.476 L2.849,5.721 L2.545,5.971 L2.307,6.226 L2.137,6.484 L2.034,6.745 L2,7.006 L2.034,7.268 L2.137,7.529 L2.307,7.787 L2.545,8.042 L2.849,8.292 L3.218,8.537 L3.65,8.776 L4.144,9.006 L4.696,9.229 L5.306,9.442 L5.971,9.644 L6.686,9.835 L7.45,10.014 L8.26,10.18 L9.111,10.332 L10,10.471 L10.923,10.594 L11.877,10.702 L12.857,10.794 L13.859,10.87 L14.879,10.93 L15.912,10.972 L16.954,10.998 L18,11.006 L19.046,10.998 L20.088,10.972 L21.121,10.93 L22.141,10.87 L23.143,10.794 L24.123,10.702 L25.077,10.594 L26,10.471 L26.889,10.332 L27.74,10.18 L28.55,10.014 L29.314,9.835 L30.029,9.644 L30.694,9.442 L31.304,9.229 L31.856,9.006 L32.35,8.776 L32.782,8.537 L33.151,8.292 L33.455,8.042 L33.693,7.787 L33.863,7.529 L33.966,7.268 Z" Fill="{StaticResource BrushMetalTop}" />
-            <Path Data="M31.803,5.451 L31.72,5.36 L31.481,5.257 L31.124,5.156 L30.703,5.074 L30.282,5.023 L29.926,5.011 L29.687,5.04 L29.603,5.105 L29.687,5.196 L29.926,5.3 L30.282,5.399 L30.703,5.481 L31.124,5.531 L31.481,5.543 L31.72,5.515 Z M24.362,3.488 L24.278,3.445 L24.04,3.396 L23.683,3.351 L23.262,3.316 L22.841,3.296 L22.484,3.294 L22.246,3.311 L22.162,3.345 L22.246,3.39 L22.484,3.439 L22.841,3.485 L23.262,3.52 L23.683,3.539 L24.04,3.54 L24.278,3.522 Z M13.838,3.345 L13.754,3.311 L13.516,3.294 L13.159,3.296 L12.738,3.316 L12.317,3.351 L11.96,3.396 L11.722,3.445 L11.638,3.488 L11.722,3.522 L11.96,3.54 L12.317,3.539 L12.738,3.52 L13.159,3.485 L13.516,3.439 L13.754,3.39 Z M6.397,5.105 L6.313,5.04 L6.074,5.011 L5.718,5.023 L5.297,5.074 L4.876,5.156 L4.519,5.257 L4.28,5.36 L4.197,5.451 L4.28,5.515 L4.519,5.543 L4.876,5.531 L5.297,5.481 L5.718,5.399 L6.074,5.3 L6.313,5.196 Z M6.397,7.736 L6.313,7.617 L6.074,7.542 L5.718,7.522 L5.297,7.561 L4.876,7.654 L4.519,7.785 L4.28,7.936 L4.197,8.082 L4.28,8.202 L4.519,8.277 L4.876,8.295 L5.297,8.255 L5.718,8.162 L6.074,8.031 L6.313,7.881 Z M13.838,9.697 L13.754,9.531 L13.516,9.402 L13.159,9.328 L12.738,9.322 L12.317,9.383 L11.96,9.502 L11.722,9.663 L11.638,9.84 L11.722,10.007 L11.96,10.137 L12.317,10.211 L12.738,10.218 L13.159,10.155 L13.516,10.035 L13.754,9.874 Z M24.362,9.84 L24.278,9.663 L24.04,9.502 L23.683,9.383 L23.262,9.322 L22.841,9.328 L22.484,9.402 L22.246,9.531 L22.162,9.697 L22.246,9.874 L22.484,10.035 L22.841,10.155 L23.262,10.218 L23.683,10.211 L24.04,10.137 L24.278,10.007 Z M31.803,8.082 L31.72,7.936 L31.481,7.785 L31.124,7.654 L30.703,7.561 L30.282,7.522 L29.926,7.542 L29.687,7.617 L29.603,7.736 L29.687,7.881 L29.926,8.031 L30.282,8.162 L30.703,8.255 L31.124,8.295 L31.481,8.277 L31.72,8.202 Z" Fill="#1A1E25" />
-            <Path Data="M7,6.171 L7.024,6.351 L7.094,6.53 L7.211,6.708 L7.375,6.883 L7.584,7.055 L7.837,7.223 L8.134,7.387 L8.474,7.546 L8.854,7.699 L9.273,7.845 L9.73,7.984 L10.222,8.116 L10.747,8.239 L11.304,8.353 L11.889,8.458 L12.5,8.553 L13.135,8.637 L13.79,8.712 L14.464,8.775 L15.153,8.827 L15.854,8.868 L16.564,8.898 L17.281,8.915 L18,8.921 L18.719,8.915 L19.436,8.898 L20.146,8.868 L20.847,8.827 L21.536,8.775 L22.21,8.712 L22.865,8.637 L23.5,8.553 L24.111,8.458 L24.696,8.353 L25.253,8.239 L25.778,8.116 L26.27,7.984 L26.727,7.845 L27.146,7.699 L27.526,7.546 L27.866,7.387 L28.163,7.223 L28.416,7.055 L28.625,6.883 L28.789,6.708 L28.906,6.53 L28.976,6.351 L29,6.171 L29,3.531 L28.976,3.351 L28.906,3.172 L28.789,2.995 L28.625,2.819 L28.416,2.647 L28.163,2.479 L27.866,2.315 L27.526,2.156 L27.146,2.003 L26.727,1.857 L26.27,1.718 L25.778,1.587 L25.253,1.464 L24.696,1.349 L24.111,1.245 L23.5,1.15 L22.865,1.065 L22.21,0.99 L21.536,0.927 L20.847,0.875 L20.146,0.834 L19.436,0.805 L18.719,0.787 L18,0.781 L17.281,0.787 L16.564,0.805 L15.854,0.834 L15.153,0.875 L14.464,0.927 L13.79,0.99 L13.135,1.065 L12.5,1.15 L11.889,1.245 L11.304,1.349 L10.747,1.464 L10.222,1.587 L9.73,1.718 L9.273,1.857 L8.854,2.003 L8.474,2.156 L8.134,2.315 L7.837,2.479 L7.584,2.647 L7.375,2.819 L7.211,2.995 L7.094,3.172 L7.024,3.351 L7,3.531 Z" Fill="{StaticResource BrushMetal}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
+            <Path Classes="body" Data="M2,8.459 L2.034,8.72 L2.137,8.981 L2.307,9.239 L2.545,9.494 L2.849,9.745 L3.218,9.99 L3.65,10.228 L4.144,10.459 L4.696,10.681 L5.306,10.894 L5.971,11.096 L6.686,11.287 L7.45,11.466 L8.26,11.632 L9.111,11.785 L10,11.923 L10.923,12.046 L11.877,12.154 L12.857,12.247 L13.859,12.323 L14.879,12.382 L15.912,12.425 L16.954,12.45 L18,12.459 L19.046,12.45 L20.088,12.425 L21.121,12.382 L22.141,12.323 L23.143,12.247 L24.123,12.154 L25.077,12.046 L26,11.923 L26.889,11.785 L27.74,11.632 L28.55,11.466 L29.314,11.287 L30.029,11.096 L30.694,10.894 L31.304,10.681 L31.856,10.459 L32.35,10.228 L32.782,9.99 L33.151,9.745 L33.455,9.494 L33.693,9.239 L33.863,8.981 L33.966,8.72 L34,8.459 L34,7.006 L33.966,6.745 L33.863,6.484 L33.693,6.226 L33.455,5.971 L33.151,5.721 L32.782,5.476 L32.35,5.237 L31.856,5.006 L31.304,4.784 L30.694,4.571 L30.029,4.369 L29.314,4.178 L28.55,3.999 L27.74,3.833 L26.889,3.681 L26,3.542 L25.077,3.419 L24.123,3.311 L23.143,3.219 L22.141,3.143 L21.121,3.083 L20.088,3.041 L19.046,3.015 L18,3.006 L16.954,3.015 L15.912,3.041 L14.879,3.083 L13.859,3.143 L12.857,3.219 L11.877,3.311 L10.923,3.419 L10,3.542 L9.111,3.681 L8.26,3.833 L7.45,3.999 L6.686,4.178 L5.971,4.369 L5.306,4.571 L4.696,4.784 L4.144,5.006 L3.65,5.237 L3.218,5.476 L2.849,5.721 L2.545,5.971 L2.307,6.226 L2.137,6.484 L2.034,6.745 L2,7.006 Z" Fill="{StaticResource BrushMetal}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
+            <Path Classes="top" Data="M34,7.006 L33.966,6.745 L33.863,6.484 L33.693,6.226 L33.455,5.971 L33.151,5.721 L32.782,5.476 L32.35,5.237 L31.856,5.006 L31.304,4.784 L30.694,4.571 L30.029,4.369 L29.314,4.178 L28.55,3.999 L27.74,3.833 L26.889,3.681 L26,3.542 L25.077,3.419 L24.123,3.311 L23.143,3.219 L22.141,3.143 L21.121,3.083 L20.088,3.041 L19.046,3.015 L18,3.006 L16.954,3.015 L15.912,3.041 L14.879,3.083 L13.859,3.143 L12.857,3.219 L11.877,3.311 L10.923,3.419 L10,3.542 L9.111,3.681 L8.26,3.833 L7.45,3.999 L6.686,4.178 L5.971,4.369 L5.306,4.571 L4.696,4.784 L4.144,5.006 L3.65,5.237 L3.218,5.476 L2.849,5.721 L2.545,5.971 L2.307,6.226 L2.137,6.484 L2.034,6.745 L2,7.006 L2.034,7.268 L2.137,7.529 L2.307,7.787 L2.545,8.042 L2.849,8.292 L3.218,8.537 L3.65,8.776 L4.144,9.006 L4.696,9.229 L5.306,9.442 L5.971,9.644 L6.686,9.835 L7.45,10.014 L8.26,10.18 L9.111,10.332 L10,10.471 L10.923,10.594 L11.877,10.702 L12.857,10.794 L13.859,10.87 L14.879,10.93 L15.912,10.972 L16.954,10.998 L18,11.006 L19.046,10.998 L20.088,10.972 L21.121,10.93 L22.141,10.87 L23.143,10.794 L24.123,10.702 L25.077,10.594 L26,10.471 L26.889,10.332 L27.74,10.18 L28.55,10.014 L29.314,9.835 L30.029,9.644 L30.694,9.442 L31.304,9.229 L31.856,9.006 L32.35,8.776 L32.782,8.537 L33.151,8.292 L33.455,8.042 L33.693,7.787 L33.863,7.529 L33.966,7.268 Z" Fill="{StaticResource BrushMetalTop}" />
+            <Path Classes="holes" Data="M31.803,5.451 L31.72,5.36 L31.481,5.257 L31.124,5.156 L30.703,5.074 L30.282,5.023 L29.926,5.011 L29.687,5.04 L29.603,5.105 L29.687,5.196 L29.926,5.3 L30.282,5.399 L30.703,5.481 L31.124,5.531 L31.481,5.543 L31.72,5.515 Z M24.362,3.488 L24.278,3.445 L24.04,3.396 L23.683,3.351 L23.262,3.316 L22.841,3.296 L22.484,3.294 L22.246,3.311 L22.162,3.345 L22.246,3.39 L22.484,3.439 L22.841,3.485 L23.262,3.52 L23.683,3.539 L24.04,3.54 L24.278,3.522 Z M13.838,3.345 L13.754,3.311 L13.516,3.294 L13.159,3.296 L12.738,3.316 L12.317,3.351 L11.96,3.396 L11.722,3.445 L11.638,3.488 L11.722,3.522 L11.96,3.54 L12.317,3.539 L12.738,3.52 L13.159,3.485 L13.516,3.439 L13.754,3.39 Z M6.397,5.105 L6.313,5.04 L6.074,5.011 L5.718,5.023 L5.297,5.074 L4.876,5.156 L4.519,5.257 L4.28,5.36 L4.197,5.451 L4.28,5.515 L4.519,5.543 L4.876,5.531 L5.297,5.481 L5.718,5.399 L6.074,5.3 L6.313,5.196 Z M6.397,7.736 L6.313,7.617 L6.074,7.542 L5.718,7.522 L5.297,7.561 L4.876,7.654 L4.519,7.785 L4.28,7.936 L4.197,8.082 L4.28,8.202 L4.519,8.277 L4.876,8.295 L5.297,8.255 L5.718,8.162 L6.074,8.031 L6.313,7.881 Z M13.838,9.697 L13.754,9.531 L13.516,9.402 L13.159,9.328 L12.738,9.322 L12.317,9.383 L11.96,9.502 L11.722,9.663 L11.638,9.84 L11.722,10.007 L11.96,10.137 L12.317,10.211 L12.738,10.218 L13.159,10.155 L13.516,10.035 L13.754,9.874 Z M24.362,9.84 L24.278,9.663 L24.04,9.502 L23.683,9.383 L23.262,9.322 L22.841,9.328 L22.484,9.402 L22.246,9.531 L22.162,9.697 L22.246,9.874 L22.484,10.035 L22.841,10.155 L23.262,10.218 L23.683,10.211 L24.04,10.137 L24.278,10.007 Z M31.803,8.082 L31.72,7.936 L31.481,7.785 L31.124,7.654 L30.703,7.561 L30.282,7.522 L29.926,7.542 L29.687,7.617 L29.603,7.736 L29.687,7.881 L29.926,8.031 L30.282,8.162 L30.703,8.255 L31.124,8.295 L31.481,8.277 L31.72,8.202 Z" Fill="#1A1E25" />
+            <Path Classes="hubSide" Data="M7,6.171 L7.024,6.351 L7.094,6.53 L7.211,6.708 L7.375,6.883 L7.584,7.055 L7.837,7.223 L8.134,7.387 L8.474,7.546 L8.854,7.699 L9.273,7.845 L9.73,7.984 L10.222,8.116 L10.747,8.239 L11.304,8.353 L11.889,8.458 L12.5,8.553 L13.135,8.637 L13.79,8.712 L14.464,8.775 L15.153,8.827 L15.854,8.868 L16.564,8.898 L17.281,8.915 L18,8.921 L18.719,8.915 L19.436,8.898 L20.146,8.868 L20.847,8.827 L21.536,8.775 L22.21,8.712 L22.865,8.637 L23.5,8.553 L24.111,8.458 L24.696,8.353 L25.253,8.239 L25.778,8.116 L26.27,7.984 L26.727,7.845 L27.146,7.699 L27.526,7.546 L27.866,7.387 L28.163,7.223 L28.416,7.055 L28.625,6.883 L28.789,6.708 L28.906,6.53 L28.976,6.351 L29,6.171 L29,3.531 L28.976,3.351 L28.906,3.172 L28.789,2.995 L28.625,2.819 L28.416,2.647 L28.163,2.479 L27.866,2.315 L27.526,2.156 L27.146,2.003 L26.727,1.857 L26.27,1.718 L25.778,1.587 L25.253,1.464 L24.696,1.349 L24.111,1.245 L23.5,1.15 L22.865,1.065 L22.21,0.99 L21.536,0.927 L20.847,0.875 L20.146,0.834 L19.436,0.805 L18.719,0.787 L18,0.781 L17.281,0.787 L16.564,0.805 L15.854,0.834 L15.153,0.875 L14.464,0.927 L13.79,0.99 L13.135,1.065 L12.5,1.15 L11.889,1.245 L11.304,1.349 L10.747,1.464 L10.222,1.587 L9.73,1.718 L9.273,1.857 L8.854,2.003 L8.474,2.156 L8.134,2.315 L7.837,2.479 L7.584,2.647 L7.375,2.819 L7.211,2.995 L7.094,3.172 L7.024,3.351 L7,3.531 Z" Fill="{StaticResource BrushMetal}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
             <Path Data="M7,3.531 A11,2.75 0 1 1 29,3.531 A11,2.75 0 1 1 7,3.531 Z" Fill="{StaticResource BrushMetalTop}" />
             <Path Data="M8.4,3.531 A9.6,2.4 0 1 1 27.6,3.531 A9.6,2.4 0 1 1 8.4,3.531 Z" Stroke="#6E7888" StrokeThickness="0.5" />
             <Path Data="M9,3.281 H27 V3.781 H9 Z" Fill="#05070A" />
@@ -195,6 +183,18 @@
           </Panel>
         </ControlTemplate>
       </Setter>
+      <Style Selector="^.flat /template/ Path.body">
+        <Setter Property="Data" Value="M2,6.92 L2.034,7.182 L2.137,7.442 L2.307,7.7 L2.545,7.955 L2.849,8.206 L3.218,8.451 L3.65,8.689 L4.144,8.92 L4.696,9.142 L5.306,9.355 L5.971,9.557 L6.686,9.748 L7.45,9.927 L8.26,10.093 L9.111,10.246 L10,10.384 L10.923,10.507 L11.877,10.616 L12.857,10.708 L13.859,10.784 L14.879,10.843 L15.912,10.886 L16.954,10.911 L18,10.92 L19.046,10.911 L20.088,10.886 L21.121,10.843 L22.141,10.784 L23.143,10.708 L24.123,10.616 L25.077,10.507 L26,10.384 L26.889,10.246 L27.74,10.093 L28.55,9.927 L29.314,9.748 L30.029,9.557 L30.694,9.355 L31.304,9.142 L31.856,8.92 L32.35,8.689 L32.782,8.451 L33.151,8.206 L33.455,7.955 L33.693,7.7 L33.863,7.442 L33.966,7.182 L34,6.92 L34,5.468 L33.966,5.206 L33.863,4.946 L33.693,4.687 L33.455,4.432 L33.151,4.182 L32.782,3.937 L32.35,3.698 L31.856,3.468 L31.304,3.245 L30.694,3.033 L30.029,2.83 L29.314,2.639 L28.55,2.46 L27.74,2.294 L26.889,2.142 L26,2.004 L25.077,1.88 L24.123,1.772 L23.143,1.68 L22.141,1.604 L21.121,1.544 L20.088,1.502 L19.046,1.476 L18,1.468 L16.954,1.476 L15.912,1.502 L14.879,1.544 L13.859,1.604 L12.857,1.68 L11.877,1.772 L10.923,1.88 L10,2.004 L9.111,2.142 L8.26,2.294 L7.45,2.46 L6.686,2.639 L5.971,2.83 L5.306,3.033 L4.696,3.245 L4.144,3.468 L3.65,3.698 L3.218,3.937 L2.849,4.182 L2.545,4.432 L2.307,4.687 L2.137,4.946 L2.034,5.206 L2,5.468 Z" />
+      </Style>
+      <Style Selector="^.flat /template/ Path.top">
+        <Setter Property="Data" Value="M34,5.468 L33.966,5.206 L33.863,4.946 L33.693,4.687 L33.455,4.432 L33.151,4.182 L32.782,3.937 L32.35,3.698 L31.856,3.468 L31.304,3.245 L30.694,3.033 L30.029,2.83 L29.314,2.639 L28.55,2.46 L27.74,2.294 L26.889,2.142 L26,2.004 L25.077,1.88 L24.123,1.772 L23.143,1.68 L22.141,1.604 L21.121,1.544 L20.088,1.502 L19.046,1.476 L18,1.468 L16.954,1.476 L15.912,1.502 L14.879,1.544 L13.859,1.604 L12.857,1.68 L11.877,1.772 L10.923,1.88 L10,2.004 L9.111,2.142 L8.26,2.294 L7.45,2.46 L6.686,2.639 L5.971,2.83 L5.306,3.033 L4.696,3.245 L4.144,3.468 L3.65,3.698 L3.218,3.937 L2.849,4.182 L2.545,4.432 L2.307,4.687 L2.137,4.946 L2.034,5.206 L2,5.468 L2.034,5.729 L2.137,5.99 L2.307,6.248 L2.545,6.503 L2.849,6.753 L3.218,6.998 L3.65,7.237 L4.144,7.468 L4.696,7.69 L5.306,7.903 L5.971,8.105 L6.686,8.296 L7.45,8.475 L8.26,8.641 L9.111,8.794 L10,8.932 L10.923,9.055 L11.877,9.163 L12.857,9.255 L13.859,9.331 L14.879,9.391 L15.912,9.433 L16.954,9.459 L18,9.468 L19.046,9.459 L20.088,9.433 L21.121,9.391 L22.141,9.331 L23.143,9.255 L24.123,9.163 L25.077,9.055 L26,8.932 L26.889,8.794 L27.74,8.641 L28.55,8.475 L29.314,8.296 L30.029,8.105 L30.694,7.903 L31.304,7.69 L31.856,7.468 L32.35,7.237 L32.782,6.998 L33.151,6.753 L33.455,6.503 L33.693,6.248 L33.863,5.99 L33.966,5.729 Z" />
+      </Style>
+      <Style Selector="^.flat /template/ Path.holes">
+        <Setter Property="Data" Value="M31.803,4.152 L31.72,4.047 L31.481,3.958 L31.124,3.898 L30.703,3.877 L30.282,3.898 L29.926,3.958 L29.687,4.047 L29.603,4.152 L29.687,4.257 L29.926,4.347 L30.282,4.406 L30.703,4.427 L31.124,4.406 L31.481,4.347 L31.72,4.257 Z M24.362,2.292 L24.278,2.187 L24.04,2.097 L23.683,2.038 L23.262,2.017 L22.841,2.038 L22.484,2.097 L22.246,2.187 L22.162,2.292 L22.246,2.397 L22.484,2.486 L22.841,2.546 L23.262,2.567 L23.683,2.546 L24.04,2.486 L24.278,2.397 Z M13.838,2.292 L13.754,2.187 L13.516,2.097 L13.159,2.038 L12.738,2.017 L12.317,2.038 L11.96,2.097 L11.722,2.187 L11.638,2.292 L11.722,2.397 L11.96,2.486 L12.317,2.546 L12.738,2.567 L13.159,2.546 L13.516,2.486 L13.754,2.397 Z M6.397,4.152 L6.313,4.047 L6.074,3.958 L5.718,3.898 L5.297,3.877 L4.876,3.898 L4.519,3.958 L4.28,4.047 L4.197,4.152 L4.28,4.257 L4.519,4.347 L4.876,4.406 L5.297,4.427 L5.718,4.406 L6.074,4.347 L6.313,4.257 Z M6.397,6.783 L6.313,6.678 L6.074,6.589 L5.718,6.529 L5.297,6.508 L4.876,6.529 L4.519,6.589 L4.28,6.678 L4.197,6.783 L4.28,6.888 L4.519,6.978 L4.876,7.037 L5.297,7.058 L5.718,7.037 L6.074,6.978 L6.313,6.888 Z M13.838,8.643 L13.754,8.538 L13.516,8.449 L13.159,8.389 L12.738,8.368 L12.317,8.389 L11.96,8.449 L11.722,8.538 L11.638,8.643 L11.722,8.749 L11.96,8.838 L12.317,8.898 L12.738,8.918 L13.159,8.898 L13.516,8.838 L13.754,8.749 Z M24.362,8.643 L24.278,8.538 L24.04,8.449 L23.683,8.389 L23.262,8.368 L22.841,8.389 L22.484,8.449 L22.246,8.538 L22.162,8.643 L22.246,8.749 L22.484,8.838 L22.841,8.898 L23.262,8.918 L23.683,8.898 L24.04,8.838 L24.278,8.749 Z M31.803,6.783 L31.72,6.678 L31.481,6.589 L31.124,6.529 L30.703,6.508 L30.282,6.529 L29.926,6.589 L29.687,6.678 L29.603,6.783 L29.687,6.888 L29.926,6.978 L30.282,7.037 L30.703,7.058 L31.124,7.037 L31.481,6.978 L31.72,6.888 Z" />
+      </Style>
+      <Style Selector="^.flat /template/ Path.hubSide">
+        <Setter Property="Data" Value="M7,5.468 L7.024,5.647 L7.094,5.827 L7.211,6.004 L7.375,6.179 L7.584,6.352 L7.837,6.52 L8.134,6.684 L8.474,6.843 L8.854,6.995 L9.273,7.142 L9.73,7.281 L10.222,7.412 L10.747,7.535 L11.304,7.649 L11.889,7.754 L12.5,7.849 L13.135,7.934 L13.79,8.008 L14.464,8.072 L15.153,8.124 L15.854,8.165 L16.564,8.194 L17.281,8.212 L18,8.218 L18.719,8.212 L19.436,8.194 L20.146,8.165 L20.847,8.124 L21.536,8.072 L22.21,8.008 L22.865,7.934 L23.5,7.849 L24.111,7.754 L24.696,7.649 L25.253,7.535 L25.778,7.412 L26.27,7.281 L26.727,7.142 L27.146,6.995 L27.526,6.843 L27.866,6.684 L28.163,6.52 L28.416,6.352 L28.625,6.179 L28.789,6.004 L28.906,5.827 L28.976,5.647 L29,5.468 L29,3.531 L28.976,3.351 L28.906,3.172 L28.789,2.995 L28.625,2.819 L28.416,2.647 L28.163,2.479 L27.866,2.315 L27.526,2.156 L27.146,2.003 L26.727,1.857 L26.27,1.718 L25.778,1.587 L25.253,1.464 L24.696,1.349 L24.111,1.245 L23.5,1.15 L22.865,1.065 L22.21,0.99 L21.536,0.927 L20.847,0.875 L20.146,0.834 L19.436,0.805 L18.719,0.787 L18,0.781 L17.281,0.787 L16.564,0.805 L15.854,0.834 L15.153,0.875 L14.464,0.927 L13.79,0.99 L13.135,1.065 L12.5,1.15 L11.889,1.245 L11.304,1.349 L10.747,1.464 L10.222,1.587 L9.73,1.718 L9.273,1.857 L8.854,2.003 L8.474,2.156 L8.134,2.315 L7.837,2.479 L7.584,2.647 L7.375,2.819 L7.211,2.995 L7.094,3.172 L7.024,3.351 L7,3.531 Z" />
+      </Style>
     </ControlTheme>
     <ControlTheme x:Key="ThemeReceptacleDown" TargetType="TemplatedControl">
       <Setter Property="Width" Value="16" />
@@ -346,12 +346,12 @@
             </Path>
             <Panel IsHitTestVisible="False">
               <Path Data="{StaticResource GeometryConeInterior}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
-              <Path Data="{StaticResource GeometryConeInterior}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
-              <Path Data="M2,10 A34,8.5 0 0 1 70,10" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
+              <Path Data="{StaticResource GeometryConeInterior}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+              <Path Data="M2,10 A34,8.5 0 0 1 70,10" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" Opacity="0.6" />
             </Panel>
             <ContentPresenter Content="{TemplateBinding Content}" ClipToBounds="False" />
             <Panel IsHitTestVisible="False">
-              <Path Data="{StaticResource GeometryCap}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" />
+              <Path Data="{StaticResource GeometryCap}" Fill="{StaticResource BrushMetal}" />
               <Path Data="{StaticResource GeometryCap}" Fill="{StaticResource BrushGlass}" />
               <TemplatedControl Classes="plateSlit" Theme="{StaticResource ThemeReceptacleFlush}" Margin="24,-5,0,0" />
               <TemplatedControl Classes="portLid" Theme="{StaticResource ThemeReceptacleFlange}" Margin="18,-10,0,0" />
@@ -359,11 +359,11 @@
             <Panel IsHitTestVisible="False">
               <Path Data="M2.372,11.254 A34,8.5 0 0 0 69.628,11.254 L40.451,60.166 L31.549,60.166 Z" Fill="{StaticResource BrushGlass}" />
               <Path Data="M8,16 L30,53" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
-              <Path Data="M12,27 A24,6 0 0 0 60,27 M25,49 A11,2.75 0 0 0 47,49" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1.5" Opacity="0.7" />
-              <Path Data="M66.8,16 H70.8 M60.24,27 H64.24 M53.67,38 H57.67 M47.11,49 H51.11" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1" />
-              <Path Data="M2.372,11.254 L31.549,60.166 M69.628,11.254 L40.451,60.166" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
-              <Path Data="M2,10 A34,8.5 0 0 0 70,10" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="3" StrokeLineCap="Round" />
-              <Path Data="M64.4,14.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,17.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,18.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,17.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,14.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="White" Opacity="0.7" />
+              <Path Data="M12,27 A24,6 0 0 0 60,27 M25,49 A11,2.75 0 0 0 47,49" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.5" Opacity="0.7" />
+              <Path Data="M66.8,16 H70.8 M60.24,27 H64.24 M53.67,38 H57.67 M47.11,49 H51.11" Stroke="{StaticResource BrushSteel}" StrokeThickness="1" />
+              <Path Data="M2.372,11.254 L31.549,60.166 M69.628,11.254 L40.451,60.166" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
+              <Path Data="M2,10 A34,8.5 0 0 0 70,10" Stroke="{StaticResource BrushSteel}" StrokeThickness="3" StrokeLineCap="Round" />
+              <Path Data="M64.4,14.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,17.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,18.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,17.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,14.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="{StaticResource BrushMetal}" />
               <TemplatedControl Classes="portNozzle" Theme="{StaticResource ThemeReceptacleDown}" Margin="28,57,0,0" />
             </Panel>
           </Panel>
@@ -390,23 +390,23 @@
             </Path>
             <Panel IsHitTestVisible="False">
               <TemplatedControl Theme="{StaticResource ThemeReceptacleDown}" Margin="28,57,0,0" />
-              <Path Data="{StaticResource GeometryCapTankAnchor}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" />
+              <Path Data="{StaticResource GeometryCapTankAnchor}" Fill="{StaticResource BrushMetal}" />
               <Path Data="{StaticResource GeometryCapTankAnchor}" Fill="{StaticResource BrushGlass}" />
-              <Path Data="M2,45 A34,15.6 0 0 0 70,45" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
+              <Path Data="M2,45 A34,15.6 0 0 0 70,45" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
               <Path Data="{StaticResource GeometryTankAnchorInterior}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
-              <Path Data="{StaticResource GeometryTankAnchorInterior}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
-              <Path Data="M2,45 A34,8.5 0 0 1 70,45" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
+              <Path Data="{StaticResource GeometryTankAnchorInterior}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+              <Path Data="M2,45 A34,8.5 0 0 1 70,45" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" Opacity="0.6" />
             </Panel>
             <ContentPresenter Content="{TemplateBinding Content}" ClipToBounds="False" RenderTransformOrigin="36,27.5" RenderTransform="rotate(180deg)" />
             <Panel IsHitTestVisible="False">
-              <Path Data="M2.372,43.746 A34,8.5 0 1 0 69.628,43.746 L40.451,-5.166 L31.549,-5.166 Z" Fill="{StaticResource BrushGlass}" />
-              <Path Data="M8,39 L30,2" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
-              <Path Data="M12,28 A24,6 0 0 0 60,28 M25,6 A11,2.75 0 0 0 47,6" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1.5" Opacity="0.7" />
-              <Path Data="M66.8,39 H70.8 M60.24,28 H64.24 M53.67,17 H57.67 M47.11,6 H51.11" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1" />
-              <Path Data="M2.372,43.746 L31.549,-5.166 M69.628,43.746 L40.451,-5.166" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
-              <Path Data="M2,45 A34,8.5 0 0 0 70,45" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="3" StrokeLineCap="Round" />
-              <Path Data="M64.4,49.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,52.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,53.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,52.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,49.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="White" Opacity="0.7" />
-              <TemplatedControl Classes="portNozzle" Theme="{StaticResource ThemeReceptacleBusbar}" Margin="24,-11,0,0" />
+              <Path Data="M2.138,44.235 A34,8.5 0 1 0 69.862,44.235 L51.935,-5.36 A16,4 0 1 1 20.065,-5.36 Z" Fill="{StaticResource BrushGlass}" />
+              <Path Data="M8,39 L21.4,2" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
+              <Path Data="M8.12,28 A27.88,6.97 0 0 0 63.88,28 M16.04,6 A19.96,4.99 0 0 0 55.96,6" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.5" Opacity="0.7" />
+              <Path Data="M67.97,39 H71.97 M63.99,28 H67.99 M60.02,17 H64.02 M56.04,6 H60.04" Stroke="{StaticResource BrushSteel}" StrokeThickness="1" />
+              <Path Data="M2.138,44.235 L20.065,-5.36 M69.862,44.235 L51.935,-5.36" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
+              <Path Data="M2,45 A34,8.5 0 0 0 70,45" Stroke="{StaticResource BrushSteel}" StrokeThickness="3" StrokeLineCap="Round" />
+              <Path Data="M64.4,49.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,52.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,53.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,52.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,49.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="{StaticResource BrushMetal}" />
+              <TemplatedControl Classes="portNozzle flat" Theme="{StaticResource ThemeReceptacleFlange}" Margin="18,-11.92,0,0" />
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -600,9 +600,9 @@
                 <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
                   <Panel>
                     <Panel IsHitTestVisible="False">
-                      <Path Classes="tubeConverter" Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
+                      <Path Classes="tubeConverter" Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" />
                       <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
-                      <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
+                      <Path Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushTintGlass}" StrokeThickness="5" Opacity="0.12" />
                     </Panel>
                     <Button Command="{Binding Tank.OpenPanelCommand}" Height="68" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
                     <ItemsControl Classes="heap" ItemsSource="{Binding Tank.Chips}" ItemTemplate="{StaticResource TemplateChip}" />
@@ -611,21 +611,21 @@
                 <ContentControl Classes="tankAnchor" Theme="{StaticResource ThemeTankAnchor}" Margin="0,48,28,0" HorizontalAlignment="Right" VerticalAlignment="Top">
                   <Panel>
                     <Button Command="{Binding OpenFormAnchorsCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                    <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" />
+                    <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Clip="M42.138,50.765 A34,8.5 0 1 1 109.862,50.765 L91.935,100.36 A16,4 0 0 1 60.065,100.36 Z" />
                   </Panel>
                 </ContentControl>
                 <Canvas Width="0" Height="0" Margin="0,48,59,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
-                  <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" StrokeJoin="Round" />
+                  <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" StrokeJoin="Round" />
                   <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" StrokeJoin="Round" />
-                  <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" StrokeJoin="Round" Opacity="0.36" />
+                  <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="5" StrokeJoin="Round" Opacity="0.36" />
                 </Canvas>
               </Panel>
               <Panel Width="48" Height="34" Margin="0,167,161,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
-                <Path Data="M0,1 H48 V33 H0 Z" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
-                <Path Data="M0,5 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1" Opacity="0.4" />
+                <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+                <Path Data="M0,5 H48" Stroke="{StaticResource BrushSteel}" StrokeThickness="1" Opacity="0.4" />
                 <Path Data="M0,1 H48 V33 H0 Z" Fill="{StaticResource BrushGlass}" />
-                <Path Data="M0,1 H48 M0,33 H48" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                <Path Data="M0,1 H48 M0,33 H48" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" />
               </Panel>
               <Panel x:Name="PanelBlockCreator" Width="72" Height="70" Margin="0,153,223,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                 <Path Data="{StaticResource GeometryChamber}" Margin="10,10,-10,-10" Fill="Black" Opacity="0.35">
@@ -635,13 +635,13 @@
                 </Path>
                 <TemplatedControl x:Name="PortOutlet" Theme="{StaticResource ThemePortBlock}" Margin="66,11,0,0" RenderTransform="rotate(180deg)" />
                 <Path Data="{StaticResource GeometryChamber}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
-                <Path Data="{StaticResource GeometryChamber}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
-                <Path Data="M2,56 A34,6 0 0 1 70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
+                <Path Data="{StaticResource GeometryChamber}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+                <Path Data="M2,56 A34,6 0 0 1 70,56" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" Opacity="0.6" />
                 <Path Data="{StaticResource GeometryChamber}" Fill="{StaticResource BrushGlass}" />
-                <Path Data="M2,8 L2,56 M70,8 L70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
-                <Path Data="M2,56 A34,6 0 0 0 70,56" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
-                <Path Data="{StaticResource GeometryLidChamber}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" />
-                <Path Data="{StaticResource GeometryLidChamber}" Fill="{StaticResource BrushGlass}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                <Path Data="M2,8 L2,56 M70,8 L70,56" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" />
+                <Path Data="M2,56 A34,6 0 0 0 70,56" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
+                <Path Data="{StaticResource GeometryLidChamber}" Fill="{StaticResource BrushMetal}" />
+                <Path Data="{StaticResource GeometryLidChamber}" Fill="{StaticResource BrushGlass}" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" />
                 <Path Data="M10,16 L10,50" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
               </Panel>
               <ContentControl x:Name="ContentTankPool" Classes="tankPool" Theme="{StaticResource ThemeCone}" Margin="0,92,223,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
@@ -662,14 +662,14 @@
                 <TemplatedControl x:Name="PortHatch" Theme="{StaticResource ThemePortBlock}" Margin="72,94,0,0" RenderTransform="rotate(-90deg)" />
                 <Panel IsHitTestVisible="False">
                   <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
-                  <Path Data="{StaticResource GeometrySphere}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.12" />
-                  <Path Data="M42,70 A40,6 0 0 1 122,70" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" Opacity="0.6" />
+                  <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+                  <Path Data="M42,70 A40,6 0 0 1 122,70" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" Opacity="0.6" />
                 </Panel>
                 <Button Command="{Binding OpenFormConverterCommand}" Width="80" Height="80" Margin="42,30,0,0" Padding="0" CornerRadius="40" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 <Panel IsHitTestVisible="False">
                   <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushGlass}" />
-                  <Path Data="M42,70 A40,6 0 0 0 122,70" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
-                  <Path Data="{StaticResource GeometrySphere}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" />
+                  <Path Data="M42,70 A40,6 0 0 0 122,70" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
+                  <Path Data="{StaticResource GeometrySphere}" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" />
                   <Path Data="M54.3,54 A32,32 0 0 1 71.1,39.9" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
                   <Path Data="M58,47 a3,2 0 1 0 6,0 a3,2 0 1 0 -6,0" Fill="White" Opacity="0.5" />
                   <Path Data="M90,85 A9,9 0 1 1 108,85 A9,9 0 1 1 90,85 Z" Stroke="#1A1E25" StrokeThickness="0.5">
@@ -681,7 +681,7 @@
                     </Path.Fill>
                   </Path>
                   <Path Data="M91.5,85 A7.5,7.5 0 1 1 106.5,85 A7.5,7.5 0 1 1 91.5,85 Z" Fill="#05070A" />
-                  <Path Data="M93.8,88 A6,6 0 1 1 104.2,88" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="1.2" StrokeLineCap="Round" />
+                  <Path Data="M93.8,88 A6,6 0 1 1 104.2,88" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.2" StrokeLineCap="Round" />
                   <Path Data="M99,85 L99,79.5" Stroke="White" StrokeThickness="1" StrokeLineCap="Round" RenderTransformOrigin="99,85">
                     <Path.RenderTransform>
                       <RotateTransform Angle="{Binding AngleGaugeConverter}" />
@@ -702,9 +702,9 @@
                 <Canvas>
                   <Grid Width="{Binding #PanelTankBToken.Bounds.Width}" ColumnDefinitions="*,*">
                     <Panel Grid.Column="1" Height="8" Margin="12,100,0,0" VerticalAlignment="Top" Classes.glowing="{Binding Tank.IsAutoActive}">
-                      <Border Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+                      <Border Background="{StaticResource BrushSteel}" />
                       <Border Height="5" Background="{StaticResource BrushWindowBackground}" />
-                      <Border Height="5" Background="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.36" />
+                      <Border Height="5" Background="{StaticResource BrushTintGlass}" Opacity="0.12" />
                       <Path Classes="glow" Data="M0,0 H1 V1 H0 Z" Stretch="Fill" Height="6" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}">
                         <Path.Effect>
                           <BlurEffect Radius="6" />
@@ -730,9 +730,9 @@
                   <Button Command="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).Wallet.ActivateViewCommand}" Width="64" Height="48" Margin="2,2,0,0" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                   <Panel IsHitTestVisible="False">
                     <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushWindowBackground}" />
-                    <Path Data="{StaticResource GeometryWallet}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.29" />
-                    <Path Data="{StaticResource GeometryWallet}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
-                    <Path Data="M66,14 L46,14 A6,6 0 0 0 40,20 L40,32 A6,6 0 0 0 46,38 L66,38" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeJoin="Round" />
+                    <Path Data="{StaticResource GeometryWallet}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+                    <Path Data="{StaticResource GeometryWallet}" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeJoin="Round" />
+                    <Path Data="M66,14 L46,14 A6,6 0 0 0 40,20 L40,32 A6,6 0 0 0 46,38 L66,38" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeJoin="Round" />
                     <Path Data="M47,26 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0" Fill="White" Opacity="0.8" />
                   </Panel>
                 </Panel>
@@ -740,12 +740,12 @@
               <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
                 <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
                   <Panel IsHitTestVisible="False">
-                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" />
-                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
+                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" />
+                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" OpacityMask="{StaticResource BrushFadeTube}" />
                     <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" />
                     <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" OpacityMask="{StaticResource BrushFadeTube}" />
-                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" />
-                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="5" Opacity="0.36" OpacityMask="{StaticResource BrushFadeTube}" />
+                    <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushTintGlass}" StrokeThickness="5" Opacity="0.12" />
+                    <Path Data="{StaticResource GeometryTubeAway}" Stroke="{StaticResource BrushTintGlass}" StrokeThickness="5" Opacity="0.12" OpacityMask="{StaticResource BrushFadeTube}" />
                   </Panel>
                   <Path Classes="glow" Data="{StaticResource GeometryTubeCenter}" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="6" Opacity="0" IsVisible="{Binding Tank.IsAutoToWalletGUI}" IsHitTestVisible="False">
                     <Path.Effect>
