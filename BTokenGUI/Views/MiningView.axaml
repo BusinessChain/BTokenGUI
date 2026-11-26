@@ -37,6 +37,9 @@
     <Style Selector="ItemsControl.flights :is(Control).flying">
       <Setter Property="Opacity" Value="1" />
     </Style>
+    <Style Selector="ContentControl.blockchain">
+      <Setter Property="ClipToBounds" Value="False" />
+    </Style>
     <Style Selector="ItemsControl.blocks">
       <Setter Property="ClipToBounds" Value="False" />
     </Style>
@@ -546,7 +549,7 @@
           </Panel.DataTemplates>
           <Canvas x:Name="CanvasPipes" IsHitTestVisible="False" />
           <StackPanel Margin="20,0">
-            <ContentControl x:Name="ContentBlockchainBitcoin" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" Margin="0,48,0,0" />
+            <ContentControl x:Name="ContentBlockchainBitcoin" Classes="blockchain" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" Margin="0,48,0,0" />
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
               <Panel DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBitcoin}" x:DataType="models:Blockchain">
                 <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -648,7 +651,7 @@
                 </Panel>
               </Panel>
             </Grid>
-            <ContentControl x:Name="ContentBlockchainBToken" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+            <ContentControl x:Name="ContentBlockchainBToken" Classes="blockchain" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
               <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
                 <Canvas>

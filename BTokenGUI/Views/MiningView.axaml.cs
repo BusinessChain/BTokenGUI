@@ -61,6 +61,45 @@ public partial class MiningView : UserControl
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
+    LayoutUpdated += (_, _) => DrawOutlinesDebug();
+  }
+
+  static readonly string[] ColorsOutlineDebug = ["#FF0000", "#FF8C00", "#FFFF00", "#00FF00", "#00FFFF", "#3399FF", "#FF00FF", "#FFFFFF"];
+  List<(Rectangle Outline, TextBlock Label)> OutlinesDebug = [];
+
+  void DrawOutlinesDebug()
+  {
+    List<Visual> containers = this.GetVisualDescendants().OfType<PanelBlocks>()
+      .SelectMany(panel => panel.GetSelfAndVisualAncestors().TakeWhile(visual => visual is not ScrollViewer).Append(panel.FindAncestorOfType<ScrollViewer>()).Reverse())
+      .Distinct()
+      .ToList();
+
+    while (OutlinesDebug.Count < containers.Count)
+    {
+      string color = ColorsOutlineDebug[OutlinesDebug.Count % ColorsOutlineDebug.Length];
+      Rectangle outline = new() { Stroke = new SolidColorBrush(Color.Parse(color)), StrokeThickness = 1, StrokeDashArray = [4, 2] };
+      TextBlock label = new() { Foreground = new SolidColorBrush(Color.Parse(color)), FontSize = 9 };
+
+      CanvasFront.Children.AddRange([outline, label]);
+      OutlinesDebug.Add((outline, label));
+    }
+
+    for (int i = 0; i < containers.Count; i++)
+    {
+      if (containers[i].TranslatePoint(new Point(), CanvasFront) is not Point origin)
+        continue;
+
+      (Rectangle outline, TextBlock label) = OutlinesDebug[i];
+
+      Canvas.SetLeft(outline, origin.X);
+      Canvas.SetTop(outline, origin.Y);
+      outline.Width = containers[i].Bounds.Width;
+      outline.Height = containers[i].Bounds.Height;
+
+      Canvas.SetLeft(label, origin.X + 2);
+      Canvas.SetTop(label, origin.Y + 2 + 10 * (i % 4));
+      label.Text = FormattableString.Invariant($"{i} {containers[i].GetType().Name} x={origin.X:0} w={containers[i].Bounds.Width:0} clip={containers[i].ClipToBounds}");
+    }
   }
 
   FlexPipe CreatePipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip)
