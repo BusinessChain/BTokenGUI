@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using BTokenGUI.Models;
+using BTokenGUI.ViewModels;
 
 namespace BTokenGUI.Views;
 
@@ -12,7 +13,6 @@ public class PanelBlocks : Panel
   const double SPACING_BLOCKS = 36;
   const double WIDTH_FACE_FRONT = 36;
   const double GAP_MIN_BLOCKS = 5;
-  const double SECONDS_AGE_TIP_PACKED = 3000;
   const int MILLISECONDS_COMPRESSION = 250;
 
   public static readonly AttachedProperty<double> OffsetProperty = AvaloniaProperty.RegisterAttached<PanelBlocks, Control, double>("Offset");
@@ -60,9 +60,7 @@ public class PanelBlocks : Panel
       height = Math.Max(height, child.DesiredSize.Height);
     }
 
-    double widthMin = Children.Sum(child => child.DesiredSize.Width) + Math.Max(0, Children.Count - 1) * SPACING_BLOCKS + Children.Select(child => child.DesiredSize.Width).LastOrDefault();
-
-    return new Size(widthMin, height);
+    return new Size(0, height);
   }
 
   protected override Size ArrangeOverride(Size finalSize)
@@ -108,10 +106,8 @@ public class PanelBlocks : Panel
   {
     double widthHalf = Children[^1].DesiredSize.Width / 2;
     double distanceStart = widthRail - widthHalf;
-    double distancePacked = widthHalf + (Children.Count - 1) * (WIDTH_FACE_FRONT + GAP_MIN_BLOCKS);
-    double v0 = Math.Log(distanceStart / distancePacked) / SECONDS_AGE_TIP_PACKED;
 
-    return distanceStart * Math.Exp(-v0 * age);
+    return distanceStart - (distanceStart - widthHalf) * age / MainViewModel.SECONDS_AGE_MAX_BLOCKS;
   }
 
   double[] GetTimestamps()
