@@ -10,20 +10,12 @@ namespace BTokenGUI.Views;
 
 public class PanelBlocks : Panel
 {
-  const double SPACING_BLOCKS = 36;
   const double WIDTH_FACE_FRONT = 36;
   const double GAP_MIN_BLOCKS = 5;
   const int MILLISECONDS_COMPRESSION = 250;
 
-  public static readonly AttachedProperty<double> OffsetProperty = AvaloniaProperty.RegisterAttached<PanelBlocks, Control, double>("Offset");
-
   DispatcherTimer TimerCompression = new() { Interval = TimeSpan.FromMilliseconds(MILLISECONDS_COMPRESSION) };
 
-
-  static PanelBlocks()
-  {
-    AffectsParentArrange<PanelBlocks>(OffsetProperty);
-  }
 
   public PanelBlocks()
   {
@@ -42,11 +34,6 @@ public class PanelBlocks : Panel
     base.OnDetachedFromVisualTree(e);
 
     TimerCompression.Stop();
-  }
-
-  public double GetDistanceSlot()
-  {
-    return Children[0].Bounds.Width + SPACING_BLOCKS;
   }
 
   protected override Size MeasureOverride(Size availableSize)
@@ -68,14 +55,9 @@ public class PanelBlocks : Panel
     double[] positions = GetPositions(finalSize.Width);
 
     for (int i = 0; i < Children.Count; i++)
-      Children[i].Arrange(new Rect(positions[i] + Children[i].GetValue(OffsetProperty), 0, Children[i].DesiredSize.Width, finalSize.Height));
+      Children[i].Arrange(new Rect(positions[i], 0, Children[i].DesiredSize.Width, finalSize.Height));
 
     return finalSize;
-  }
-
-  public double GetPosition(Control child)
-  {
-    return GetPositions(Bounds.Width)[Children.IndexOf(child)];
   }
 
   double[] GetPositions(double widthRail)

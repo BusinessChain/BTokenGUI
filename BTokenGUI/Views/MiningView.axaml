@@ -465,7 +465,7 @@
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
-      <ItemsControl Classes="blocks" Margin="-120,10,0,10" ItemsSource="{Binding Blocks}" ContainerPrepared="ExtendTip" ContainerClearing="PresentBlockLeaving">
+      <ItemsControl Classes="blocks" Margin="-120,10,0,10" ItemsSource="{Binding Blocks}">
         <ItemsControl.Template>
           <ControlTemplate TargetType="ItemsControl">
             <Panel>

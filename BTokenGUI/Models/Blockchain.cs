@@ -17,8 +17,6 @@ public partial class Blockchain : ObservableObject
   public ObservableCollection<Anchor> Anchors { get; } = [];
   public ObservableCollection<Chip> TXsPool { get; } = [];
   public Mining.Wallet Tank { get; }
-  public bool IsTipExtending;
-  public Task TaskSlideBlocks = Task.CompletedTask;
   [ObservableProperty]
   public partial bool IsPlaced { get; set; }
   [ObservableProperty]
@@ -52,28 +50,16 @@ public partial class Blockchain : ObservableObject
 
   public void Update(JsonElement snapshotState)
   {
-    if (!TaskSlideBlocks.IsCompleted)
-      return;
-
     Dictionary<string, (Anchor Anchor, ObservableCollection<Anchor> Place)> placesAnchor = Anchors
       .Select(anchor => (anchor, Anchors))
       .Concat(Blocks.SelectMany(block => block.Anchors.Select(anchor => (anchor, block.Anchors))))
       .ToDictionary(placeAnchor => placeAnchor.anchor.Hash);
 
-    List<JsonElement> blocksJSON = snapshotState.GetProperty("headers").EnumerateArray().Reverse().ToList();
-
-    IsTipExtending = IsPlaced
-      && blocksJSON.Count > 1
-      && blocksJSON.Count == Blocks.Count
-      && blocksJSON[^2].GetProperty("hash").GetString() == Blocks[^1].Hash;
-
-    PlaceBlocks(blocksJSON);
-
-    IsTipExtending = false;
+    PlaceBlocks(snapshotState.GetProperty("headers").EnumerateArray().Reverse().ToList());
 
     bool hasAnchorer = snapshotState.TryGetProperty("anchorer", out JsonElement anchorer);
 
-    if (TaskSlideBlocks.IsCompleted && hasAnchorer)
+    if (hasAnchorer)
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
 
     PlaceChips(hasAnchorer ? anchorer : null);
@@ -173,7 +159,7 @@ public partial class Blockchain : ObservableObject
 
   void PlaceChips(JsonElement? anchorer)
   {
-    if (Tank.Funds is not long funds || !TaskSlideBlocks.IsCompleted || Blocks.Count == 0 || Blocks[^1].IsFlying)
+    if (Tank.Funds is not long funds || Blocks.Count == 0 || Blocks[^1].IsFlying)
       return;
 
     foreach (Chip chip in Tank.Chips.Where(chip => chip.IsExploding && !chip.IsFlying).ToList())

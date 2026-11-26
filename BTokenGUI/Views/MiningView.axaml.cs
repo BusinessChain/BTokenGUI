@@ -6,10 +6,8 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
-using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
@@ -26,8 +24,6 @@ public partial class MiningView : UserControl
   const double SECONDS_REACTION = 3;
   const double SECONDS_DRAW = 1.25;
   const double SECONDS_CREATION = 2 * SECONDS_DRAW;
-  const double SECONDS_SLIDE = 1.5;
-  const double SECONDS_STAGGER_SLIDE = 0.75;
   const double SPACING_ROUTE = 6;
   const double SPEED_PIPE = 320.0 / 3;
   const double SPEED_OUTFLOW = 128;
@@ -36,15 +32,10 @@ public partial class MiningView : UserControl
   const double LEAD_PIPE = 6;
   const double BOW_PIPE = 12;
   const double TENSION_PIPE = 0.55;
-  const double RETRACTION_PLUG = 12;
-  const double SECONDS_PLUG = 0.9;
-  const int MILLISECONDS_FRAME = 16;
 
   static readonly Point ContactPortUpper = new(8, 8);
   static readonly Point ContactPortLower = new(8, 5.6);
   static readonly (string ClassCone, string ClassPort)[] PortsCone = [("tank", "portLid"), ("tankAnchor", "portNozzle")];
-
-  ContentPresenter PresenterBlockLeaving;
 
   FlexPipe[] Pipes;
 
@@ -100,33 +91,6 @@ public partial class MiningView : UserControl
       pipe.Place(CanvasPipes);
   }
 
-  Task AnimateRetraction(List<FlexPipe> pipes, double retractionStart, double retractionEnd)
-  {
-    return AnimateFrames(SECONDS_PLUG, progress =>
-    {
-      foreach (FlexPipe pipe in pipes)
-      {
-        pipe.Retraction = retractionStart + (retractionEnd - retractionStart) * progress * progress * (3 - 2 * progress);
-        pipe.Place(CanvasPipes);
-      }
-    });
-  }
-
-  static async Task AnimateFrames(double seconds, Action<double> applyProgress)
-  {
-    DateTime timeStart = DateTime.UtcNow;
-    double progress = 0;
-
-    while (progress < 1)
-    {
-      progress = Math.Min(1, (DateTime.UtcNow - timeStart).TotalSeconds / seconds);
-
-      applyProgress(progress);
-
-      if (progress < 1)
-        await Task.Delay(MILLISECONDS_FRAME);
-    }
-  }
   async void StartFlight(object sender, ContainerPreparedEventArgs e)
   {
     Control container = e.Container;
@@ -149,8 +113,6 @@ public partial class MiningView : UserControl
       Canvas.SetLeft(container, pointOrigin.X - OFFSET_CENTER_GEM);
       Canvas.SetTop(container, pointOrigin.Y - OFFSET_CENTER_GEM);
       container.Opacity = isInflow || isOutflow ? 0 : 1;
-
-      await blockchain.TaskSlideBlocks;
 
       if (isInflow || isOutflow)
         await Task.Delay(TimeSpan.FromSeconds(SECONDS_CREATION + (isOutflow ? SECONDS_INFLOW + SECONDS_REACTION : 0)));
@@ -277,97 +239,6 @@ public partial class MiningView : UserControl
     return points;
   }
 
-  void PresentBlockLeaving(object sender, ContainerClearingEventArgs e)
-  {
-    ItemsControl itemsBlocks = (ItemsControl)sender;
-
-    if (!((Blockchain)itemsBlocks.DataContext).IsTipExtending)
-      return;
-
-    Panel panel = (Panel)itemsBlocks.Presenter.GetVisualParent();
-    Point position = e.Container.TranslatePoint(new Point(), panel).Value;
-
-    PresenterBlockLeaving = new ContentPresenter
-    {
-      Content = e.Container.DataContext,
-      ContentTemplate = itemsBlocks.ItemTemplate,
-      HorizontalAlignment = HorizontalAlignment.Left,
-      VerticalAlignment = VerticalAlignment.Top,
-      Margin = new Thickness(position.X, position.Y, 0, 0),
-      RenderTransform = new TranslateTransform(),
-      IsHitTestVisible = false
-    };
-
-    panel.Children.Add(PresenterBlockLeaving);
-  }
-
-  void ExtendTip(object sender, ContainerPreparedEventArgs e)
-  {
-    ItemsControl itemsBlocks = (ItemsControl)sender;
-    Blockchain blockchain = (Blockchain)itemsBlocks.DataContext;
-
-    if (blockchain.IsTipExtending)
-      blockchain.TaskSlideBlocks = SlideBlocks(itemsBlocks, e.Container);
-  }
-
-  async Task SlideBlocks(ItemsControl itemsBlocks, Control containerNew)
-  {
-    ContentPresenter presenterLeaving = PresenterBlockLeaving;
-    Blockchain.Block blockNew = (Blockchain.Block)containerNew.DataContext;
-    bool isSlidingIn = !blockNew.IsFlying;
-    List<FlexPipe> pipesTip = Pipes.Where(pipe => pipe.Chain.Content == itemsBlocks.DataContext).ToList();
-
-    pipesTip.ForEach(pipe => pipe.IsTipFrozen = true);
-
-    Control[] containersSliding = itemsBlocks.GetRealizedContainers()
-      .Where(container => isSlidingIn || container != containerNew)
-      .OrderBy(itemsBlocks.IndexFromContainer)
-      .ToArray();
-
-    PanelBlocks panelBlocks = (PanelBlocks)itemsBlocks.ItemsPanelRoot;
-
-    containerNew.Measure(Size.Infinity);
-
-    double[] offsetsStart = containersSliding
-      .Select(container => container == containerNew ? panelBlocks.GetDistanceSlot() : container.Bounds.X - panelBlocks.GetPosition(container))
-      .ToArray();
-
-    PresenterBlockLeaving = null;
-
-    for (int i = 0; i < containersSliding.Length; i++)
-      containersSliding[i].SetValue(PanelBlocks.OffsetProperty, offsetsStart[i]);
-
-    if (isSlidingIn)
-      containerNew.Opacity = 0;
-
-    await AnimateRetraction(pipesTip, 0, 1);
-
-    double secondsSlide = SECONDS_STAGGER_SLIDE * containersSliding.Length + SECONDS_SLIDE;
-    CubicEaseInOut easingSlide = new();
-
-    await Task.WhenAll(new[]
-      {
-        AnimateFrames(secondsSlide, progress =>
-        {
-          for (int i = 0; i < containersSliding.Length; i++)
-          {
-            double progressContainer = Math.Clamp((progress * secondsSlide - SECONDS_STAGGER_SLIDE * (i + 1)) / SECONDS_SLIDE, 0, 1);
-
-            containersSliding[i].SetValue(PanelBlocks.OffsetProperty, offsetsStart[i] * (1 - easingSlide.Ease(progressContainer)));
-          }
-        }),
-        Animate(presenterLeaving, 0, SECONDS_SLIDE, new CubicEaseInOut(), (TranslateTransform.XProperty, [0, -offsetsStart[0]])),
-        Animate(presenterLeaving, 0, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [1, 0.8, 0]))
-      }
-      .Concat(isSlidingIn ? [Animate(containerNew, SECONDS_STAGGER_SLIDE * containersSliding.Length, SECONDS_SLIDE, new LinearEasing(), (Visual.OpacityProperty, [0, 1]))] : []));
-
-    (presenterLeaving?.Parent as Panel)?.Children.Remove(presenterLeaving);
-
-    pipesTip.ForEach(pipe => pipe.IsTipFrozen = false);
-
-    await AnimateRetraction(pipesTip, 1, 0);
-  }
-
   void OpenFlyoutBlock(object sender, EventArgs e)
   {
     _ = ((Blockchain.Block)((Flyout)sender).Target.DataContext).Open();
@@ -410,16 +281,13 @@ public partial class MiningView : UserControl
   class FlexPipe
   {
     public ContentControl Chain;
-    public bool IsTipFrozen;
 
     Control OwnerCones;
-    public double Retraction;
 
     Path Outline;
     Path Core;
     TemplatedControl PlugTip;
     TemplatedControl[] PlugsCone;
-    Point? ContactTip;
     Point Start;
     Point?[] Ends = [];
     Geometry[] Branches = new Geometry[PortsCone.Length];
@@ -437,9 +305,7 @@ public partial class MiningView : UserControl
 
     public void Place(Visual canvas)
     {
-      Point? contactTip = IsTipFrozen ? ContactTip : FindPort(FindTip(Chain), "portBottom")?.TranslatePoint(ContactPortUpper, canvas);
-
-      ContactTip = contactTip;
+      Point? contactTip = FindPort(FindTip(Chain), "portBottom")?.TranslatePoint(ContactPortUpper, canvas);
 
       Point?[] contactsCone = PortsCone
         .Select(port => FindPort(FindCone(OwnerCones, port.ClassCone), port.ClassPort)?.TranslatePoint(ContactPortLower, canvas))
@@ -457,7 +323,7 @@ public partial class MiningView : UserControl
       if (!isPlaced)
         return;
 
-      Point start = new(contactTip.Value.X, contactTip.Value.Y + LENGTH_PLUG + Retraction * RETRACTION_PLUG);
+      Point start = new(contactTip.Value.X, contactTip.Value.Y + LENGTH_PLUG);
 
       Point?[] ends = contactsCone
         .Select(contact => contact is Point point ? new Point(point.X, point.Y - LENGTH_PLUG) : (Point?)null)
