@@ -12,8 +12,6 @@ public class PanelBlocks : Panel
 {
   const double WIDTH_FACE_FRONT = 36;
   const double GAP_MIN_BLOCKS = 5;
-  const double FACTOR_X_RAIL = 0.8944;
-  const double FACTOR_Y_RAIL = 0.1278;
   const int MILLISECONDS_COMPRESSION = 250;
 
   DispatcherTimer TimerCompression = new() { Interval = TimeSpan.FromMilliseconds(MILLISECONDS_COMPRESSION) };
@@ -43,20 +41,20 @@ public class PanelBlocks : Panel
     foreach (Control child in Children)
       child.Measure(Size.Infinity);
 
-    return new Size(0, availableSize.Width / FACTOR_X_RAIL * FACTOR_Y_RAIL);
+    return new Size();
   }
 
   protected override Size ArrangeOverride(Size finalSize)
   {
-    double[] positions = GetPositions(finalSize.Width / FACTOR_X_RAIL);
+    double[] positions = GetPositions(finalSize.Width);
 
     for (int i = 0; i < Children.Count; i++)
-      Children[i].Arrange(new Rect(new Point(FACTOR_X_RAIL * positions[i], FACTOR_Y_RAIL * positions[i]), Children[i].DesiredSize));
+      Children[i].Arrange(new Rect(positions[i], 0, Children[i].DesiredSize.Width, finalSize.Height));
 
     return finalSize;
   }
 
-  double[] GetPositions(double lengthRail)
+  double[] GetPositions(double widthRail)
   {
     double[] timestamps = GetTimestamps();
     double timeNow = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
@@ -65,7 +63,7 @@ public class PanelBlocks : Panel
 
     for (int i = Children.Count - 1; i >= 0; i--)
     {
-      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i]), lengthRail) - Children[i].DesiredSize.Width / FACTOR_X_RAIL / 2, limitRight - WIDTH_FACE_FRONT - GAP_MIN_BLOCKS);
+      positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i]), widthRail) - Children[i].DesiredSize.Width / 2, limitRight - WIDTH_FACE_FRONT - GAP_MIN_BLOCKS);
       limitRight = positions[i];
     }
 
@@ -80,10 +78,10 @@ public class PanelBlocks : Panel
     return positions;
   }
 
-  double GetPositionCenter(double age, double lengthRail)
+  double GetPositionCenter(double age, double widthRail)
   {
-    double widthHalf = Children[^1].DesiredSize.Width / FACTOR_X_RAIL / 2;
-    double distanceStart = lengthRail - widthHalf;
+    double widthHalf = Children[^1].DesiredSize.Width / 2;
+    double distanceStart = widthRail - widthHalf;
 
     return distanceStart - (distanceStart - widthHalf) * age / MainViewModel.SECONDS_AGE_MAX_BLOCKS;
   }
