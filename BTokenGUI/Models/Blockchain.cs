@@ -59,10 +59,10 @@ public partial class Blockchain : ObservableObject
 
     bool hasAnchorer = snapshotState.TryGetProperty("anchorer", out JsonElement anchorer);
 
+    PlaceChips(hasAnchorer ? anchorer : null);
+
     if (hasAnchorer)
       PlaceAnchors(anchorer.GetProperty("anchors"), placesAnchor);
-
-    PlaceChips(hasAnchorer ? anchorer : null);
 
     if (snapshotState.TryGetProperty("tXPool", out JsonElement tXPool))
       PlaceTXsPool(tXPool);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Animation;
@@ -35,6 +36,8 @@ public partial class MiningView : UserControl
   const double TENSION_PIPE = 0.55;
   const double DISTANCE_HANG = 48;
   const double LENGTH_HANG = 40;
+  const double SECONDS_PLUG = 0.9;
+  const int MILLISECONDS_FRAME = 16;
 
   static readonly Point ContactPortUpper = new(8, 8);
   static readonly Point ContactPortLower = new(8, 5.6);
@@ -48,17 +51,19 @@ public partial class MiningView : UserControl
 
     ItemsFlights.ContainerPrepared += StartFlight;
 
+    SemaphoreSlim semaphoreTipBitcoin = new(1);
+
     Pipes =
     [
-      CreatePipe(ContentBlockchainBitcoin, GridMining, "tank", "portLid", HorizontalAlignment.Left),
-      CreatePipe(ContentBlockchainBitcoin, GridMining, "tankAnchor", "portNozzle", HorizontalAlignment.Right),
-      CreatePipe(ContentBlockchainBToken, PanelTankBToken, "tank", "portLid", HorizontalAlignment.Left)
+      CreatePipe(ContentBlockchainBitcoin, GridMining, "tank", "portLid", HorizontalAlignment.Left, semaphoreTipBitcoin),
+      CreatePipe(ContentBlockchainBitcoin, GridMining, "tankAnchor", "portNozzle", HorizontalAlignment.Right, semaphoreTipBitcoin),
+      CreatePipe(ContentBlockchainBToken, PanelTankBToken, "tank", "portLid", HorizontalAlignment.Left, new SemaphoreSlim(1))
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
   }
 
-  FlexPipe CreatePipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang)
+  FlexPipe CreatePipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip)
   {
     ControlTheme themePlug = (ControlTheme)this.FindResource("ThemePlug");
     Path outline = new() { Stroke = new SolidColorBrush(Color.Parse("#7D8794")), StrokeThickness = 8 };
@@ -69,7 +74,7 @@ public partial class MiningView : UserControl
     CanvasPipes.Children.AddRange([outline, core, plugTip]);
     CanvasFront.Children.Add(plugCone);
 
-    return new FlexPipe(chain, ownerCones, classCone, classPort, sideHang, outline, core, plugTip, plugCone);
+    return new FlexPipe(chain, ownerCones, classCone, classPort, sideHang, semaphoreTip, outline, core, plugTip, plugCone);
   }
 
   static ContentControl FindCone(Control ownerCones, string classCone)
@@ -93,6 +98,54 @@ public partial class MiningView : UserControl
   {
     foreach (FlexPipe pipe in Pipes)
       pipe.Place(CanvasPipes);
+  }
+
+  async Task ConnectPipe(FlexPipe pipe)
+  {
+    if (pipe.CountGoods++ == 0)
+      pipe.TaskPlugged = PlugInPipe(pipe);
+
+    await pipe.TaskPlugged;
+  }
+
+  async Task PlugInPipe(FlexPipe pipe)
+  {
+    await pipe.SemaphoreTip.WaitAsync();
+    await AnimateConnection(pipe, 0, 1);
+  }
+
+  async Task ReleasePipe(FlexPipe pipe)
+  {
+    if (--pipe.CountGoods > 0)
+      return;
+
+    await AnimateConnection(pipe, 1, 0);
+    pipe.SemaphoreTip.Release();
+  }
+
+  Task AnimateConnection(FlexPipe pipe, double connectionStart, double connectionEnd)
+  {
+    return AnimateFrames(SECONDS_PLUG, progress =>
+    {
+      pipe.Connection = connectionStart + (connectionEnd - connectionStart) * progress;
+      pipe.Place(CanvasPipes);
+    });
+  }
+
+  static async Task AnimateFrames(double seconds, Action<double> applyProgress)
+  {
+    DateTime timeStart = DateTime.UtcNow;
+    double progress = 0;
+
+    while (progress < 1)
+    {
+      progress = Math.Min(1, (DateTime.UtcNow - timeStart).TotalSeconds / seconds);
+
+      applyProgress(progress);
+
+      if (progress < 1)
+        await Task.Delay(MILLISECONDS_FRAME);
+    }
   }
 
   async void StartFlight(object sender, ContainerPreparedEventArgs e)
@@ -125,7 +178,12 @@ public partial class MiningView : UserControl
 
       if (FindCenter(isInflow ? PanelConverter : controlPlace, ItemsFlights) is Point pointEnd)
       {
-        List<Point> routeDuct = TraceRouteDuct(blockchain, good, isInflow, isOutflow, ItemsFlights);
+        FlexPipe pipeFlex = FindPipeFlex(blockchain, good);
+
+        if (pipeFlex != null)
+          await ConnectPipe(pipeFlex);
+
+        List<Point> routeDuct = TraceRouteDuct(blockchain, good, isInflow, isOutflow, pipeFlex, ItemsFlights);
 
         foreach (Point point in routeDuct)
           ExtendRoute(route, point);
@@ -142,6 +200,9 @@ public partial class MiningView : UserControl
           route,
           isInflow ? SECONDS_INFLOW : isPiped ? (route.Count - 1) * SPACING_ROUTE / (isOutflow ? SPEED_OUTFLOW : SPEED_PIPE) : SECONDS_FLIGHT,
           isPiped ? new LinearEasing() : new CubicEaseInOut());
+
+        if (pipeFlex != null)
+          _ = ReleasePipe(pipeFlex);
 
         if (isInflow && FindCenter(PanelConverter, CanvasFront) is Point pointSphere)
         {
@@ -179,7 +240,7 @@ public partial class MiningView : UserControl
       (Canvas.TopProperty, route.Select(point => point.Y - OFFSET_CENTER_GEM).ToArray()));
   }
 
-  List<Point> TraceRouteDuct(Blockchain blockchain, Blockchain.Good good, bool isInflow, bool isOutflow, Visual target)
+  List<Point> TraceRouteDuct(Blockchain blockchain, Blockchain.Good good, bool isInflow, bool isOutflow, FlexPipe pipeFlex, Visual target)
   {
     if (isOutflow && good is Blockchain.Anchor)
       return FindPath("pipeAnchor", blockchain) is Path pipe ? TraceRoutePath(pipe, target) : [];
@@ -187,7 +248,15 @@ public partial class MiningView : UserControl
     if (isInflow)
       return FindPath("tubeConverter", blockchain) is Path tube ? TraceRoutePath(tube, target) : [];
 
-    return TraceRouteFlex(blockchain, good).Select(point => CanvasPipes.TranslatePoint(point, target)).OfType<Point>().ToList();
+    if (pipeFlex == null)
+      return [];
+
+    List<Point> route = pipeFlex.TraceRoute().Select(point => CanvasPipes.TranslatePoint(point, target)).OfType<Point>().ToList();
+
+    if (good is Blockchain.Anchor)
+      route.Reverse();
+
+    return route;
   }
 
   static Point? FindCenter(Control control, Visual target)
@@ -195,24 +264,19 @@ public partial class MiningView : UserControl
     return control?.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), target);
   }
 
-  List<Point> TraceRouteFlex(Blockchain blockchain, Blockchain.Good good)
+  FlexPipe FindPipeFlex(Blockchain blockchain, Blockchain.Good good)
   {
     if (blockchain.Blocks.Count == 0)
-      return [];
+      return null;
 
     Blockchain.Block tip = blockchain.Blocks[^1];
     bool isChipLeavingTip = good is Blockchain.Chip && good.Origin == tip;
     bool isAnchorEnteringTip = good is Blockchain.Anchor anchor && good.Origin == blockchain.Anchors && tip.Anchors.Contains(anchor);
 
     if (!isChipLeavingTip && !isAnchorEnteringTip)
-      return [];
+      return null;
 
-    List<Point> route = Pipes.First(pipe => pipe.Chain.Content == blockchain && pipe.ClassCone == (isChipLeavingTip ? "tank" : "tankAnchor")).TraceRoute();
-
-    if (isAnchorEnteringTip)
-      route.Reverse();
-
-    return route;
+    return Pipes.First(pipe => pipe.Chain.Content == blockchain && pipe.ClassCone == (isChipLeavingTip ? "tank" : "tankAnchor"));
   }
 
   Path FindPath(string classPath, Blockchain blockchain)
@@ -286,7 +350,10 @@ public partial class MiningView : UserControl
   {
     public ContentControl Chain;
     public string ClassCone;
-    public double Connection = 1;
+    public SemaphoreSlim SemaphoreTip;
+    public double Connection;
+    public int CountGoods;
+    public Task TaskPlugged;
 
     Control OwnerCones;
     string ClassPort;
@@ -301,13 +368,14 @@ public partial class MiningView : UserControl
     Geometry Branch;
 
 
-    public FlexPipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, Path outline, Path core, TemplatedControl plugTip, TemplatedControl plugCone)
+    public FlexPipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip, Path outline, Path core, TemplatedControl plugTip, TemplatedControl plugCone)
     {
       Chain = chain;
       OwnerCones = ownerCones;
       ClassCone = classCone;
       ClassPort = classPort;
       DirectionHang = sideHang == HorizontalAlignment.Left ? -1 : 1;
+      SemaphoreTip = semaphoreTip;
       Outline = outline;
       Core = core;
       PlugTip = plugTip;
