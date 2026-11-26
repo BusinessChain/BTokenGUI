@@ -101,7 +101,7 @@
       <GradientStop Offset="0" Color="Black" />
       <GradientStop Offset="1" Color="Transparent" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="BrushGlass" StartPoint="0%,0%" EndPoint="100%,0%">
+    <LinearGradientBrush x:Key="BrushGlass" StartPoint="100%,0%" EndPoint="0%,0%">
       <GradientStop Offset="0" Color="#30FFFFFF" />
       <GradientStop Offset="0.35" Color="#08FFFFFF" />
       <GradientStop Offset="0.7" Color="#00000000" />
@@ -579,7 +579,7 @@
   </UserControl.Resources>
   <Border Classes="Panel">
     <Border.Background>
-      <RadialGradientBrush Center="0%,0%" GradientOrigin="0%,0%" RadiusX="100%" RadiusY="100%">
+      <RadialGradientBrush Center="100%,0%" GradientOrigin="100%,0%" RadiusX="100%" RadiusY="100%">
         <GradientStop Offset="0" Color="#60FFFFFF" />
         <GradientStop Offset="1" Color="#06FFFFFF" />
       </RadialGradientBrush>
