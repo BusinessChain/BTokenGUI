@@ -107,6 +107,16 @@
       <GradientStop Offset="0.7" Color="#00000000" />
       <GradientStop Offset="1" Color="#40000000" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BrushMetal" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Offset="0" Color="#1E232B" />
+      <GradientStop Offset="0.35" Color="#6B7686" />
+      <GradientStop Offset="0.7" Color="#C9D1DC" />
+      <GradientStop Offset="1" Color="#2A303A" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BrushMetalTop" StartPoint="100%,0%" EndPoint="0%,100%">
+      <GradientStop Offset="0" Color="#E6ECF3" />
+      <GradientStop Offset="1" Color="#6E7888" />
+    </LinearGradientBrush>
     <ControlTheme x:Key="ThemeReceptacle" TargetType="TemplatedControl">
       <Setter Property="Width" Value="16" />
       <Setter Property="Height" Value="12" />
@@ -116,27 +126,11 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Data="M1,4 L1,9 A7,2.5 0 0 0 15,9 L15,4 Z">
-              <Path.Fill>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
-                  <GradientStop Offset="0" Color="#2A303A" />
-                  <GradientStop Offset="0.3" Color="#C9D1DC" />
-                  <GradientStop Offset="0.65" Color="#6B7686" />
-                  <GradientStop Offset="1" Color="#1E232B" />
-                </LinearGradientBrush>
-              </Path.Fill>
-            </Path>
-            <Path Data="M1,4 A7,2.5 0 1 1 15,4 A7,2.5 0 1 1 1,4 Z">
-              <Path.Fill>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-                  <GradientStop Offset="0" Color="#E6ECF3" />
-                  <GradientStop Offset="1" Color="#6E7888" />
-                </LinearGradientBrush>
-              </Path.Fill>
-            </Path>
-            <Path Data="M3.5,4 A4.5,1.6 0 1 1 12.5,4 A4.5,1.6 0 1 1 3.5,4 Z" Fill="#4A5260" Stroke="#1A1E25" StrokeThickness="0.5" />
-            <Path Data="M5,4.2 A3,1 0 1 1 11,4.2 A3,1 0 1 1 5,4.2 Z" Fill="#05070A" />
-            <Path Data="M3,3.2 A6,2 0 0 1 8,2" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
+            <Path Data="M1,4 L1,8.564 A7,2.858 0 0 0 15,8.564 L15,4 Z" Fill="{StaticResource BrushMetal}" />
+            <Path Data="M1,4 A7,2.858 0 1 1 15,4 A7,2.858 0 1 1 1,4 Z" Fill="{StaticResource BrushMetalTop}" />
+            <Path Data="M3.5,4 A4.5,1.837 0 1 1 12.5,4 A4.5,1.837 0 1 1 3.5,4 Z" Fill="#4A5260" Stroke="#1A1E25" StrokeThickness="0.5" />
+            <Path Data="M5,4.2 A3,1.225 0 1 1 11,4.2 A3,1.225 0 1 1 5,4.2 Z" Fill="#05070A" />
+            <Path Data="M8,1.551 A6,2.449 0 0 1 13,2.646" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -206,26 +200,10 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Data="M1,3 L1,8 A7,2.5 0 0 0 15,8 L15,3 Z">
-              <Path.Fill>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
-                  <GradientStop Offset="0" Color="#2A303A" />
-                  <GradientStop Offset="0.3" Color="#C9D1DC" />
-                  <GradientStop Offset="0.65" Color="#6B7686" />
-                  <GradientStop Offset="1" Color="#1E232B" />
-                </LinearGradientBrush>
-              </Path.Fill>
-            </Path>
-            <Path Data="M1,7 A7,2.5 0 0 0 15,7 L15,8 A7,2.5 0 0 1 1,8 Z" Fill="#9AA4B2" Opacity="0.8" />
-            <Path Data="M1,3 A7,2.5 0 1 1 15,3 A7,2.5 0 1 1 1,3 Z">
-              <Path.Fill>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-                  <GradientStop Offset="0" Color="#E6ECF3" />
-                  <GradientStop Offset="1" Color="#6E7888" />
-                </LinearGradientBrush>
-              </Path.Fill>
-            </Path>
-            <Path Data="M3,2.2 A6,2 0 0 1 8,1" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
+            <Path Data="M1,3 L1,7.564 A7,2.858 0 0 0 15,7.564 L15,3 Z" Fill="{StaticResource BrushMetal}" />
+            <Path Data="M1,6.651 A7,2.858 0 0 0 15,6.651 L15,7.564 A7,2.858 0 0 1 1,7.564 Z" Fill="#9AA4B2" Opacity="0.8" />
+            <Path Data="M1,3 A7,2.858 0 1 1 15,3 A7,2.858 0 1 1 1,3 Z" Fill="{StaticResource BrushMetalTop}" />
+            <Path Data="M8,0.551 A6,2.449 0 0 1 13,1.646" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -271,24 +249,32 @@
       </Style>
     </ControlTheme>
     <ControlTheme x:Key="ThemePlug" TargetType="TemplatedControl">
-      <Setter Property="Width" Value="10" />
-      <Setter Property="Height" Value="11" />
+      <Setter Property="Width" Value="14" />
+      <Setter Property="Height" Value="15" />
       <Setter Property="RenderTransformOrigin" Value="50%,50%" />
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Data="M0.5,0.5 L9.5,0.5 L9.5,10.5 L0.5,10.5 Z" Stroke="#1E232B" StrokeThickness="0.6">
+            <Path Data="M0.963,3.893 L9.012,5.536 L9.012,14.665 L0.963,13.022 Z" Stroke="#1E232B" StrokeThickness="0.6">
               <Path.Fill>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
                   <GradientStop Offset="0" Color="#2A303A" />
-                  <GradientStop Offset="0.3" Color="#C9D1DC" />
-                  <GradientStop Offset="0.65" Color="#6B7686" />
-                  <GradientStop Offset="1" Color="#1E232B" />
+                  <GradientStop Offset="1" Color="#6B7686" />
                 </LinearGradientBrush>
               </Path.Fill>
             </Path>
-            <Path Data="M1,2.5 H9 M1,4.5 H9 M1,6.5 H9" Stroke="#2A303A" StrokeThickness="0.8" Opacity="0.8" />
-            <Path Data="M0.5,8.5 L9.5,8.5 L9.5,10.5 L0.5,10.5 Z" Fill="#3A4250" Stroke="#1E232B" StrokeThickness="0.6" />
+            <Path Data="M9.012,5.536 L13.037,2.25 L13.037,11.378 L9.012,14.665 Z" Stroke="#1E232B" StrokeThickness="0.6">
+              <Path.Fill>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                  <GradientStop Offset="0" Color="#6B7686" />
+                  <GradientStop Offset="1" Color="#C9D1DC" />
+                </LinearGradientBrush>
+              </Path.Fill>
+            </Path>
+            <Path Data="M0.963,3.893 L4.988,0.607 L13.037,2.25 L9.012,5.536 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.6" />
+            <Path Data="M1.41,5.81 L8.565,7.27 M1.41,7.636 L8.565,9.096 M1.41,9.461 L8.565,10.922 M9.236,7.179 L12.814,4.258 M9.236,9.005 L12.814,6.084 M9.236,10.831 L12.814,7.91" Stroke="#2A303A" StrokeThickness="0.8" Opacity="0.8" />
+            <Path Data="M0.963,11.196 L9.012,12.839 L9.012,14.665 L0.963,13.022 Z" Fill="#3A4250" Stroke="#1E232B" StrokeThickness="0.6" />
+            <Path Data="M9.012,12.839 L13.037,9.553 L13.037,11.378 L9.012,14.665 Z" Fill="#4A5260" Stroke="#1E232B" StrokeThickness="0.6" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -693,8 +679,8 @@
                   <Path Data="M92.5,82 A7,7 0 0 1 97,78.3" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.5" />
                   <TemplatedControl Theme="{StaticResource ThemeReceptacle}" Margin="52,30,0,0" />
                   <TemplatedControl Theme="{StaticResource ThemeReceptacle}" Margin="96,30,0,0" />
-                  <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="55,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-                  <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="99,24.6,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                  <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="53,21.8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                  <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="97,21.8,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Panel>
               </Panel>
             </Grid>
