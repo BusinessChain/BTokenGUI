@@ -306,6 +306,10 @@
               <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.62" />
               <Path Data="M19,1 L19,79 L55,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
             </Panel>
+            <Panel Classes="slots" IsVisible="False" IsHitTestVisible="False">
+              <Path Data="M17,89 L21.5,84.5 L49.5,84.5 L45,89 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.3" StrokeJoin="Round" />
+              <Path Data="M22.6,85.5 L48.5,85.5 L47.5,86.5 L22.6,86.5 Z M22.6,87 L47,87 L46,88 L22.6,88 Z" Fill="#05070A" />
+            </Panel>
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
@@ -324,11 +328,15 @@
                 <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
               </Panel>
               <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z M1,19 L37,19 L55,1 M37,19 L37,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
+              <Path Classes="slots" IsVisible="False" Data="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z" Fill="#05070A" />
             </Panel>
           </Panel>
         </ControlTemplate>
       </Setter>
       <Style Selector="^.bitcoin /template/ Panel.logo">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
+      <Style Selector="^.bitcoin /template/ :is(Control).slots">
         <Setter Property="IsVisible" Value="True" />
       </Style>
     </ControlTheme>
