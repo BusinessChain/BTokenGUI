@@ -52,6 +52,10 @@ public class PanelBlocks : Panel
 
     for (int i = 0; i < Children.Count; i++)
     {
+      bool isOffRail = positions[i] <= 0;
+
+      Children[i].Opacity = isOffRail ? 0 : 1;
+      Children[i].IsHitTestVisible = !isOffRail;
       Children[i].SetValue(DistanceArrivalProperty, GetPositionCenter(0, finalSize.Width) - Children[i].DesiredSize.Width / 2 - positions[i]);
       Children[i].Arrange(new Rect(positions[i], 0, Children[i].DesiredSize.Width, finalSize.Height));
     }
@@ -70,14 +74,6 @@ public class PanelBlocks : Panel
     {
       positions[i] = Math.Min(GetPositionCenter(Math.Max(0, timeNow - timestamps[i]), widthRail) - Children[i].DesiredSize.Width / 2, limitRight - WIDTH_FACE_FRONT - GAP_MIN_BLOCKS);
       limitRight = positions[i];
-    }
-
-    double limitLeft = 0;
-
-    for (int i = 0; i < Children.Count; i++)
-    {
-      positions[i] = Math.Max(positions[i], limitLeft);
-      limitLeft = positions[i] + WIDTH_FACE_FRONT + GAP_MIN_BLOCKS;
     }
 
     return positions;

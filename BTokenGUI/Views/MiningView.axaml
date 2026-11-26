@@ -291,6 +291,25 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
+    <ControlTheme x:Key="ThemeRiserTip" TargetType="TemplatedControl">
+      <Setter Property="Width" Value="10.8" />
+      <Setter Property="Height" Value="4" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="IsHitTestVisible" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Path Classes="aluminum body" Data="M0,4 V0 H10.8 V4 Z" />
+            <Path Classes="top" Data="M0,0 H10.8 V1 H0 Z" />
+            <Path Data="M0.8,0.25 H10 V0.75 H0.8 Z" Fill="#05070A" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^.outside /template/ Path.body">
+        <Setter Property="Data" Value="M0,8 V0 H10.8 V8" />
+      </Style>
+    </ControlTheme>
     <ControlTheme x:Key="ThemeCube" TargetType="ContentControl">
       <Setter Property="Width" Value="56" />
       <Setter Property="Height" Value="98" />
@@ -312,14 +331,8 @@
               <Path Data="M22.6,86.2 H50 M22.6,87.7 H50" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" />
               <Path Data="M22.6,85.8 H50 M22.6,87.3 H50" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" StrokeDashOffset="0.667" />
               <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                <Path Data="M33.4,85.5 H80 V86.5 H33.4 Z M33.4,87 H80 V88 H33.4 Z" Fill="#05070A" />
-                <Path Data="M20.6,85.3 H22.6 V86.7 H20.6 Z M20.6,86.8 H22.6 V88.2 H20.6 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.2" StrokeJoin="Round" />
-                <Path Classes="aluminum" Data="M22.6,86.5 V82.5 H33.4 V86.5 Z" />
-                <Path Classes="top" Data="M22.6,82.5 H33.4 V83.5 H22.6 Z" />
-                <Path Data="M23.4,82.75 H32.6 V83.25 H23.4 Z" Fill="#05070A" />
-                <Path Classes="aluminum" Data="M22.6,88 V84 H33.4 V88 Z" />
-                <Path Classes="top" Data="M22.6,84 H33.4 V85 H22.6 Z" />
-                <Path Data="M23.4,84.25 H32.6 V84.75 H23.4 Z" Fill="#05070A" />
+                <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="22.6,82.5,0,0" />
+                <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
               </Panel>
             </Canvas>
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
@@ -345,7 +358,17 @@
                 <Path Data="M46.3,84.5 V89 M47.8,83 V87.5" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" />
                 <Path Data="M46.7,84.5 V89 M48.2,83 V87.5" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" StrokeDashOffset="0.667" />
                 <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                  <Path Data="M22.6,80 H80 V92 H22.6 Z" Fill="#05070A" />
+                  <Path Data="M22.6,80 H33.4 V92 H22.6 Z" Fill="#05070A" />
+                </Panel>
+              </Canvas>
+              <Canvas Classes="slots" IsVisible="False" Clip="M47.5,88 L47.5,83.5 L48.5,82.5 L48.5,78 L57.5,78 Z">
+                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                  <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="22.6,82.5,0,0" />
+                </Panel>
+              </Canvas>
+              <Canvas Classes="slots" IsVisible="False" Clip="M46,89.5 L46,85 L47,84 L47,78 L57.5,78 Z">
+                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                  <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
                 </Panel>
               </Canvas>
             </Panel>
@@ -649,7 +672,7 @@
             </DataTemplate>
           </Panel.DataTemplates>
           <StackPanel Margin="20,0">
-            <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,58,0,10" />
+            <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,58,0,10" />
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
               <Panel DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBitcoin}" x:DataType="models:Blockchain">
                 <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -767,7 +790,7 @@
                 </Panel>
               </Panel>
             </Grid>
-            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,10,0,10" />
+            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10" />
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
               <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
                 <Canvas>
