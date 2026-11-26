@@ -28,7 +28,7 @@ public partial class MainViewModel : ObservableObject
   public Wallet Wallet { get; } = new();
 
   const int MILLISECONDS_INTERVAL_POLL_NODE = 1000;
-  const int COUNT_BLOCKS_NEWEST = 3;
+  const int SECONDS_AGE_MAX_BLOCKS = 3600;
   const int COUNT_TXS_POOL = 15;
 
 
@@ -49,7 +49,7 @@ public partial class MainViewModel : ObservableObject
 
       try
       {
-        JsonElement snapshotState = await Node.SendRequest("getSnapshotState", new Dictionary<string, object> { ["countBlocks"] = COUNT_BLOCKS_NEWEST, ["countTXsPool"] = COUNT_TXS_POOL }).ConfigureAwait(false);
+        JsonElement snapshotState = await Node.SendRequest("getSnapshotState", new Dictionary<string, object> { ["secondsAgeMax"] = SECONDS_AGE_MAX_BLOCKS, ["countTXsPool"] = COUNT_TXS_POOL }).ConfigureAwait(false);
         JsonElement networksJSON = snapshotState.GetProperty("networks");
         JsonElement blockchainsJSON = snapshotState.GetProperty("blockchains");
 
