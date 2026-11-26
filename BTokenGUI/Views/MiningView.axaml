@@ -541,7 +541,6 @@
               <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateChip}" />
             </DataTemplate>
           </Panel.DataTemplates>
-          <Canvas x:Name="CanvasPipes" IsHitTestVisible="False" />
           <StackPanel Margin="20,0">
             <ItemsControl x:Name="ItemsBlocksBitcoin" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,58,0,10" />
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
