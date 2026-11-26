@@ -280,29 +280,27 @@
       </Setter>
     </ControlTheme>
     <ControlTheme x:Key="ThemeCube" TargetType="ContentControl">
-      <Setter Property="Width" Value="56" />
-      <Setter Property="Height" Value="98" />
+      <Setter Property="Width" Value="50.3" />
+      <Setter Property="Height" Value="90.55" />
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Border Width="36" Height="78" Margin="19,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource BrushWindowBackground}" IsHitTestVisible="False">
-              <Border Background="{TemplateBinding BorderBrush}" Opacity="0.36" />
-            </Border>
             <Panel IsHitTestVisible="False">
-              <Path Data="M1,19 L19,1 L19,79 L1,97 Z M1,97 L19,79 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
-              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.5" />
-              <Path Data="M19,1 L19,79 L55,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
+              <Path Data="M17.1,1 L49.299,5.6 L49.299,80.348 L17.1,75.749 Z M1,10.2 L17.1,1 L17.1,75.749 L1,84.948 Z M1,84.948 L17.1,75.749 L49.299,80.348 L33.199,89.548 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M17.1,1 L49.299,5.6 L49.299,80.348 L17.1,75.749 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.29" />
+              <Path Data="M1,10.2 L17.1,1 L17.1,75.749 L1,84.948 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.49" />
+              <Path Data="M1,84.948 L17.1,75.749 L49.299,80.348 L33.199,89.548 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.68" />
+              <Path Data="M17.1,1 L17.1,75.749 L49.299,80.348 M17.1,75.749 L1,84.948" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
             </Panel>
-            <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="20,78,0,0" />
+            <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="17.15,73.857,0,0" />
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
-              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.68" />
-              <Path Data="M1,19 L37,19 L37,97 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.36" />
-              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
-              <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z M1,19 L37,19 L55,1 M37,19 L37,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
+              <Path Data="M1,10.2 L17.1,1 L49.299,5.6 L33.199,14.8 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M1,10.2 L17.1,1 L49.299,5.6 L33.199,14.8 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.68" />
+              <Path Data="M1,10.2 L33.199,14.8 L33.199,89.548 L1,84.948 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.29" />
+              <Path Data="M33.199,14.8 L49.299,5.6 L49.299,80.348 L33.199,89.548 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M33.199,14.8 L49.299,5.6 L49.299,80.348 L33.199,89.548 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.49" />
+              <Path Data="M1,10.2 L17.1,1 L49.299,5.6 L49.299,80.348 L33.199,89.548 L1,84.948 Z M1,10.2 L33.199,14.8 L49.299,5.6 M33.199,14.8 L33.199,89.548" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -510,8 +508,26 @@
       <Setter Property="Template">
         <ControlTemplate TargetType="ItemsControl">
           <Panel>
-            <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" Margin="0,44,0,0" />
-            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="0,0,0,98" />
+            <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" Margin="0,36.681,0,0" />
+            <ItemsControl ItemsSource="{TemplateBinding ItemsSource}" ClipToBounds="False" IsHitTestVisible="False">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <views:PanelBlocks />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="models:Blockchain+Block">
+                  <Panel Width="50.3" Height="90.55" Classes.flying="{Binding IsFlying}">
+                    <Path Data="M1,10.2 L17.1,1 L49.299,5.6 L49.299,80.348 L33.199,89.548 L1,84.948 Z" Margin="-10,10,10,-10" Fill="Black" Opacity="0.35">
+                      <Path.Effect>
+                        <BlurEffect Radius="8" />
+                      </Path.Effect>
+                    </Path>
+                  </Panel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" Margin="0,0,0,90.55" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -522,12 +538,7 @@
       </Setter>
       <Setter Property="ItemTemplate">
         <DataTemplate x:DataType="models:Blockchain+Block">
-          <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
-            <Path Data="M1,19 L19,1 L55,1 L85,31 L85,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
-              <Path.Effect>
-                <BlurEffect Radius="8" />
-              </Path.Effect>
-            </Path>
+          <Panel Width="50.3" Height="90.55" Classes.flying="{Binding IsFlying}">
             <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
               <Button.Flyout>
                 <Flyout Opening="OpenFlyoutBlock">
@@ -541,7 +552,7 @@
               </Button.Flyout>
             </Button>
             <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
-              <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="7.15,6.274,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <ItemsControl.ItemContainerTheme>
                   <ControlTheme TargetType="ContentPresenter">
                     <Setter Property="Margin" Value="0,-8" />
@@ -554,7 +565,10 @@
                 </ItemsControl.ItemsPanel>
               </ItemsControl>
             </ContentControl>
-            <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+            <Viewbox Width="30" Margin="3.683,13.458,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" RenderTransformOrigin="0,0" IsHitTestVisible="False">
+              <Viewbox.RenderTransform>
+                <MatrixTransform Matrix="0.8944,0.1278,0,0.9583,0,0" />
+              </Viewbox.RenderTransform>
               <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
                 <TextBlock.Effect>
                   <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
