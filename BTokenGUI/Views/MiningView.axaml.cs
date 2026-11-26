@@ -8,6 +8,7 @@ using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
@@ -32,6 +33,8 @@ public partial class MiningView : UserControl
   const double LEAD_PIPE = 6;
   const double BOW_PIPE = 12;
   const double TENSION_PIPE = 0.55;
+  const double DISTANCE_HANG = 48;
+  const double LENGTH_HANG = 40;
 
   static readonly Point ContactPortUpper = new(8, 8);
   static readonly Point ContactPortLower = new(8, 5.6);
@@ -47,25 +50,26 @@ public partial class MiningView : UserControl
 
     Pipes =
     [
-      CreatePipe(ContentBlockchainBitcoin, GridMining, "tank", "portLid"),
-      CreatePipe(ContentBlockchainBitcoin, GridMining, "tankAnchor", "portNozzle"),
-      CreatePipe(ContentBlockchainBToken, PanelTankBToken, "tank", "portLid")
+      CreatePipe(ContentBlockchainBitcoin, GridMining, "tank", "portLid", HorizontalAlignment.Left),
+      CreatePipe(ContentBlockchainBitcoin, GridMining, "tankAnchor", "portNozzle", HorizontalAlignment.Right),
+      CreatePipe(ContentBlockchainBToken, PanelTankBToken, "tank", "portLid", HorizontalAlignment.Left)
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
   }
 
-  FlexPipe CreatePipe(ContentControl chain, Control ownerCones, string classCone, string classPort)
+  FlexPipe CreatePipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang)
   {
+    ControlTheme themePlug = (ControlTheme)this.FindResource("ThemePlug");
     Path outline = new() { Stroke = new SolidColorBrush(Color.Parse("#7D8794")), StrokeThickness = 8 };
     Path core = new() { Stroke = new SolidColorBrush(Color.Parse("#F2F4F7")), StrokeThickness = 6 };
-    TemplatedControl plugTip = new() { Theme = (ControlTheme)this.FindResource("ThemePlug"), RenderTransform = new ScaleTransform(1, -1) };
-    TemplatedControl plugCone = new() { Theme = (ControlTheme)this.FindResource("ThemePlug") };
+    TemplatedControl plugTip = new() { Theme = themePlug };
+    TemplatedControl plugCone = new() { Theme = themePlug };
 
     CanvasPipes.Children.AddRange([outline, core, plugTip]);
     CanvasFront.Children.Add(plugCone);
 
-    return new FlexPipe(chain, ownerCones, classCone, classPort, outline, core, plugTip, plugCone);
+    return new FlexPipe(chain, ownerCones, classCone, classPort, sideHang, outline, core, plugTip, plugCone);
   }
 
   static ContentControl FindCone(Control ownerCones, string classCone)
@@ -282,9 +286,11 @@ public partial class MiningView : UserControl
   {
     public ContentControl Chain;
     public string ClassCone;
+    public double Connection = 1;
 
     Control OwnerCones;
     string ClassPort;
+    double DirectionHang;
 
     Path Outline;
     Path Core;
@@ -295,12 +301,13 @@ public partial class MiningView : UserControl
     Geometry Branch;
 
 
-    public FlexPipe(ContentControl chain, Control ownerCones, string classCone, string classPort, Path outline, Path core, TemplatedControl plugTip, TemplatedControl plugCone)
+    public FlexPipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, Path outline, Path core, TemplatedControl plugTip, TemplatedControl plugCone)
     {
       Chain = chain;
       OwnerCones = ownerCones;
       ClassCone = classCone;
       ClassPort = classPort;
+      DirectionHang = sideHang == HorizontalAlignment.Left ? -1 : 1;
       Outline = outline;
       Core = core;
       PlugTip = plugTip;
@@ -309,10 +316,9 @@ public partial class MiningView : UserControl
 
     public void Place(Visual canvas)
     {
-      Point? contactTip = FindPort(FindTip(Chain), "portBottom")?.TranslatePoint(ContactPortUpper, canvas);
       Point? contactCone = FindPort(FindCone(OwnerCones, ClassCone), ClassPort)?.TranslatePoint(ContactPortLower, canvas);
 
-      bool isPlaced = contactTip != null && contactCone != null;
+      bool isPlaced = contactCone != null;
 
       Outline.IsVisible = isPlaced;
       Core.IsVisible = isPlaced;
@@ -322,7 +328,20 @@ public partial class MiningView : UserControl
       if (!isPlaced)
         return;
 
-      Point start = new(contactTip.Value.X, contactTip.Value.Y + LENGTH_PLUG);
+      Point rest = new(contactCone.Value.X + DirectionHang * DISTANCE_HANG, contactCone.Value.Y + LENGTH_HANG);
+      Point contactPlug = rest;
+      double connection = 0;
+
+      if (Connection > 0 && FindPort(FindTip(Chain), "portBottom")?.TranslatePoint(ContactPortUpper, canvas) is Point contactTip)
+      {
+        connection = Connection * Connection * (3 - 2 * Connection);
+        contactPlug = rest + (contactTip - rest) * connection;
+      }
+
+      double anglePlug = -DirectionHang * 180 * connection;
+      double radiansPlug = anglePlug * Math.PI / 180;
+      Vector directionLead = new(Math.Sin(radiansPlug), -Math.Cos(radiansPlug));
+      Point start = contactPlug + directionLead * LENGTH_PLUG;
       Point end = new(contactCone.Value.X, contactCone.Value.Y - LENGTH_PLUG);
 
       if (start == Start && end == End)
@@ -331,25 +350,21 @@ public partial class MiningView : UserControl
       Start = start;
       End = end;
 
-      Canvas.SetLeft(PlugTip, start.X - WIDTH_PLUG / 2);
-      Canvas.SetTop(PlugTip, start.Y - LENGTH_PLUG);
+      Point centerPlug = contactPlug + directionLead * (LENGTH_PLUG / 2);
+
+      Canvas.SetLeft(PlugTip, centerPlug.X - WIDTH_PLUG / 2);
+      Canvas.SetTop(PlugTip, centerPlug.Y - LENGTH_PLUG / 2);
+      PlugTip.RenderTransform = new RotateTransform(anglePlug);
       Canvas.SetLeft(PlugCone, end.X - WIDTH_PLUG / 2);
       Canvas.SetTop(PlugCone, end.Y);
 
-      Point leadStart = new(start.X, start.Y + LEAD_PIPE);
+      Point leadStart = start + directionLead * LEAD_PIPE;
       Point leadEnd = new(end.X, end.Y - LEAD_PIPE);
-      Point middle = new((leadStart.X + leadEnd.X) / 2 + BOW_PIPE, (leadStart.Y + leadEnd.Y) / 2);
-      double reach = (leadEnd.Y - leadStart.Y) / 2 * TENSION_PIPE;
-      double reachBranch = (leadEnd.Y - leadStart.Y) / 2;
+      double reach = Math.Max(LENGTH_HANG, Math.Abs(leadEnd.Y - leadStart.Y) / 2 * TENSION_PIPE);
+      Point controlStart = leadStart + directionLead * reach + new Vector(DirectionHang * BOW_PIPE, 0);
+      Point controlEnd = new(leadEnd.X + DirectionHang * BOW_PIPE, leadEnd.Y - reach);
 
-      string curve = leadEnd.X == leadStart.X
-        ? FormattableString.Invariant($"""
-          C{leadStart.X},{leadStart.Y + reach} {middle.X},{middle.Y - reach} {middle.X},{middle.Y}
-          C{middle.X},{middle.Y + reach} {leadEnd.X},{leadEnd.Y - reach} {leadEnd.X},{leadEnd.Y}
-          """)
-        : FormattableString.Invariant($"C{leadStart.X},{leadStart.Y + reachBranch} {leadEnd.X},{leadEnd.Y - reachBranch} {leadEnd.X},{leadEnd.Y}");
-
-      Branch = Geometry.Parse(FormattableString.Invariant($"M{start.X},{start.Y} L{leadStart.X},{leadStart.Y} {curve} L{end.X},{end.Y}"));
+      Branch = Geometry.Parse(FormattableString.Invariant($"M{start.X},{start.Y} L{leadStart.X},{leadStart.Y} C{controlStart.X},{controlStart.Y} {controlEnd.X},{controlEnd.Y} {leadEnd.X},{leadEnd.Y} L{end.X},{end.Y}"));
 
       Outline.Data = Branch;
       Core.Data = Branch;
