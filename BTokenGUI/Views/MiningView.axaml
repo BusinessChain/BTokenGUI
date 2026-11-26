@@ -97,6 +97,13 @@
     <StreamGeometry x:Key="GeometryChamber">M2,8 A34,6 0 0 1 70,8 L70,56 A34,6 0 0 1 2,56 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryLidChamber">M2,8 A34,6 0 1 1 70,8 A34,6 0 1 1 2,8 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryWallet">M8,2 L60,2 A6,6 0 0 1 66,8 L66,44 A6,6 0 0 1 60,50 L8,50 A6,6 0 0 1 2,44 L2,8 A6,6 0 0 1 8,2 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryLogoBitcoin">m241.91 70.689c0.637-4.258-2.605-6.547-7.038-8.074l1.438-5.768-3.511-0.875-1.4 5.616c-0.923-0.23-1.871-0.447-2.813-0.662l1.41-5.653-3.509-0.875-1.439 5.766c-0.764-0.174-1.514-0.346-2.242-0.527l0.004-0.018-4.842-1.209-0.934 3.75c0 0 2.605 0.597 2.55 0.634 1.422 0.355 1.679 1.296 1.636 2.042l-1.638 6.571c0.098 0.025 0.225 0.061 0.365 0.117-0.117-0.029-0.242-0.061-0.371-0.092l-2.296 9.205c-0.174 0.432-0.615 1.08-1.609 0.834 0.035 0.051-2.552-0.637-2.552-0.637l-1.743 4.019 4.569 1.139c0.85 0.213 1.683 0.436 2.503 0.646l-1.453 5.834 3.507 0.875 1.439-5.772c0.958 0.26 1.888 0.5 2.798 0.726l-1.434 5.745 3.511 0.875 1.453-5.823c5.987 1.133 10.489 0.676 12.384-4.739 1.527-4.36-0.076-6.875-3.226-8.515 2.294-0.529 4.022-2.038 4.483-5.155zm-8.022 11.249c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38 0.594 10.012 1.77 8.878 6.317zm1.086-11.312c-0.99 3.966-7.1 1.951-9.082 1.457l1.748-7.01c1.982 0.494 8.365 1.416 7.334 5.553z</StreamGeometry>
+    <SolidColorBrush x:Key="BrushBitcoin" Color="#F7931A" />
+    <LinearGradientBrush x:Key="BrushCopper" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Offset="0" Color="#5A2A12" />
+      <GradientStop Offset="0.7" Color="#F4B183" />
+      <GradientStop Offset="1" Color="#B5652F" />
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="BrushFadeTube" StartPoint="56,0" EndPoint="104,0">
       <GradientStop Offset="0" Color="Black" />
       <GradientStop Offset="1" Color="Transparent" />
@@ -284,6 +291,25 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
+    <ControlTheme x:Key="ThemeClamp" TargetType="TemplatedControl">
+      <Setter Property="Width" Value="3" />
+      <Setter Property="Height" Value="25.4" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="IsHitTestVisible" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Path Data="M0,0 H3 V4 H0 Z M0,4.5 H3 V21.9 H0 Z M0,21.9 H3 V25.4 H0 Z" Fill="{StaticResource BrushMetal}" Stroke="#1E232B" StrokeThickness="0.25" StrokeJoin="Round" />
+            <Path Data="M0,4 H3 V4.5 H0 Z" Fill="{StaticResource BrushMetalTop}" />
+            <Path Data="M0,4.25 H3" Stroke="#1E232B" StrokeThickness="0.1" />
+            <Path Data="M0.3,2 A1.2,1.16 0 1 1 2.7,2 A1.2,1.16 0 1 1 0.3,2 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1A1E25" StrokeThickness="0.2" />
+            <Path Data="M0.3,23.4 A1.2,1.16 0 1 1 2.7,23.4 A1.2,1.16 0 1 1 0.3,23.4 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1A1E25" StrokeThickness="0.2" />
+            <Path Data="M0.7,2 H2.3 M0.7,23.4 H2.3" Stroke="#1A1E25" StrokeThickness="0.35" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
     <ControlTheme x:Key="ThemeCube" TargetType="ContentControl">
       <Setter Property="Width" Value="56" />
       <Setter Property="Height" Value="98" />
@@ -291,27 +317,40 @@
         <ControlTemplate>
           <Panel>
             <Border Width="36" Height="78" Margin="19,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource BrushWindowBackground}" IsHitTestVisible="False">
-              <Border Background="{TemplateBinding BorderBrush}" Opacity="0.36" />
+              <Border Background="{TemplateBinding BorderBrush}" Opacity="0.27" />
             </Border>
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L19,79 L1,97 Z M1,97 L19,79 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
-              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.5" />
+              <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.45" />
+              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.62" />
               <Path Data="M19,1 L19,79 L55,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
             </Panel>
             <TemplatedControl Classes="portBottom" Theme="{StaticResource ThemeReceptacle}" Margin="20,78,0,0" />
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.68" />
-              <Path Data="M1,19 L37,19 L37,97 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.36" />
+              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.77" />
+              <Path Data="M1,19 L37,19 L37,97 L1,97 Z" Fill="{StaticResource BrushGlass}" />
+              <Path Data="F0 M1,19 H37 V97 H1 Z M5,23 H33 V93 H5 Z" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="F0 M1,19 H37 V97 H1 Z M5,23 H33 V93 H5 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.33" />
+              <Path Data="M5,23 H33 V93 H5 Z" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.8" />
+              <Path Data="M2.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0" Fill="{TemplateBinding BorderBrush}" Stroke="#1E232B" StrokeThickness="0.3" />
               <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.2" />
+              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.55" />
+              <Panel Classes="logo" IsVisible="False" Clip="M37,19 H73 V97 H37 Z" RenderTransformOrigin="0,0">
+                <Panel.RenderTransform>
+                  <MatrixTransform Matrix="0.5,-0.5,0,1,18.5,18.5" />
+                </Panel.RenderTransform>
+                <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
+              </Panel>
               <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z M1,19 L37,19 L55,1 M37,19 L37,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
             </Panel>
           </Panel>
         </ControlTemplate>
       </Setter>
+      <Style Selector="^.bitcoin /template/ Panel.logo">
+        <Setter Property="IsVisible" Value="True" />
+      </Style>
     </ControlTheme>
     <ControlTheme x:Key="ThemeChip" TargetType="ContentControl">
       <Setter Property="Width" Value="32" />
@@ -490,14 +529,8 @@
         <Panel.RenderTransform>
           <ScaleTransform />
         </Panel.RenderTransform>
-        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="#FF8A1F" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <ContentControl.Background>
-            <RadialGradientBrush>
-              <GradientStop Offset="0" Color="#FFD27A" />
-              <GradientStop Offset="1" Color="#FF6A00" />
-            </RadialGradientBrush>
-          </ContentControl.Background>
-          <Path Width="6.5" Height="8" Stretch="Uniform" Data="M3,2 V10 M3,2 H6 A2,2 0 0 1 6,6 H3 M6,6 A2.2,2 0 0 1 6,10 H2 M2,2 H3 M4,0.8 V2 M6,0.8 V2 M4,10 V11.2 M6,10 V11.2" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
+        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{StaticResource BrushBitcoin}" Background="{StaticResource BrushBitcoin}" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Path Data="{StaticResource GeometryLogoBitcoin}" Width="6.8" Height="9" Stretch="Uniform" Fill="White" />
         </ContentControl>
         <Path Classes="flash" Data="M10,10 L22,10 L22,22 L10,22 Z" Fill="White" Opacity="0">
           <Path.Effect>
@@ -549,7 +582,7 @@
                 </Flyout>
               </Button.Flyout>
             </Button>
-            <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
+            <ContentControl Theme="{StaticResource ThemeCube}" Classes.bitcoin="{Binding BrushPair, Converter={x:Static ObjectConverters.IsNull}}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource BrushBitcoin}}">
               <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <ItemsControl.ItemContainerTheme>
                   <ControlTheme TargetType="ContentPresenter">
@@ -563,7 +596,7 @@
                 </ItemsControl.ItemsPanel>
               </ItemsControl>
             </ContentControl>
-            <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+            <Viewbox Width="26" Margin="6,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
               <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
                 <TextBlock.Effect>
                   <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
@@ -614,6 +647,30 @@
                     <ItemsControl Classes="heap" ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Clip="M42.138,50.765 A34,8.5 0 1 1 109.862,50.765 L91.935,100.36 A16,4 0 0 1 60.065,100.36 Z" />
                   </Panel>
                 </ContentControl>
+                <Panel Width="170" Margin="0,48,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" ClipToBounds="False" IsHitTestVisible="False">
+                  <Panel.Styles>
+                    <Style Selector="Path.copper">
+                      <Setter Property="Fill" Value="{StaticResource BrushCopper}" />
+                      <Setter Property="Stroke" Value="#3B1A08" />
+                      <Setter Property="StrokeThickness" Value="0.25" />
+                      <Setter Property="StrokeJoin" Value="Round" />
+                    </Style>
+                    <Style Selector="Path.shine">
+                      <Setter Property="Stroke" Value="#FFD9BC" />
+                      <Setter Property="StrokeThickness" Value="0.25" />
+                    </Style>
+                  </Panel.Styles>
+                  <Path Classes="copper" Data="M62,-30.325 L62,-34.825 A17.5,4.375 0 0 1 79.5,-39.2 L142,-39.2 L142,-21.55 L79.5,-21.55 A16.5,4.125 0 0 0 63,-17.425 L63,-30.325 Z" />
+                  <Path Classes="shine" Data="M79.5,-39.075 H142" />
+                  <Path Classes="copper" Data="M63,-30.325 L63,-34.825 A16.5,4.125 0 0 1 79.5,-38.95 L142,-38.95 L142,-21.3 L79.5,-21.3 A15.5,3.875 0 0 0 64,-17.425 L64,-30.325 Z" />
+                  <Path Classes="shine" Data="M79.5,-38.825 H142" />
+                  <TemplatedControl Theme="{StaticResource ThemeClamp}" Margin="90.5,-43.2,0,0" />
+                  <TemplatedControl Theme="{StaticResource ThemeClamp}" Margin="110.5,-43.2,0,0" />
+                  <TemplatedControl Theme="{StaticResource ThemeClamp}" Margin="130.5,-43.2,0,0" />
+                  <Path Classes="copper" Data="M11,-6.47 L11,-9.617 A20,19.333 0 0 1 31,-28.95 L56.5,-28.95 A5.5,1.375 0 0 0 62,-30.325 L63,-30.325 L63,-12.925 A6.5,1.625 0 0 1 56.5,-11.3 L31,-11.3 A2,1.933 0 0 0 29,-9.367 L29,-6.47 Z" />
+                  <Path Classes="copper" Data="M115,-8.39 L115,-9.617 A20,19.333 0 0 0 95,-28.95 L69.5,-28.95 A5.5,1.375 0 0 1 64,-30.325 L63,-30.325 L63,-12.925 A6.5,1.625 0 0 0 69.5,-11.3 L95,-11.3 A2,1.933 0 0 1 97,-9.367 L97,-8.39 Z" />
+                  <Path Classes="shine" Data="M31,-28.825 H56.5 M69.5,-28.825 H95" />
+                </Panel>
                 <Canvas Width="0" Height="0" Margin="0,48,59,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" StrokeJoin="Round" />
                   <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushWindowBackground}" StrokeThickness="5" StrokeJoin="Round" />
