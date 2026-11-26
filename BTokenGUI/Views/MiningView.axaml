@@ -141,6 +141,62 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
+    <ControlTheme x:Key="ThemeReceptacleBusbar" TargetType="TemplatedControl">
+      <Setter Property="Width" Value="25" />
+      <Setter Property="Height" Value="8" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="IsHitTestVisible" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Path Data="M1,1.85 L23,1.85 L23.85,1 L23.85,6 L23,6.85 L1,6.85 Z">
+              <Path.Fill>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                  <GradientStop Offset="0" Color="#2A303A" />
+                  <GradientStop Offset="0.3" Color="#C9D1DC" />
+                  <GradientStop Offset="0.65" Color="#6B7686" />
+                  <GradientStop Offset="1" Color="#1E232B" />
+                </LinearGradientBrush>
+              </Path.Fill>
+            </Path>
+            <Path Data="M1,1.85 L1.85,1 L23.85,1 L23,1.85 Z">
+              <Path.Fill>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                  <GradientStop Offset="0" Color="#E6ECF3" />
+                  <GradientStop Offset="1" Color="#6E7888" />
+                </LinearGradientBrush>
+              </Path.Fill>
+            </Path>
+            <Path Data="M1,1.85 H23 L23.85,1 M23,1.85 V6.85" Stroke="#1E232B" StrokeThickness="0.6" Opacity="0.6" />
+            <Path Data="M3.175,1.675 L21.175,1.675 L21.675,1.175 L3.675,1.175 Z" Fill="#05070A" />
+            <Path Data="M1.3,1.55 L1.85,1 H7" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" StrokeJoin="Round" Opacity="0.7" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="ThemeReceptacleFlush" TargetType="TemplatedControl">
+      <Setter Property="Width" Value="24" />
+      <Setter Property="Height" Value="3" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+      <Setter Property="IsHitTestVisible" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Path Data="M1,2.555 A34,14 0 0 1 23,2.555 L23,2.952 A34,14 0 0 0 1,2.952 Z">
+              <Path.Fill>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                  <GradientStop Offset="0" Color="#E6ECF3" />
+                  <GradientStop Offset="1" Color="#6E7888" />
+                </LinearGradientBrush>
+              </Path.Fill>
+            </Path>
+            <Path Data="M3,2.352 A34,14 0 0 1 21,2.352 L21,2.646 A34,14 0 0 0 3,2.646 Z" Fill="#05070A" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
     <ControlTheme x:Key="ThemeReceptacleDown" TargetType="TemplatedControl">
       <Setter Property="Width" Value="16" />
       <Setter Property="Height" Value="12" />
@@ -306,9 +362,7 @@
             <Panel IsHitTestVisible="False">
               <Path Data="{StaticResource GeometryCap}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" />
               <Path Data="{StaticResource GeometryCap}" Fill="{StaticResource BrushGlass}" />
-              <Path Data="M11,1 A26,9 0 0 1 30,-3" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
-              <Path Data="M2,10 A34,14 0 0 1 70,10" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
-              <TemplatedControl Classes="portLid" Theme="{StaticResource ThemeReceptacle}" Margin="28,-14,0,0" />
+              <TemplatedControl Classes="portLid" Theme="{StaticResource ThemeReceptacleFlush}" Margin="24,-5,0,0" />
             </Panel>
             <Panel IsHitTestVisible="False">
               <Path Data="M2,10 A34,5 0 0 0 70,10 L40.5,60 L31.5,60 Z" Fill="{StaticResource BrushGlass}" />
@@ -354,7 +408,7 @@
               <Path Data="M2,45 L31.5,-5 M70,45 L40.5,-5" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="2" StrokeLineCap="Round" />
               <Path Data="M2,45 A34,5 0 0 0 70,45" Stroke="{DynamicResource SystemControlHighlightAccentBrush}" StrokeThickness="3" StrokeLineCap="Round" />
               <Path Data="M64.4,47.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,49.3 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,50 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,49.3 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,47.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="White" Opacity="0.7" />
-              <TemplatedControl Classes="portNozzle" Theme="{StaticResource ThemeReceptacle}" Margin="28,-14,0,0" />
+              <TemplatedControl Classes="portNozzle" Theme="{StaticResource ThemeReceptacleBusbar}" Margin="23.575,-11.425,0,0" />
             </Panel>
           </Panel>
         </ControlTemplate>
