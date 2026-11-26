@@ -306,10 +306,22 @@
               <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.62" />
               <Path Data="M19,1 L19,79 L55,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
             </Panel>
-            <Panel Classes="slots" IsVisible="False" IsHitTestVisible="False">
+            <Canvas Classes="slots" IsVisible="False" IsHitTestVisible="False" Clip="M0,0 L134,0 L37,97 L0,97 Z">
               <Path Data="M17,89 L21.5,84.5 L49.5,84.5 L45,89 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.3" StrokeJoin="Round" />
-              <Path Data="M22.6,85.5 L48.5,85.5 L47.5,86.5 L22.6,86.5 Z M22.6,87 L47,87 L46,88 L22.6,88 Z" Fill="#05070A" />
-            </Panel>
+              <Path Data="M22.6,85.5 H50 V86.5 H22.6 Z M22.6,87 H50 V88 H22.6 Z" Fill="#2A303A" />
+              <Path Data="M22.6,86.2 H50 M22.6,87.7 H50" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" />
+              <Path Data="M22.6,85.8 H50 M22.6,87.3 H50" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" StrokeDashOffset="0.667" />
+              <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                <Path Data="M33.4,85.5 H80 V86.5 H33.4 Z M33.4,87 H80 V88 H33.4 Z" Fill="#05070A" />
+                <Path Data="M20.6,85.3 H22.6 V86.7 H20.6 Z M20.6,86.8 H22.6 V88.2 H20.6 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.2" StrokeJoin="Round" />
+                <Path Classes="aluminum" Data="M22.6,86.5 V82.5 H33.4 V86.5 Z" />
+                <Path Classes="top" Data="M22.6,82.5 H33.4 V83.5 H22.6 Z" />
+                <Path Data="M23.4,82.75 H32.6 V83.25 H23.4 Z" Fill="#05070A" />
+                <Path Classes="aluminum" Data="M22.6,88 V84 H33.4 V88 Z" />
+                <Path Classes="top" Data="M22.6,84 H33.4 V85 H22.6 Z" />
+                <Path Data="M23.4,84.25 H32.6 V84.75 H23.4 Z" Fill="#05070A" />
+              </Panel>
+            </Canvas>
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
@@ -606,6 +618,21 @@
     <DockPanel>
       <ScrollViewer VerticalScrollBarVisibility="Hidden" IsVisible="{Binding BlockchainBToken.IsPlaced}">
         <Panel>
+          <Panel.Styles>
+            <Style Selector="Path.aluminum">
+              <Setter Property="Fill" Value="{StaticResource BrushAluminum}" />
+              <Setter Property="Stroke" Value="#3A3F46" />
+              <Setter Property="StrokeThickness" Value="0.25" />
+              <Setter Property="StrokeJoin" Value="Round" />
+            </Style>
+            <Style Selector="Path.top">
+              <Setter Property="Fill" Value="#66FFFFFF" />
+            </Style>
+            <Style Selector="Path.shine">
+              <Setter Property="Stroke" Value="White" />
+              <Setter Property="StrokeThickness" Value="0.3" />
+            </Style>
+          </Panel.Styles>
           <Panel.DataTemplates>
             <DataTemplate DataType="models:Blockchain+Anchor">
               <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateAnchor}" />
@@ -615,13 +642,7 @@
             </DataTemplate>
           </Panel.DataTemplates>
           <StackPanel Margin="20,0">
-            <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,58,0,10">
-              <ItemsControl.Styles>
-                <Style Selector="ItemsControl#ItemsBlocksBitcoin /template/ ItemsPresenter#PART_ItemsPresenter">
-                  <Setter Property="Opacity" Value="0" />
-                </Style>
-              </ItemsControl.Styles>
-            </ItemsControl>
+            <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,58,0,10" />
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
               <Panel DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBitcoin}" x:DataType="models:Blockchain">
                 <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -642,22 +663,6 @@
                   </Panel>
                 </ContentControl>
                 <Panel Width="170" Margin="0,48,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" ClipToBounds="False" IsHitTestVisible="False">
-                  <Panel.Styles>
-                    <Style Selector="Path.aluminum">
-                      <Setter Property="Fill" Value="{StaticResource BrushAluminum}" />
-                      <Setter Property="Stroke" Value="#3A3F46" />
-                      <Setter Property="StrokeThickness" Value="0.25" />
-                      <Setter Property="StrokeJoin" Value="Round" />
-                    </Style>
-                    <Style Selector="Path.top">
-                      <Setter Property="Fill" Value="White" />
-                      <Setter Property="Opacity" Value="0.4" />
-                    </Style>
-                    <Style Selector="Path.shine">
-                      <Setter Property="Stroke" Value="White" />
-                      <Setter Property="StrokeThickness" Value="0.3" />
-                    </Style>
-                  </Panel.Styles>
                   <Path Classes="aluminum" Data="M58,-23.75 L58,-27.75 A24,6 0 0 1 82,-33.75 L134.6,-33.75 A2,1.94 0 0 0 136.6,-35.69 L136.6,-73.5 L147.4,-73.5 L147.4,-34.69 A12.8,12.39 0 0 1 134.6,-22.3 L82,-22.3 A20,5 0 0 0 62,-17.3 L62,-23.75 Z" />
                   <Path Classes="top" Data="M58,-27.75 A24,6 0 0 1 82,-33.75 L134.6,-33.75 A2,1.94 0 0 0 136.6,-35.69 L136.6,-34.69 A2,1.94 0 0 1 134.6,-32.75 L82,-32.75 A20,5 0 0 0 62,-27.75 Z M136.6,-73.5 H147.4 V-72.5 H136.6 Z" />
                   <Path Classes="shine" Data="M82,-32.75 H134.6" />
@@ -670,16 +675,6 @@
                   <Path Classes="aluminum" Data="M68,-27.75 L68,-23.75 A4,1 0 0 0 72,-22.75 L98.6,-22.75 A12.8,12.39 0 0 1 111.4,-10.36 L111.4,-7.89 L100.6,-7.89 L100.6,-9.36 A2,1.94 0 0 0 98.6,-11.3 L72,-11.3 A8,2 0 0 1 64,-13.3 L64,-27.75" />
                   <Path Classes="top" Data="M64,-27.75 L68,-27.75 L68,-23.75 A4,1 0 0 0 72,-22.75 L98.6,-22.75 A12.8,12.39 0 0 1 111.4,-10.36 L111.4,-9.36 A12.8,12.39 0 0 0 98.6,-21.75 L72,-21.75 A8,2 0 0 1 64,-23.75 Z" />
                   <Path Classes="shine" Data="M27.4,-21.75 H54 M72,-21.75 H98.6" />
-                  <ContentControl Theme="{StaticResource ThemeCube}" Classes="bitcoin" BorderBrush="{StaticResource BrushBitcoin}" Margin="114,-156,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Panel>
-                      <Path Classes="aluminum" Data="M22.6,86.5 V82.5 H33.4 V86.5 Z" />
-                      <Path Classes="top" Data="M22.6,82.5 H33.4 V83.5 H22.6 Z" />
-                      <Path Data="M23.4,82.75 H32.6 V83.25 H23.4 Z" Fill="#05070A" />
-                      <Path Classes="aluminum" Data="M22.6,88 V84 H33.4 V88 Z" />
-                      <Path Classes="top" Data="M22.6,84 H33.4 V85 H22.6 Z" />
-                      <Path Data="M23.4,84.25 H32.6 V84.75 H23.4 Z" Fill="#05070A" />
-                    </Panel>
-                  </ContentControl>
                 </Panel>
                 <Canvas Width="0" Height="0" Margin="0,48,59,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" StrokeJoin="Round" />

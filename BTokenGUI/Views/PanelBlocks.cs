@@ -14,6 +14,8 @@ public class PanelBlocks : Panel
   const double GAP_MIN_BLOCKS = 5;
   const int MILLISECONDS_COMPRESSION = 250;
 
+  public static readonly AttachedProperty<double> DistanceArrivalProperty = AvaloniaProperty.RegisterAttached<PanelBlocks, Control, double>("DistanceArrival", inherits: true);
+
   DispatcherTimer TimerCompression = new() { Interval = TimeSpan.FromMilliseconds(MILLISECONDS_COMPRESSION) };
 
 
@@ -49,7 +51,10 @@ public class PanelBlocks : Panel
     double[] positions = GetPositions(finalSize.Width);
 
     for (int i = 0; i < Children.Count; i++)
+    {
+      Children[i].SetValue(DistanceArrivalProperty, GetPositionCenter(0, finalSize.Width) - Children[i].DesiredSize.Width / 2 - positions[i]);
       Children[i].Arrange(new Rect(positions[i], 0, Children[i].DesiredSize.Width, finalSize.Height));
+    }
 
     return finalSize;
   }
