@@ -79,9 +79,9 @@ public partial class MainViewModel : ObservableObject
 
         await Wallet.UpdateBalance().ConfigureAwait(false);
 
-        JsonElement headerTipBToken = blockchainsJSON.GetProperty("BToken").GetProperty("headers")[0];
+        JsonElement tipBToken = blockchainsJSON.GetProperty("BToken").GetProperty("tip");
 
-        await Wallet.ProcessTip(headerTipBToken.GetProperty("hash").GetString(), headerTipBToken.GetProperty("height").GetInt32()).ConfigureAwait(false);
+        await Wallet.ProcessTip(tipBToken.GetProperty("hash").GetString(), tipBToken.GetProperty("height").GetInt32()).ConfigureAwait(false);
       }
       catch (Exception exception)
       {
