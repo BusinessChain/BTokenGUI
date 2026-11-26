@@ -463,6 +463,7 @@
     </DataTemplate>
     <ControlTheme x:Key="ThemeBlockchain" TargetType="ItemsControl">
       <Setter Property="ClipToBounds" Value="False" />
+      <Setter Property="Height" Value="98" />
       <Setter Property="Template">
         <ControlTemplate TargetType="ItemsControl">
           <Panel>
@@ -479,7 +480,7 @@
       <Setter Property="ItemTemplate">
         <DataTemplate x:DataType="models:Blockchain+Block">
           <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
-            <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+            <Path Data="M1,19 L19,1 L55,1 L85,31 L85,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
               <Path.Effect>
                 <BlurEffect Radius="8" />
               </Path.Effect>

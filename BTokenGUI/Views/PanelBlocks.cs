@@ -38,16 +38,10 @@ public class PanelBlocks : Panel
 
   protected override Size MeasureOverride(Size availableSize)
   {
-    double height = 0;
-
     foreach (Control child in Children)
-    {
       child.Measure(Size.Infinity);
 
-      height = Math.Max(height, child.DesiredSize.Height);
-    }
-
-    return new Size(0, height);
+    return new Size();
   }
 
   protected override Size ArrangeOverride(Size finalSize)
