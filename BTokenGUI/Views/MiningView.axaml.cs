@@ -55,54 +55,15 @@ public partial class MiningView : UserControl
 
     Pipes =
     [
-      CreatePipe(ContentBlockchainBitcoin, GridMining, "tank", "portLid", HorizontalAlignment.Left, semaphoreTipBitcoin),
-      CreatePipe(ContentBlockchainBitcoin, GridMining, "tankAnchor", "portNozzle", HorizontalAlignment.Right, semaphoreTipBitcoin),
-      CreatePipe(ContentBlockchainBToken, PanelTankBToken, "tank", "portLid", HorizontalAlignment.Left, new SemaphoreSlim(1))
+      CreatePipe(ItemsBlocksBitcoin, GridMining, "tank", "portLid", HorizontalAlignment.Left, semaphoreTipBitcoin),
+      CreatePipe(ItemsBlocksBitcoin, GridMining, "tankAnchor", "portNozzle", HorizontalAlignment.Right, semaphoreTipBitcoin),
+      CreatePipe(ItemsBlocksBToken, PanelTankBToken, "tank", "portLid", HorizontalAlignment.Left, new SemaphoreSlim(1))
     ];
 
     LayoutUpdated += (_, _) => PlacePipes();
-    LayoutUpdated += (_, _) => DrawOutlinesDebug();
   }
 
-  static readonly string[] ColorsOutlineDebug = ["#FF0000", "#FF8C00", "#FFFF00", "#00FF00", "#00FFFF", "#3399FF", "#FF00FF", "#FFFFFF"];
-  List<(Rectangle Outline, TextBlock Label)> OutlinesDebug = [];
-
-  void DrawOutlinesDebug()
-  {
-    List<Visual> containers = this.GetVisualDescendants().OfType<PanelBlocks>()
-      .SelectMany(panel => panel.GetSelfAndVisualAncestors().TakeWhile(visual => visual is not ScrollViewer).Append(panel.FindAncestorOfType<ScrollViewer>()).Reverse())
-      .Distinct()
-      .ToList();
-
-    while (OutlinesDebug.Count < containers.Count)
-    {
-      string color = ColorsOutlineDebug[OutlinesDebug.Count % ColorsOutlineDebug.Length];
-      Rectangle outline = new() { Stroke = new SolidColorBrush(Color.Parse(color)), StrokeThickness = 1, StrokeDashArray = [4, 2] };
-      TextBlock label = new() { Foreground = new SolidColorBrush(Color.Parse(color)), FontSize = 9 };
-
-      CanvasFront.Children.AddRange([outline, label]);
-      OutlinesDebug.Add((outline, label));
-    }
-
-    for (int i = 0; i < containers.Count; i++)
-    {
-      if (containers[i].TranslatePoint(new Point(), CanvasFront) is not Point origin)
-        continue;
-
-      (Rectangle outline, TextBlock label) = OutlinesDebug[i];
-
-      Canvas.SetLeft(outline, origin.X);
-      Canvas.SetTop(outline, origin.Y);
-      outline.Width = containers[i].Bounds.Width;
-      outline.Height = containers[i].Bounds.Height;
-
-      Canvas.SetLeft(label, origin.X + 2);
-      Canvas.SetTop(label, origin.Y + 2 + 10 * (i % 4));
-      label.Text = FormattableString.Invariant($"{i} {containers[i].GetType().Name} x={origin.X:0} w={containers[i].Bounds.Width:0} clip={containers[i].ClipToBounds}");
-    }
-  }
-
-  FlexPipe CreatePipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip)
+  FlexPipe CreatePipe(ItemsControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip)
   {
     ControlTheme themePlug = (ControlTheme)this.FindResource("ThemePlug");
     Path outline = new() { Stroke = new SolidColorBrush(Color.Parse("#7D8794")), StrokeThickness = 8 };
@@ -119,13 +80,6 @@ public partial class MiningView : UserControl
   static ContentControl FindCone(Control ownerCones, string classCone)
   {
     return ownerCones.GetVisualDescendants().OfType<ContentControl>().FirstOrDefault(control => control.Classes.Contains(classCone));
-  }
-
-  static Control FindTip(ContentControl chain)
-  {
-    ItemsControl itemsBlocks = chain.GetVisualDescendants().OfType<ItemsControl>().FirstOrDefault(control => control.Classes.Contains("blocks"));
-
-    return itemsBlocks?.ContainerFromIndex(itemsBlocks.ItemCount - 1);
   }
 
   static Control FindPort(Control owner, string classPort)
@@ -200,7 +154,7 @@ public partial class MiningView : UserControl
     bool isOutflow = good.Origin == null;
     Control controlPlace = FindControl(good);
     bool isInflow = controlPlace == null && good is Blockchain.Chip;
-    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin) ?? ContentBlockchainBitcoin;
+    Control controlOrigin = isOutflow ? PanelConverter : FindControl(good.Origin) ?? ItemsBlocksBitcoin;
 
     if (FindCenter(controlOrigin, ItemsFlights) is Point pointOrigin)
     {
@@ -315,7 +269,7 @@ public partial class MiningView : UserControl
     if (!isChipLeavingTip && !isAnchorEnteringTip)
       return null;
 
-    return Pipes.First(pipe => pipe.Chain.Content == blockchain && pipe.ClassCone == (isChipLeavingTip ? "tank" : "tankAnchor"));
+    return Pipes.First(pipe => pipe.Chain.DataContext == blockchain && pipe.ClassCone == (isChipLeavingTip ? "tank" : "tankAnchor"));
   }
 
   Path FindPath(string classPath, Blockchain blockchain)
@@ -387,7 +341,7 @@ public partial class MiningView : UserControl
 
   class FlexPipe
   {
-    public ContentControl Chain;
+    public ItemsControl Chain;
     public string ClassCone;
     public SemaphoreSlim SemaphoreTip;
     public double Connection;
@@ -407,7 +361,7 @@ public partial class MiningView : UserControl
     Geometry Branch;
 
 
-    public FlexPipe(ContentControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip, Path outline, Path core, TemplatedControl plugTip, TemplatedControl plugCone)
+    public FlexPipe(ItemsControl chain, Control ownerCones, string classCone, string classPort, HorizontalAlignment sideHang, SemaphoreSlim semaphoreTip, Path outline, Path core, TemplatedControl plugTip, TemplatedControl plugCone)
     {
       Chain = chain;
       OwnerCones = ownerCones;
@@ -439,7 +393,7 @@ public partial class MiningView : UserControl
       Point contactPlug = rest;
       double connection = 0;
 
-      if (Connection > 0 && FindPort(FindTip(Chain), "portBottom")?.TranslatePoint(ContactPortUpper, canvas) is Point contactTip)
+      if (Connection > 0 && FindPort(Chain.ContainerFromIndex(Chain.ItemCount - 1), "portBottom")?.TranslatePoint(ContactPortUpper, canvas) is Point contactTip)
       {
         connection = Connection * Connection * (3 - 2 * Connection);
         contactPlug = rest + (contactTip - rest) * connection;

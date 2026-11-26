@@ -37,12 +37,6 @@
     <Style Selector="ItemsControl.flights :is(Control).flying">
       <Setter Property="Opacity" Value="1" />
     </Style>
-    <Style Selector="ContentControl.blockchain">
-      <Setter Property="ClipToBounds" Value="False" />
-    </Style>
-    <Style Selector="ItemsControl.blocks">
-      <Setter Property="ClipToBounds" Value="False" />
-    </Style>
     <Style Selector="Panel.glowing > Path.glow">
       <Style.Animations>
         <Animation Duration="0:0:1" IterationCount="Infinite" PlaybackDirection="Alternate">
@@ -467,67 +461,66 @@
         </ContentControl>
       </Panel>
     </DataTemplate>
-    <DataTemplate x:Key="TemplateBlockchain" x:DataType="models:Blockchain">
-      <ItemsControl Classes="blocks" Margin="-120,10,0,10" ItemsSource="{Binding Blocks}">
-        <ItemsControl.Template>
-          <ControlTemplate TargetType="ItemsControl">
-            <Panel>
-              <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
-              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
-            </Panel>
-          </ControlTemplate>
-        </ItemsControl.Template>
-        <ItemsControl.ItemsPanel>
-          <ItemsPanelTemplate>
-            <views:PanelBlocks />
-          </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-          <DataTemplate x:DataType="models:Blockchain+Block">
-            <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
-              <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
-                <Path.Effect>
-                  <BlurEffect Radius="8" />
-                </Path.Effect>
-              </Path>
-              <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Button.Flyout>
-                  <Flyout Opening="OpenFlyoutBlock">
-                    <ScrollViewer MaxHeight="600">
-                      <StackPanel Spacing="12" MaxWidth="420">
-                        <SelectableTextBlock Text="Block" FontWeight="Bold" />
-                        <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
-                      </StackPanel>
-                    </ScrollViewer>
-                  </Flyout>
-                </Button.Flyout>
-              </Button>
-              <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
-                <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                  <ItemsControl.ItemContainerTheme>
-                    <ControlTheme TargetType="ContentPresenter">
-                      <Setter Property="Margin" Value="0,-8" />
-                    </ControlTheme>
-                  </ItemsControl.ItemContainerTheme>
-                  <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </ItemsPanelTemplate>
-                  </ItemsControl.ItemsPanel>
-                </ItemsControl>
-              </ContentControl>
-              <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
-                <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
-                  <TextBlock.Effect>
-                    <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
-                  </TextBlock.Effect>
-                </TextBlock>
-              </Viewbox>
-            </Panel>
-          </DataTemplate>
-        </ItemsControl.ItemTemplate>
-      </ItemsControl>
-    </DataTemplate>
+    <ControlTheme x:Key="ThemeBlockchain" TargetType="ItemsControl">
+      <Setter Property="ClipToBounds" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate TargetType="ItemsControl">
+          <Panel>
+            <TemplatedControl Theme="{StaticResource ThemeRail}" BorderThickness="1" />
+            <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <views:PanelBlocks />
+        </ItemsPanelTemplate>
+      </Setter>
+      <Setter Property="ItemTemplate">
+        <DataTemplate x:DataType="models:Blockchain+Block">
+          <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
+            <Path Data="M1,19 L19,1 L55,1 L85,31 L85,109 L67,127 L31,127 L1,97 Z" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+              <Path.Effect>
+                <BlurEffect Radius="8" />
+              </Path.Effect>
+            </Path>
+            <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+              <Button.Flyout>
+                <Flyout Opening="OpenFlyoutBlock">
+                  <ScrollViewer MaxHeight="600">
+                    <StackPanel Spacing="12" MaxWidth="420">
+                      <SelectableTextBlock Text="Block" FontWeight="Bold" />
+                      <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
+                    </StackPanel>
+                  </ScrollViewer>
+                </Flyout>
+              </Button.Flyout>
+            </Button>
+            <ContentControl Theme="{StaticResource ThemeCube}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource SystemControlHighlightAccentBrush}}">
+              <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <ItemsControl.ItemContainerTheme>
+                  <ControlTheme TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="0,-8" />
+                  </ControlTheme>
+                </ItemsControl.ItemContainerTheme>
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
+            </ContentControl>
+            <Viewbox Width="30" Margin="4,22,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+              <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
+                <TextBlock.Effect>
+                  <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
+                </TextBlock.Effect>
+              </TextBlock>
+            </Viewbox>
+          </Panel>
+        </DataTemplate>
+      </Setter>
+    </ControlTheme>
   </UserControl.Resources>
   <Border Classes="Panel">
     <Border.Background>
@@ -549,7 +542,7 @@
           </Panel.DataTemplates>
           <Canvas x:Name="CanvasPipes" IsHitTestVisible="False" />
           <StackPanel Margin="20,0">
-            <ContentControl x:Name="ContentBlockchainBitcoin" Classes="blockchain" Content="{Binding BlockchainBitcoin}" ContentTemplate="{StaticResource TemplateBlockchain}" Margin="0,48,0,0" />
+            <ItemsControl x:Name="ItemsBlocksBitcoin" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,58,0,10" />
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
               <Panel DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBitcoin}" x:DataType="models:Blockchain">
                 <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -651,7 +644,7 @@
                 </Panel>
               </Panel>
             </Grid>
-            <ContentControl x:Name="ContentBlockchainBToken" Classes="blockchain" Content="{Binding BlockchainBToken}" ContentTemplate="{StaticResource TemplateBlockchain}" />
+            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-120,10,0,10" />
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
               <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
                 <Canvas>
