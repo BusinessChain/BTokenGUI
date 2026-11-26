@@ -340,7 +340,14 @@
                 <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
               </Panel>
               <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z M1,19 L37,19 L55,1 M37,19 L37,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
-              <Path Classes="slots" IsVisible="False" Data="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z" Fill="#05070A" />
+              <Canvas Classes="slots" IsVisible="False" Clip="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z">
+                <Path Data="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z" Fill="#2A303A" />
+                <Path Data="M46.3,84.5 V89 M47.8,83 V87.5" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" />
+                <Path Data="M46.7,84.5 V89 M48.2,83 V87.5" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" StrokeDashOffset="0.667" />
+                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                  <Path Data="M22.6,80 H80 V92 H22.6 Z" Fill="#05070A" />
+                </Panel>
+              </Canvas>
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -675,6 +682,8 @@
                   <Path Classes="aluminum" Data="M68,-27.75 L68,-23.75 A4,1 0 0 0 72,-22.75 L98.6,-22.75 A12.8,12.39 0 0 1 111.4,-10.36 L111.4,-7.89 L100.6,-7.89 L100.6,-9.36 A2,1.94 0 0 0 98.6,-11.3 L72,-11.3 A8,2 0 0 1 64,-13.3 L64,-27.75" />
                   <Path Classes="top" Data="M64,-27.75 L68,-27.75 L68,-23.75 A4,1 0 0 0 72,-22.75 L98.6,-22.75 A12.8,12.39 0 0 1 111.4,-10.36 L111.4,-9.36 A12.8,12.39 0 0 0 98.6,-21.75 L72,-21.75 A8,2 0 0 1 64,-23.75 Z" />
                   <Path Classes="shine" Data="M27.4,-21.75 H54 M72,-21.75 H98.6" />
+                  <Path Classes="busbarChip" Data="M20,-6.47 L20,-9.86 A7.4,7.163 0 0 1 27.4,-17.025 L54,-17.025 A6,1.5 0 0 0 60,-18.525 L60,-22.525 A22,5.5 0 0 1 82,-28.025 L134.6,-28.025 A7.4,7.163 0 0 0 142,-35.19 L142,-73" />
+                  <Path Classes="busbarAnchor" Data="M106,-8.39 L106,-9.86 A7.4,7.163 0 0 0 98.6,-17.025 L72,-17.025 A6,1.5 0 0 1 66,-18.525 L66,-22.525 A16,4 0 0 1 82,-26.525 L134.6,-26.525 A7.4,7.163 0 0 0 142,-33.69 L142,-71.5" />
                 </Panel>
                 <Canvas Width="0" Height="0" Margin="0,48,59,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" StrokeJoin="Round" />

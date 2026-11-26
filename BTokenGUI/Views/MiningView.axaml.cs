@@ -121,10 +121,16 @@ public partial class MiningView : UserControl
   List<Point> TraceRouteDuct(Blockchain blockchain, Blockchain.Good good, bool isInflow, bool isOutflow, Visual target)
   {
     if (isOutflow && good is Blockchain.Anchor)
-      return FindPath("pipeAnchor", blockchain) is Path pipe ? TraceRoutePath(pipe, target) : [];
+      return TraceRoutePath("pipeAnchor", blockchain, target);
 
     if (isInflow)
-      return FindPath("tubeConverter", blockchain) is Path tube ? TraceRoutePath(tube, target) : [];
+      return TraceRoutePath("tubeConverter", blockchain, target);
+
+    if (good is Blockchain.Anchor && good.Origin == blockchain.Anchors)
+      return TraceRoutePath("busbarAnchor", blockchain, target);
+
+    if (good is Blockchain.Chip && good.Origin is Blockchain.Block)
+      return TraceRoutePath("busbarChip", blockchain, target).AsEnumerable().Reverse().ToList();
 
     return [];
   }
@@ -139,9 +145,9 @@ public partial class MiningView : UserControl
     return this.GetVisualDescendants().OfType<Path>().FirstOrDefault(path => path.Classes.Contains(classPath) && path.DataContext == blockchain);
   }
 
-  static List<Point> TraceRoutePath(Path path, Visual target)
+  List<Point> TraceRoutePath(string classPath, Blockchain blockchain, Visual target)
   {
-    return SampleRoute(path.Data).Select(point => path.TranslatePoint(point, target)).OfType<Point>().ToList();
+    return FindPath(classPath, blockchain) is Path path ? SampleRoute(path.Data).Select(point => path.TranslatePoint(point, target)).OfType<Point>().ToList() : [];
   }
 
   static void ExtendRoute(List<Point> route, Point point)
