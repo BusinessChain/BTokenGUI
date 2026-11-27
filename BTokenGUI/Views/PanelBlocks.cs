@@ -11,7 +11,7 @@ namespace BTokenGUI.Views;
 public class PanelBlocks : Panel
 {
   const double WIDTH_FACE_FRONT = 36;
-  const double GAP_MIN_BLOCKS = 5;
+  const double GAP_MIN_BLOCKS = 0;
   const int MILLISECONDS_COMPRESSION = 250;
 
   public static readonly AttachedProperty<double> DistanceArrivalProperty = AvaloniaProperty.RegisterAttached<PanelBlocks, Control, double>("DistanceArrival", inherits: true);
