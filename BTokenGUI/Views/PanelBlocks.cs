@@ -49,9 +49,13 @@ public class PanelBlocks : Panel
   protected override Size ArrangeOverride(Size finalSize)
   {
     double[] positions = GetPositions(finalSize.Width);
+    TopLevel topLevel = TopLevel.GetTopLevel(this);
+    double scale = topLevel == null ? 1 : topLevel.RenderScaling * (this.TransformToVisual(topLevel)?.M11 ?? 1);
 
     for (int i = 0; i < Children.Count; i++)
     {
+      positions[i] = Math.Round(positions[i] * scale) / scale;
+
       bool isOffRail = positions[i] <= 0;
 
       Children[i].Opacity = isOffRail ? 0 : 1;
