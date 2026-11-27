@@ -288,7 +288,7 @@
       <Setter Property="Template">
         <ControlTemplate>
           <Panel>
-            <Path Classes="body" Fill="{TemplateBinding Background}" Stroke="Red" StrokeThickness="0.25" StrokeJoin="Round" />
+            <Path Classes="body" Fill="{TemplateBinding Background}" Stroke="#3A3F46" StrokeThickness="0.25" StrokeJoin="Round" />
             <Path Classes="top" Data="M0,1 L1.75,0 H12.55 L10.8,1 Z" />
             <Path Classes="side" />
             <Path Classes="shine" />
@@ -356,42 +356,50 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
-    <ControlTheme x:Key="ThemeCube" TargetType="ContentControl">
+    <ControlTheme x:Key="ThemeBlock" TargetType="views:Block">
       <Setter Property="Width" Value="56" />
       <Setter Property="Height" Value="98" />
-      <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
-          <Panel>
+          <Panel x:DataType="models:Blockchain+Block" Classes.flying="{Binding IsFlying}">
+            <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z" Margin="-10,10,10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+              <Path.Effect>
+                <BlurEffect Radius="8" />
+              </Path.Effect>
+            </Path>
+            <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+              <Button.Flyout>
+                <Flyout Opening="OpenFlyoutBlock">
+                  <ScrollViewer MaxHeight="600">
+                    <StackPanel Spacing="12" MaxWidth="420">
+                      <SelectableTextBlock Text="Block" FontWeight="Bold" />
+                      <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
+                    </StackPanel>
+                  </ScrollViewer>
+                </Flyout>
+              </Button.Flyout>
+            </Button>
             <Border Width="36" Height="78" Margin="19,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource BrushWindowBackground}" IsHitTestVisible="False">
               <Border Background="{TemplateBinding BorderBrush}" Opacity="0.35" />
             </Border>
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L19,79 L1,97 Z M1,97 L19,79 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
               <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.58" />
-              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.81" Stroke="Magenta" StrokeThickness="0.2" />
+              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.81" />
             </Panel>
-            <Canvas Classes="slots" IsVisible="False" IsHitTestVisible="False" Clip="M0,0 L134,0 L37,97 L0,97 Z">
-              <Path Data="M0,0 L134,0 L37,97 L0,97 Z" Stroke="Cyan" StrokeThickness="0.2" />
-              <Path Data="M16.5,89.5 L22,84 L50,84 L44.5,89.5 Z" Fill="{StaticResource BrushMetalTop}" Stroke="Magenta" StrokeThickness="0.2" />
-              <Canvas Clip="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z">
-                <Path Data="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z" Fill="#2B313A" Stroke="Cyan" StrokeThickness="0.2" />
-                <Path Data="M21.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M22.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M22.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M23.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M23.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M24.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M24.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M25.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M25.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M26.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M26.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M27.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M27.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M28.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M28.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M29.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M29.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M30.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M30.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M31.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M31.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M32.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M32.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M33.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M33.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M34.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M34.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M35.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M35.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M36.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M36.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M37.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M37.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M38.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M38.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M39.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M39.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M40.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M40.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M41.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M41.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M42.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M42.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M43.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M43.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M44.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M44.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68" Stroke="#9AA4B2" StrokeThickness="0.2" />
-              </Canvas>
-              <Panel RenderTransformOrigin="0,0">
-                <Panel.RenderTransform>
-                  <MatrixTransform Matrix="1,0,0.5,-0.5,16.5,89.5" />
-                </Panel.RenderTransform>
-                <Path Data="M1.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M14.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M25.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M1.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M14.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M25.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.15" />
-                <Path Data="M1.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M14.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M25.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M1.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M14.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M25.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0" Fill="White" Opacity="0.6" />
-              </Panel>
-              <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="25.225,82.5,0,0" />
-                <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
-                <Path Data="M22.6,87.9 H33.4" Stroke="#9AA4B2" StrokeThickness="1.2" StrokeDashArray="0.1667,0.25" />
-              </Panel>
-            </Canvas>
-            <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
+            <ContentPresenter Content="{TemplateBinding Inside}" IsHitTestVisible="False" />
+            <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="2,18,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <ItemsControl.ItemContainerTheme>
+                <ControlTheme TargetType="ContentPresenter">
+                  <Setter Property="Margin" Value="0,-8" />
+                </ControlTheme>
+              </ItemsControl.ItemContainerTheme>
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+            </ItemsControl>
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
               <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="1" />
@@ -402,54 +410,86 @@
               <Path Data="M2.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.3" />
               <Path Data="M3.1,20.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M3.1,94.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M19.1,20.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M19.1,94.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M35.1,20.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M35.1,94.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M3.1,39.15 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M35.1,39.15 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M3.1,57.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M35.1,57.65 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M3.1,76.15 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0 M35.1,76.15 a0.25,0.25 0 1 0 0.5,0 a0.25,0.25 0 1 0 -0.5,0" Fill="White" Opacity="0.6" />
               <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.71" Stroke="Magenta" StrokeThickness="0.2" />
-              <Panel Classes="logo" IsVisible="False" Clip="M37,19 H73 V97 H37 Z" RenderTransformOrigin="0,0">
-                <Panel.RenderTransform>
-                  <MatrixTransform Matrix="0.5,-0.5,0,1,18.5,18.5" />
-                </Panel.RenderTransform>
-                <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
-              </Panel>
-              <Path Classes="slots" IsVisible="False" Data="M50,84 L50,78.5 L44.5,84 L44.5,89.5" Fill="{StaticResource BrushMetalTop}" Stroke="Magenta" StrokeThickness="0.2" />
-              <Canvas Classes="slots" IsVisible="False" Clip="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z">
-                <Path Data="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z" Fill="#2B313A" Stroke="Cyan" StrokeThickness="0.2" />
-                <Path Data="M45.5,85.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,85.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,86.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,86.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,87.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,87.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,88.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68" Stroke="#9AA4B2" StrokeThickness="0.2" />
-              </Canvas>
-              <Panel Classes="slots" IsVisible="False" RenderTransformOrigin="0,0">
-                <Panel.RenderTransform>
-                  <MatrixTransform Matrix="0.5,-0.5,0,1,44.5,89.5" />
-                </Panel.RenderTransform>
-                <Path Data="M0.45,-4.5 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M9.45,-4.5 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M0.45,-1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M9.45,-1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.15" />
-                <Path Data="M1.35,-4.5 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M10.35,-4.5 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M1.35,-1 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M10.35,-1 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0" Fill="White" Opacity="0.6" />
-              </Panel>
-              <Canvas Classes="slots" IsVisible="False" Clip="M25.225,97 L37,97 L47.5,86.5 L47.5,83.5 L48.5,82.5 L65,82.5 L65,98.5 L25.225,98.5 Z">
-                <Path Data="M25.225,97 L37,97 L47.5,86.5 L47.5,83.5 L48.5,82.5 L65,82.5 L65,98.5 L25.225,98.5 Z" Stroke="Yellow" StrokeThickness="0.2" />
-                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                  <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="25.225,82.5,0,0" />
-                </Panel>
-              </Canvas>
-              <Canvas Classes="slots" IsVisible="False" Clip="M22.6,97 L37,97 L46,88 L46,85 L47,84 L65,84 L65,100 L22.6,100 Z">
-                <Path Data="M22.6,97 L37,97 L46,88 L46,85 L47,84 L65,84 L65,100 L22.6,100 Z" Stroke="Orange" StrokeThickness="0.2" />
-                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                  <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
-                </Panel>
-              </Canvas>
-              <Canvas Classes="slots" IsVisible="False" Clip="M45.5,85 L46.7,85 L46.7,87.3 L45.5,88.5 Z">
-                <Path Data="M45.5,85 L46.7,85 L46.7,87.3 L45.5,88.5 Z" Stroke="Lime" StrokeThickness="0.2" />
-                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                  <Path Data="M22.6,85.25 H33.4 M22.6,85.75 H33.4 M22.6,86.25 H33.4 M22.6,86.75 H33.4 M22.6,87.25 H33.4 M22.6,87.75 H33.4 M22.6,88.25 H33.4" Stroke="#9AA4B2" StrokeThickness="0.2" />
-                </Panel>
-              </Canvas>
+              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.71" />
             </Panel>
+            <ContentPresenter Content="{TemplateBinding Outside}" IsHitTestVisible="False" />
+            <Viewbox Width="26" Margin="6,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
+              <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
+                <TextBlock.Effect>
+                  <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
+                </TextBlock.Effect>
+              </TextBlock>
+            </Viewbox>
           </Panel>
         </ControlTemplate>
       </Setter>
-      <Style Selector="^.bitcoin /template/ Panel.logo">
-        <Setter Property="IsVisible" Value="True" />
-      </Style>
-      <Style Selector="^.bitcoin /template/ :is(Control).slots">
-        <Setter Property="IsVisible" Value="True" />
-      </Style>
     </ControlTheme>
+    <ControlTheme x:Key="{x:Type views:BlockBitcoin}" TargetType="views:BlockBitcoin" BasedOn="{StaticResource ThemeBlock}">
+      <Setter Property="BorderBrush" Value="{StaticResource BrushBitcoin}" />
+      <Setter Property="Inside">
+        <Template>
+          <Canvas IsHitTestVisible="False" Clip="M0,0 L134,0 L37,97 L0,97 Z">
+            <Path Data="M16.5,89.5 L22,84 L50,84 L44.5,89.5 Z" Fill="{StaticResource BrushMetalTop}" />
+            <Canvas Clip="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z">
+              <Path Data="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z" Fill="#2B313A" />
+              <Path Data="M21.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M22.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M22.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M23.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M23.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M24.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M24.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M25.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M25.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M26.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M26.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M27.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M27.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M28.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M28.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M29.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M29.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M30.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M30.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M31.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M31.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M32.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M32.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M33.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M33.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M34.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M34.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M35.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M35.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M36.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M36.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M37.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M37.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M38.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M38.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M39.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M39.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M40.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M40.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M41.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M41.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M42.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M42.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M43.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M43.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M44.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M44.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68" Stroke="#9AA4B2" StrokeThickness="0.2" />
+            </Canvas>
+            <Panel RenderTransformOrigin="0,0">
+              <Panel.RenderTransform>
+                <MatrixTransform Matrix="1,0,0.5,-0.5,16.5,89.5" />
+              </Panel.RenderTransform>
+              <Path Data="M1.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M14.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M25.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M1.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M14.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M25.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.15" />
+              <Path Data="M1.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M14.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M25.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M1.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M14.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M25.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0" Fill="White" Opacity="0.6" />
+            </Panel>
+            <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+              <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="25.225,82.5,0,0" />
+              <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
+              <Path Data="M22.6,87.9 H33.4" Stroke="#9AA4B2" StrokeThickness="1.2" StrokeDashArray="0.1667,0.25" />
+            </Panel>
+          </Canvas>
+        </Template>
+      </Setter>
+      <Setter Property="Outside">
+        <Template>
+          <Panel>
+            <Panel Clip="M37,19 H73 V97 H37 Z" RenderTransformOrigin="0,0">
+              <Panel.RenderTransform>
+                <MatrixTransform Matrix="0.5,-0.5,0,1,18.5,18.5" />
+              </Panel.RenderTransform>
+              <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
+            </Panel>
+            <Path Data="M50,84 L50,78.5 L44.5,84 L44.5,89.5" Fill="{StaticResource BrushMetalTop}" />
+            <Canvas Clip="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z">
+              <Path Data="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z" Fill="#2B313A" />
+              <Path Data="M45.5,85.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,85.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,86.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,86.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,87.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,87.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,88.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68" Stroke="#9AA4B2" StrokeThickness="0.2" />
+            </Canvas>
+            <Panel RenderTransformOrigin="0,0">
+              <Panel.RenderTransform>
+                <MatrixTransform Matrix="0.5,-0.5,0,1,44.5,89.5" />
+              </Panel.RenderTransform>
+              <Path Data="M0.45,-4.5 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M9.45,-4.5 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M0.45,-1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M9.45,-1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.15" />
+              <Path Data="M1.35,-4.5 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M10.35,-4.5 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M1.35,-1 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M10.35,-1 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0" Fill="White" Opacity="0.6" />
+            </Panel>
+            <Canvas Clip="M25.225,97 L37,97 L47.5,86.5 L47.5,83.5 L48.5,82.5 L65,82.5 L65,98.5 L25.225,98.5 Z">
+              <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="25.225,82.5,0,0" />
+              </Panel>
+            </Canvas>
+            <Canvas Clip="M22.6,97 L37,97 L46,88 L46,85 L47,84 L65,84 L65,100 L22.6,100 Z">
+              <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
+              </Panel>
+            </Canvas>
+            <Canvas Clip="M45.5,85 L46.7,85 L46.7,87.3 L45.5,88.5 Z">
+              <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
+                <Path Data="M22.6,85.25 H33.4 M22.6,85.75 H33.4 M22.6,86.25 H33.4 M22.6,86.75 H33.4 M22.6,87.25 H33.4 M22.6,87.75 H33.4 M22.6,88.25 H33.4" Stroke="#9AA4B2" StrokeThickness="0.2" />
+              </Panel>
+            </Canvas>
+          </Panel>
+        </Template>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="{x:Type views:BlockBToken}" TargetType="views:BlockBToken" BasedOn="{StaticResource ThemeBlock}" />
     <ControlTheme x:Key="ThemeChip" TargetType="ContentControl">
       <Setter Property="Width" Value="32" />
       <Setter Property="Height" Value="32" />
@@ -705,19 +745,6 @@
         <ControlTemplate TargetType="ItemsControl">
           <Panel>
             <TemplatedControl Theme="{StaticResource ThemeRail}" />
-            <Panel Width="56" Height="98" Margin="0,0,17,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" Classes="dummy">
-              <Panel.Styles>
-                <Style Selector="Panel.dummy">
-                  <Setter Property="views:PanelBlocks.DistanceArrival" Value="17" />
-                </Style>
-              </Panel.Styles>
-              <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z" Margin="-10,10,10,-10" Fill="Black" Opacity="0.35">
-                <Path.Effect>
-                  <BlurEffect Radius="8" />
-                </Path.Effect>
-              </Path>
-              <ContentControl Theme="{StaticResource ThemeCube}" Classes="bitcoin" BorderBrush="{StaticResource BrushBitcoin}" />
-            </Panel>
             <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
           </Panel>
         </ControlTemplate>
@@ -726,50 +753,6 @@
         <ItemsPanelTemplate>
           <views:PanelBlocks />
         </ItemsPanelTemplate>
-      </Setter>
-      <Setter Property="ItemTemplate">
-        <DataTemplate x:DataType="models:Blockchain+Block">
-          <Panel Width="56" Height="98" Classes.flying="{Binding IsFlying}">
-            <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z" Margin="-10,10,10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
-              <Path.Effect>
-                <BlurEffect Radius="8" />
-              </Path.Effect>
-            </Path>
-            <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-              <Button.Flyout>
-                <Flyout Opening="OpenFlyoutBlock">
-                  <ScrollViewer MaxHeight="600">
-                    <StackPanel Spacing="12" MaxWidth="420">
-                      <SelectableTextBlock Text="Block" FontWeight="Bold" />
-                      <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateBlockDetails}" />
-                    </StackPanel>
-                  </ScrollViewer>
-                </Flyout>
-              </Button.Flyout>
-            </Button>
-            <ContentControl Theme="{StaticResource ThemeCube}" Classes.bitcoin="{Binding BrushPair, Converter={x:Static ObjectConverters.IsNull}}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource BrushBitcoin}}">
-              <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="2,18,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <ItemsControl.ItemContainerTheme>
-                  <ControlTheme TargetType="ContentPresenter">
-                    <Setter Property="Margin" Value="0,-8" />
-                  </ControlTheme>
-                </ItemsControl.ItemContainerTheme>
-                <ItemsControl.ItemsPanel>
-                  <ItemsPanelTemplate>
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" />
-                  </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-              </ItemsControl>
-            </ContentControl>
-            <Viewbox Width="26" Margin="6,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" StretchDirection="DownOnly" IsHitTestVisible="False">
-              <TextBlock Text="{Binding Height}" FontSize="12" FontWeight="Bold" Foreground="White">
-                <TextBlock.Effect>
-                  <DropShadowEffect OffsetX="0" OffsetY="0" BlurRadius="3" Color="Black" Opacity="1" />
-                </TextBlock.Effect>
-              </TextBlock>
-            </Viewbox>
-          </Panel>
-        </DataTemplate>
       </Setter>
     </ControlTheme>
   </UserControl.Resources>
@@ -810,7 +793,13 @@
             </DataTemplate>
           </Panel.DataTemplates>
           <StackPanel Margin="20,0" UseLayoutRounding="False">
-            <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,58,0,10" />
+            <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,58,0,10">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="models:Blockchain+Block">
+                  <views:BlockBitcoin />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
               <Panel DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBitcoin}" x:DataType="models:Blockchain">
                 <ContentControl Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
@@ -1016,7 +1005,13 @@
                 <ItemsControl x:Name="ItemsTXsPool" Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" Clip="M57.128,40.418 A34,1.952 -90.982 1 0 58.294,108.37 L97.784,84.702 A11,0.632 -90.982 0 0 97.407,62.718 Z" />
               </ContentControl>
             </Grid>
-            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10" />
+            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="models:Blockchain+Block">
+                  <views:BlockBToken BorderBrush="{Binding BrushPair}" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
               <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
                 <Canvas>
