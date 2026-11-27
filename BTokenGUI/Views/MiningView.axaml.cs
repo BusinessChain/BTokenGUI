@@ -25,6 +25,14 @@ public partial class MiningView : UserControl
   const double SECONDS_CREATION = 2 * SECONDS_DRAW;
   const double SPACING_ROUTE = 6;
   const double SPEED_OUTFLOW = 128;
+  const double SECONDS_GATHER = 1;
+  const double SECONDS_HEAT = 1.25;
+  const double SECONDS_INFUSE = 1;
+  const double SECONDS_COOL = 1.25;
+  const double SECONDS_PART = 1;
+  const double OPACITY_PLASMA = 0.85;
+
+  bool IsCyclingNeutrons;
 
 
   public MiningView()
@@ -56,6 +64,9 @@ public partial class MiningView : UserControl
       Canvas.SetLeft(container, pointOrigin.X - OFFSET_CENTER_GEM);
       Canvas.SetTop(container, pointOrigin.Y - OFFSET_CENTER_GEM);
       container.Opacity = isInflow || isOutflow ? 0 : 1;
+
+      if (isInflow)
+        _ = CycleNeutrons();
 
       if (isInflow || isOutflow)
         await Task.Delay(TimeSpan.FromSeconds(SECONDS_CREATION + (isOutflow ? SECONDS_INFLOW + SECONDS_REACTION : 0)));
@@ -98,6 +109,34 @@ public partial class MiningView : UserControl
     }
 
     blockchain.Land(good);
+  }
+
+  async Task CycleNeutrons()
+  {
+    if (IsCyclingNeutrons)
+      return;
+
+    IsCyclingNeutrons = true;
+
+    Panel panelTank = ItemsTXsPool.ItemsPanelRoot;
+    Panel panelENG = ItemsNeutronsENG.ItemsPanelRoot;
+    Panel panelInfused = ItemsNeutronsInfused.ItemsPanelRoot;
+
+    await Task.WhenAll(
+      Animate(panelTank, 0, SECONDS_GATHER, new CubicEaseInOut(), (PanelSwirl.ShiftProperty, [0, 1])),
+      Animate(panelENG, 0, SECONDS_GATHER, new CubicEaseInOut(), (PanelSwirl.ShiftProperty, [-1, 0])),
+      Animate(panelInfused, 0, SECONDS_GATHER, new LinearEasing(), (Visual.OpacityProperty, [0, 0]), (PanelSwirl.ShiftProperty, [0, 0])));
+
+    await Animate(PathPlasma, 0, SECONDS_HEAT, new LinearEasing(), (Visual.OpacityProperty, [0, OPACITY_PLASMA]));
+    await Animate(panelInfused, 0, SECONDS_INFUSE, new LinearEasing(), (Visual.OpacityProperty, [0, 1]));
+    await Animate(PathPlasma, 0, SECONDS_COOL, new LinearEasing(), (Visual.OpacityProperty, [OPACITY_PLASMA, 0]));
+
+    await Task.WhenAll(
+      Animate(panelTank, 0, SECONDS_PART, new CubicEaseInOut(), (PanelSwirl.ShiftProperty, [1, 0])),
+      Animate(panelENG, 0, SECONDS_PART, new CubicEaseInOut(), (PanelSwirl.ShiftProperty, [0, -1])),
+      Animate(panelInfused, 0, SECONDS_PART, new CubicEaseInOut(), (PanelSwirl.ShiftProperty, [0, 1])));
+
+    IsCyclingNeutrons = false;
   }
 
   static Task AnimateGlow(Control container)

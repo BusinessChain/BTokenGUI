@@ -7,11 +7,6 @@ namespace BTokenGUI.Views;
 
 public class PanelSwirl : Panel
 {
-  const double X_CENTER_END_WIDE = 17.646;
-  const double Y_CENTER_END_WIDE = 34.395;
-  const double RADIUS_END_WIDE = 34;
-  const double RADIUS_END_NARROW = 11;
-  const double LENGTH_AXIS = 40;
   const double DEGREES_TURN_AXIS = 30;
   const double FRACTION_RADIUS_MAX = 0.8;
   const double FRACTION_AXIS_MIN = 0.1;
@@ -23,6 +18,13 @@ public class PanelSwirl : Panel
   const double OPACITY_BACK = 0.35;
   const int MILLISECONDS_FRAME = 33;
 
+  public static readonly StyledProperty<Point> CenterStartProperty = AvaloniaProperty.Register<PanelSwirl, Point>(nameof(CenterStart));
+  public static readonly StyledProperty<double> RadiusStartProperty = AvaloniaProperty.Register<PanelSwirl, double>(nameof(RadiusStart));
+  public static readonly StyledProperty<double> RadiusEndProperty = AvaloniaProperty.Register<PanelSwirl, double>(nameof(RadiusEnd));
+  public static readonly StyledProperty<double> LengthAxisProperty = AvaloniaProperty.Register<PanelSwirl, double>(nameof(LengthAxis));
+  public static readonly StyledProperty<double> ShiftProperty = AvaloniaProperty.Register<PanelSwirl, double>(nameof(Shift));
+  public static readonly StyledProperty<int> SeedProperty = AvaloniaProperty.Register<PanelSwirl, int>(nameof(Seed));
+
   static readonly DateTime TimeStart = DateTime.UtcNow;
 
   DispatcherTimer TimerFrame = new() { Interval = TimeSpan.FromMilliseconds(MILLISECONDS_FRAME) };
@@ -31,6 +33,42 @@ public class PanelSwirl : Panel
   public PanelSwirl()
   {
     TimerFrame.Tick += (_, _) => InvalidateArrange();
+  }
+
+  public Point CenterStart
+  {
+    get { return GetValue(CenterStartProperty); }
+    set { SetValue(CenterStartProperty, value); }
+  }
+
+  public double RadiusStart
+  {
+    get { return GetValue(RadiusStartProperty); }
+    set { SetValue(RadiusStartProperty, value); }
+  }
+
+  public double RadiusEnd
+  {
+    get { return GetValue(RadiusEndProperty); }
+    set { SetValue(RadiusEndProperty, value); }
+  }
+
+  public double LengthAxis
+  {
+    get { return GetValue(LengthAxisProperty); }
+    set { SetValue(LengthAxisProperty, value); }
+  }
+
+  public double Shift
+  {
+    get { return GetValue(ShiftProperty); }
+    set { SetValue(ShiftProperty, value); }
+  }
+
+  public int Seed
+  {
+    get { return GetValue(SeedProperty); }
+    set { SetValue(SeedProperty, value); }
   }
 
   protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -63,7 +101,7 @@ public class PanelSwirl : Panel
 
     foreach (Control child in Children)
     {
-      Random random = new(child.DataContext.GetHashCode());
+      Random random = new(child.DataContext.GetHashCode() + Seed);
 
       double phaseOrbit = 2 * Math.PI * random.NextDouble();
       double speedAngular = SPEED_ANGULAR_MIN + (SPEED_ANGULAR_MAX - SPEED_ANGULAR_MIN) * random.NextDouble();
@@ -74,9 +112,9 @@ public class PanelSwirl : Panel
       double angle = phaseOrbit + speedAngular * seconds;
       double cosOrbit = Math.Cos(angle);
       double sinOrbit = Math.Sin(angle);
-      double fractionAxis = (FRACTION_AXIS_MIN + FRACTION_AXIS_MAX) / 2 + (FRACTION_AXIS_MAX - FRACTION_AXIS_MIN) / 2 * Math.Sin(phaseDrift + speedDrift * seconds);
-      double along = LENGTH_AXIS * fractionAxis;
-      double radius = fractionRadius * (RADIUS_END_WIDE + (RADIUS_END_NARROW - RADIUS_END_WIDE) * fractionAxis);
+      double fractionAxis = Shift + (FRACTION_AXIS_MIN + FRACTION_AXIS_MAX) / 2 + (FRACTION_AXIS_MAX - FRACTION_AXIS_MIN) / 2 * Math.Sin(phaseDrift + speedDrift * seconds);
+      double along = LengthAxis * fractionAxis;
+      double radius = fractionRadius * (RadiusStart + (RadiusEnd - RadiusStart) * Math.Clamp(fractionAxis, 0, 1));
 
       double x = along * cosTurn - radius * sinOrbit * sinTurn;
       double y = radius * cosOrbit;
@@ -84,7 +122,7 @@ public class PanelSwirl : Panel
       double depthOrbit = (-3 * sinOrbit * sinTurn - 2 * cosOrbit - 6 * sinOrbit * cosTurn) / 7;
 
       Size size = child.DesiredSize;
-      Point center = new(X_CENTER_END_WIDE + 0.8944 * x + 0.4472 * z, Y_CENTER_END_WIDE + 0.1278 * x + 0.9583 * y - 0.2556 * z);
+      Point center = new(CenterStart.X + 0.8944 * x + 0.4472 * z, CenterStart.Y + 0.1278 * x + 0.9583 * y - 0.2556 * z);
 
       child.Opacity = OPACITY_BACK + (1 - OPACITY_BACK) * (1 + depthOrbit) / 2;
       child.ZIndex = (int)Math.Round(3 * x - 2 * y - 6 * z);

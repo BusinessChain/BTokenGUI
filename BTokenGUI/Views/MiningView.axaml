@@ -631,7 +631,7 @@
         </ControlTemplate>
       </Setter>
     </ControlTheme>
-    <ControlTheme x:Key="ThemeENG" TargetType="TemplatedControl">
+    <ControlTheme x:Key="ThemeENG" TargetType="ContentControl">
       <Setter Property="Width" Value="28" />
       <Setter Property="Height" Value="43" />
       <Setter Property="ClipToBounds" Value="False" />
@@ -658,6 +658,9 @@
               <Path Data="M25.045,14.174 A16,0.919 -90.982 0 1 25.521,27.371" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
               <Path Data="{StaticResource GeometryENGInterior}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
               <Path Data="{StaticResource GeometryENGInterior}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+            </Panel>
+            <ContentPresenter Content="{TemplateBinding Content}" ClipToBounds="False" />
+            <Panel>
               <Path Data="M3.329,11.661 A14,0.804 -90.982 0 1 3.809,39.657 L24.815,39.297 A14,0.804 -90.982 0 0 24.335,11.301 Z" Fill="{StaticResource BrushGlassLying}" />
               <Path Data="M6.853,21.102 L20.717,20.864" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
               <Path Data="M10.331,11.541 A14,0.804 -90.982 0 1 10.811,39.537 M17.333,11.421 A14,0.804 -90.982 0 1 17.813,39.417" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.5" Opacity="0.7" />
@@ -1054,14 +1057,36 @@
                   <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="97,22.092,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Panel>
               </Panel>
-              <TemplatedControl x:Name="ChamberENG" Theme="{StaticResource ThemeENG}" Margin="0,159,145,0" HorizontalAlignment="Right" VerticalAlignment="Top" />
+              <ContentControl x:Name="ChamberENG" Theme="{StaticResource ThemeENG}" Margin="0,159,145,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
+                <Panel Clip="{StaticResource GeometryENGInterior}">
+                  <Path x:Name="PathPlasma" Data="{StaticResource GeometryENGInterior}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0">
+                    <Path.Effect>
+                      <BlurEffect Radius="6" />
+                    </Path.Effect>
+                  </Path>
+                  <ItemsControl x:Name="ItemsNeutronsENG" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateNeutron}" IsHitTestVisible="False">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <views:PanelSwirl CenterStart="3.569,25.659" RadiusStart="14" RadiusEnd="14" LengthAxis="21.043" Shift="-1" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                  </ItemsControl>
+                  <ItemsControl x:Name="ItemsNeutronsInfused" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateNeutron}" IsHitTestVisible="False">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <views:PanelSwirl CenterStart="3.569,25.659" RadiusStart="14" RadiusEnd="14" LengthAxis="21.043" Seed="1" Opacity="0" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                  </ItemsControl>
+                </Panel>
+              </ContentControl>
               <ContentControl x:Name="ContentTankPool" Theme="{StaticResource ThemeTankPool}" Margin="0,151,169,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
                 <Panel>
                   <Button Command="{Binding OpenFormTXsPoolCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                   <ItemsControl x:Name="ItemsTXsPool" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateNeutron}" Clip="{StaticResource GeometryTankPoolInterior}" IsHitTestVisible="False">
                     <ItemsControl.ItemsPanel>
                       <ItemsPanelTemplate>
-                        <views:PanelSwirl />
+                        <views:PanelSwirl CenterStart="17.646,34.395" RadiusStart="34" RadiusEnd="11" LengthAxis="40" />
                       </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                   </ItemsControl>
