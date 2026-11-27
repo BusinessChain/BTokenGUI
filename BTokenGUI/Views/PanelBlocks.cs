@@ -10,7 +10,7 @@ namespace BTokenGUI.Views;
 
 public class PanelBlocks : Panel
 {
-  const double WIDTH_FACE_FRONT = 36;
+  const double WIDTH_FACE_FRONT = 28;
   const double GAP_MIN_BLOCKS = 0;
   const int MILLISECONDS_COMPRESSION = 250;
 
