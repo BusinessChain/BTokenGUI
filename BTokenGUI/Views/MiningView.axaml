@@ -90,6 +90,9 @@
     <StreamGeometry x:Key="GeometryTubeConverter">M36,66 C36,80 57,79 57,93</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankAnchor">M70,45 A34,15.6 0 0 1 2,45 L2.138,44.235 L20.065,-5.36 A16,4 0 0 1 51.935,-5.36 L69.862,44.235 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankAnchorInterior">M69.862,44.235 A34,8.5 0 1 1 2.138,44.235 L20.065,-5.36 A16,4 0 0 1 51.935,-5.36 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTankPool">F1 M17.063,0.4 A34,17.084 -90.982 0 0 18.229,68.39 A34,1.952 -90.982 0 0 18.294,68.37 L57.784,44.702 A11,0.632 -90.982 0 0 57.407,22.718 L17.128,0.418 A34,1.952 -90.982 0 0 17.063,0.4 Z M57.3,17.713 A16,0.919 -90.982 0 0 57.849,49.708 L59.346,49.682 A16,0.919 -90.982 0 0 58.798,17.687 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryTankPoolInterior">M17.128,0.418 A34,1.952 -90.982 1 0 18.294,68.37 L57.784,44.702 A11,0.632 -90.982 0 0 57.407,22.718 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryCapTankPool">M17.063,0.4 A34,17.084 -90.982 0 0 18.229,68.39 A34,1.952 -90.982 0 0 17.063,0.4 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryPipeAnchor">M-26,93 C-26,79 -5,80 -5,65</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphere">M42,70 A40,40 0 1 1 122,70 A40,40 0 1 1 42,70 Z</StreamGeometry>
@@ -112,7 +115,19 @@
       <GradientStop Offset="0.7" Color="#00000000" />
       <GradientStop Offset="1" Color="#40000000" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BrushGlassLying" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Offset="0" Color="#30FFFFFF" />
+      <GradientStop Offset="0.35" Color="#08FFFFFF" />
+      <GradientStop Offset="0.7" Color="#00000000" />
+      <GradientStop Offset="1" Color="#40000000" />
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="BrushMetal" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Offset="0" Color="#1E232B" />
+      <GradientStop Offset="0.35" Color="#6B7686" />
+      <GradientStop Offset="0.7" Color="#C9D1DC" />
+      <GradientStop Offset="1" Color="#2A303A" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BrushMetalLying" StartPoint="0%,100%" EndPoint="0%,0%">
       <GradientStop Offset="0" Color="#1E232B" />
       <GradientStop Offset="0.35" Color="#6B7686" />
       <GradientStop Offset="0.7" Color="#C9D1DC" />
@@ -142,28 +157,6 @@
             <Path Data="M3.5,4 A4.5,1.286 0 1 1 12.5,4 A4.5,1.286 0 1 1 3.5,4 Z" Fill="#4A5260" Stroke="#1A1E25" StrokeThickness="0.5" />
             <Path Data="M5,4.2 A3,0.857 0 1 1 11,4.2 A3,0.857 0 1 1 5,4.2 Z" Fill="#05070A" />
             <Path Data="M8,2.286 A6,1.714 0 0 1 13,3.052" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
-          </Panel>
-        </ControlTemplate>
-      </Setter>
-    </ControlTheme>
-    <ControlTheme x:Key="ThemeReceptacleFlush" TargetType="TemplatedControl">
-      <Setter Property="Width" Value="24" />
-      <Setter Property="Height" Value="3" />
-      <Setter Property="HorizontalAlignment" Value="Left" />
-      <Setter Property="VerticalAlignment" Value="Top" />
-      <Setter Property="IsHitTestVisible" Value="False" />
-      <Setter Property="Template">
-        <ControlTemplate>
-          <Panel>
-            <Path Data="M1,2.277 A34,14 0 0 1 23,2.277 L23,2.952 A34,14 0 0 0 1,2.952 Z">
-              <Path.Fill>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-                  <GradientStop Offset="0" Color="#E6ECF3" />
-                  <GradientStop Offset="1" Color="#6E7888" />
-                </LinearGradientBrush>
-              </Path.Fill>
-            </Path>
-            <Path Data="M3,1.932 A34,14 0 0 1 21,1.932 L21,2.432 A34,14 0 0 0 3,2.432 Z" Fill="#05070A" />
           </Panel>
         </ControlTemplate>
       </Setter>
@@ -398,13 +391,18 @@
               <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.81" />
             </Panel>
             <Canvas Classes="slots" IsVisible="False" IsHitTestVisible="False" Clip="M0,0 L134,0 L37,97 L0,97 Z">
-              <Path Data="M16.5,89.5 L22,84 L50,84 L44.5,89.5 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.3" StrokeJoin="Round" />
+              <Path Data="M16.5,89.5 L22,84 L50,84 L44.5,89.5 Z" Fill="{StaticResource BrushMetalTop}" />
               <Canvas Clip="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z">
-                <Path Data="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z" Fill="#05070A" />
-                <Path Data="M21.6,87.625 H50" Stroke="#9AA4B2" StrokeThickness="1.75" StrokeDashArray="0.1143,0.1714" />
-                <Path Data="M21.6,85.875 H50" Stroke="#9AA4B2" StrokeThickness="1.75" StrokeDashArray="0.1143,0.1714" StrokeDashOffset="0.1429" />
+                <Path Data="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z" Fill="#2B313A" />
+                <Path Data="M21.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M22.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M22.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M23.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M23.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M24.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M24.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M25.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M25.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M26.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M26.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M27.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M27.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M28.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M28.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M29.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M29.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M30.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M30.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M31.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M31.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M32.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M32.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M33.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M33.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M34.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M34.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M35.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M35.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M36.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M36.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M37.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M37.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M38.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M38.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M39.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M39.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M40.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M40.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M41.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M41.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M42.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M42.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M43.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M43.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M44.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M44.85,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.35,88.5 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68" Stroke="#9AA4B2" StrokeThickness="0.2" />
               </Canvas>
-              <Path Data="M21.6,88.5 L25.1,85 L49,85 L45.5,88.5 Z" Stroke="#1E232B" StrokeThickness="0.25" StrokeJoin="Round" />
+              <Panel RenderTransformOrigin="0,0">
+                <Panel.RenderTransform>
+                  <MatrixTransform Matrix="1,0,0.5,-0.5,16.5,89.5" />
+                </Panel.RenderTransform>
+                <Path Data="M1.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M14.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M25.45,1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M1.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M14.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M25.45,10 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.15" />
+                <Path Data="M1.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M14.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M25.95,1.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M1.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M14.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M25.95,10.35 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0" Fill="White" Opacity="0.6" />
+              </Panel>
               <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
                 <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="25.225,82.5,0,0" />
                 <TemplatedControl Classes="anchor" Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
@@ -429,12 +427,18 @@
                 </Panel.RenderTransform>
                 <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
               </Panel>
-              <Path Classes="slots" IsVisible="False" Data="M50,84 L50,78.5 L44.5,84 L44.5,89.5" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.3" StrokeJoin="Round" />
+              <Path Classes="slots" IsVisible="False" Data="M50,84 L50,78.5 L44.5,84 L44.5,89.5" Fill="{StaticResource BrushMetalTop}" />
               <Canvas Classes="slots" IsVisible="False" Clip="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z">
-                <Path Data="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z" Fill="#05070A" />
-                <Path Data="M45.5,84.9 l1.75,-1.75 M45.5,85.4 l1.75,-1.75 M45.5,85.9 l1.75,-1.75 M45.5,86.4 l1.75,-1.75 M45.5,86.9 l1.75,-1.75 M45.5,87.4 l1.75,-1.75 M45.5,87.9 l1.75,-1.75 M45.5,88.4 l1.75,-1.75 M45.5,88.9 l1.75,-1.75 M49,81.15 l-1.75,1.75 M49,81.65 l-1.75,1.75 M49,82.15 l-1.75,1.75 M49,82.65 l-1.75,1.75 M49,83.15 l-1.75,1.75 M49,83.65 l-1.75,1.75 M49,84.15 l-1.75,1.75 M49,84.65 l-1.75,1.75 M49,85.15 l-1.75,1.75" Stroke="#9AA4B2" StrokeThickness="0.2" />
+                <Path Data="M45.5,88.5 L49,85 L49,81.5 L45.5,85 Z" Fill="#2B313A" />
+                <Path Data="M45.5,85.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,85.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,86.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,86.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,87.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,87.75 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68 M45.5,88.25 l1.68,-1.68 m0.14,-0.14 l1.68,-1.68" Stroke="#9AA4B2" StrokeThickness="0.2" />
               </Canvas>
-              <Path Classes="slots" IsVisible="False" Data="M45.5,88.5 L45.5,85 L49,81.5 L49,85" Stroke="#1E232B" StrokeThickness="0.25" StrokeJoin="Round" />
+              <Panel Classes="slots" IsVisible="False" RenderTransformOrigin="0,0">
+                <Panel.RenderTransform>
+                  <MatrixTransform Matrix="0.5,-0.5,0,1,44.5,89.5" />
+                </Panel.RenderTransform>
+                <Path Data="M0.45,-4.5 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M9.45,-4.5 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M0.45,-1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0 M9.45,-1 a0.55,0.55 0 1 0 1.1,0 a0.55,0.55 0 1 0 -1.1,0" Fill="#9AA4B2" Stroke="#1E232B" StrokeThickness="0.15" />
+                <Path Data="M1.35,-4.5 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M10.35,-4.5 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M1.35,-1 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0 M10.35,-1 a0.15,0.15 0 1 0 0.3,0 a0.15,0.15 0 1 0 -0.3,0" Fill="White" Opacity="0.6" />
+              </Panel>
               <Canvas Classes="slots" IsVisible="False" Clip="M20,97 L37,97 L47.5,86.5 L47.5,83.5 L48.5,82.5 L48.5,0 L62,0 L62,130 L20,130 Z">
                 <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
                   <TemplatedControl Classes="outside" Theme="{StaticResource ThemeRiserTip}" Margin="25.225,82.5,0,0" />
@@ -501,8 +505,7 @@
             <Panel IsHitTestVisible="False">
               <Path Data="{StaticResource GeometryCap}" Fill="{StaticResource BrushMetal}" />
               <Path Data="{StaticResource GeometryCap}" Fill="{StaticResource BrushGlass}" />
-              <TemplatedControl Classes="plateSlit" Theme="{StaticResource ThemeReceptacleFlush}" Margin="24,-5,0,0" />
-              <TemplatedControl Classes="portLid" Theme="{StaticResource ThemeReceptacleFlange}" Margin="18,-10,0,0" />
+              <TemplatedControl Theme="{StaticResource ThemeReceptacleFlange}" Margin="18,-10,0,0" />
             </Panel>
             <Panel IsHitTestVisible="False">
               <Path Data="M2.372,11.254 A34,8.5 0 0 0 69.628,11.254 L40.451,60.166 L31.549,60.166 Z" Fill="{StaticResource BrushGlass}" />
@@ -517,12 +520,6 @@
           </Panel>
         </ControlTemplate>
       </Setter>
-      <Style Selector="^.tank /template/ TemplatedControl.plateSlit">
-        <Setter Property="IsVisible" Value="False" />
-      </Style>
-      <Style Selector="^.tankPool /template/ TemplatedControl.portLid">
-        <Setter Property="IsVisible" Value="False" />
-      </Style>
     </ControlTheme>
     <ControlTheme x:Key="ThemeTankAnchor" TargetType="ContentControl">
       <Setter Property="Width" Value="72" />
@@ -554,6 +551,41 @@
               <Path Data="M2,45 A34,8.5 0 0 0 70,45" Stroke="{StaticResource BrushSteel}" StrokeThickness="3" StrokeLineCap="Round" />
               <Path Data="M64.4,49.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M52,52.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M35,53.5 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18,52.361 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M5.6,49.269 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="{StaticResource BrushMetal}" />
               <TemplatedControl Classes="portNozzle flat" Theme="{StaticResource ThemeReceptacleFlange}" Margin="18,-11.92,0,0" />
+            </Panel>
+          </Panel>
+        </ControlTemplate>
+      </Setter>
+    </ControlTheme>
+    <ControlTheme x:Key="ThemeTankPool" TargetType="ContentControl">
+      <Setter Property="Width" Value="61" />
+      <Setter Property="Height" Value="69" />
+      <Setter Property="ClipToBounds" Value="False" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Panel>
+            <Path Data="{StaticResource GeometryTankPool}" Margin="-10,10,10,-10" Fill="Black" Opacity="0.35" IsHitTestVisible="False">
+              <Path.Effect>
+                <BlurEffect Radius="8" />
+              </Path.Effect>
+            </Path>
+            <Panel IsHitTestVisible="False">
+              <Path Data="M57.3,17.713 A16,0.919 -90.982 0 0 57.849,49.708 L59.346,49.682 A16,0.919 -90.982 0 0 58.798,17.687 Z" Fill="{StaticResource BrushMetalLying}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
+              <Path Data="M57.3,17.713 A16,0.919 -90.982 0 1 57.849,49.708 A16,0.919 -90.982 0 1 57.3,17.713 Z" Fill="{StaticResource BrushMetalTop}" />
+              <Path Data="M57.24,43.284 A1.1,0.063 -90.982 0 1 57.278,45.483 A1.1,0.063 -90.982 0 1 57.24,43.284 Z M56.795,34.03 A1.1,0.063 -90.982 0 1 56.832,36.23 A1.1,0.063 -90.982 0 1 56.795,34.03 Z M56.795,23.945 A1.1,0.063 -90.982 0 1 56.832,26.145 A1.1,0.063 -90.982 0 1 56.795,23.945 Z M57.24,18.936 A1.1,0.063 -90.982 0 1 57.278,21.136 A1.1,0.063 -90.982 0 1 57.24,18.936 Z M57.871,21.937 A1.1,0.063 -90.982 0 1 57.909,24.137 A1.1,0.063 -90.982 0 1 57.871,21.937 Z M58.317,31.191 A1.1,0.063 -90.982 0 1 58.355,33.391 A1.1,0.063 -90.982 0 1 58.317,31.191 Z M58.317,41.276 A1.1,0.063 -90.982 0 1 58.355,43.476 A1.1,0.063 -90.982 0 1 58.317,41.276 Z M57.871,46.285 A1.1,0.063 -90.982 0 1 57.909,48.485 A1.1,0.063 -90.982 0 1 57.871,46.285 Z" Fill="#1A1E25" />
+              <Path Data="M58.045,22.594 A16,0.919 -90.982 0 1 58.521,35.812" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
+              <Path Data="{StaticResource GeometryTankPoolInterior}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
+              <Path Data="{StaticResource GeometryTankPoolInterior}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+            </Panel>
+            <ContentPresenter Content="{TemplateBinding Content}" ClipToBounds="False" />
+            <Panel IsHitTestVisible="False">
+              <Path Data="{StaticResource GeometryCapTankPool}" Fill="{StaticResource BrushMetalLying}" />
+              <Path Data="{StaticResource GeometryCapTankPool}" Fill="{StaticResource BrushGlassLying}" />
+              <Path Data="M17.128,0.418 A34,1.952 -90.982 0 1 18.294,68.37 L57.784,44.702 A11,0.632 -90.982 0 0 57.407,22.718 Z" Fill="{StaticResource BrushGlassLying}" />
+              <Path Data="M23.975,24.539 L50.356,28.967" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
+              <Path Data="M30.823,8 A26.18,1.503 -90.982 0 1 31.72,60.323 M46.129,16.474 A17.44,1.001 -90.982 0 1 46.727,51.329" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.5" Opacity="0.7" />
+              <Path Data="M17.128,0.418 L57.407,22.718 M18.294,68.37 L57.784,44.702" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
+              <Path Data="M17.063,0.4 A34,1.952 -90.982 0 1 18.229,68.39" Stroke="{StaticResource BrushSteel}" StrokeThickness="3" StrokeLineCap="Round" />
+              <Path Data="M17.117,4.938 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18.045,17.369 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18.598,34.362 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18.628,51.364 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0 M18.127,63.819 a1,1 0 1 0 2,0 a1,1 0 1 0 -2,0" Fill="{StaticResource BrushMetal}" />
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -718,7 +750,7 @@
               </Button.Flyout>
             </Button>
             <ContentControl Theme="{StaticResource ThemeCube}" Classes.bitcoin="{Binding BrushPair, Converter={x:Static ObjectConverters.IsNull}}" BorderBrush="{Binding BrushPair, TargetNullValue={StaticResource BrushBitcoin}}">
-              <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+              <ItemsControl ItemsSource="{Binding Anchors}" ItemTemplate="{StaticResource TemplateAnchor}" Width="36" Height="78" Margin="2,18,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <ItemsControl.ItemContainerTheme>
                   <ControlTheme TargetType="ContentPresenter">
                     <Setter Property="Margin" Value="0,-8" />
@@ -783,7 +815,7 @@
             <ItemsControl x:Name="ItemsBlocksBitcoin" ZIndex="1" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBitcoin}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,58,0,10" />
             <Grid x:Name="GridMining" DataContext="{Binding Mining}" x:DataType="models:Mining">
               <Panel DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBitcoin}" x:DataType="models:Blockchain">
-                <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <ContentControl Theme="{StaticResource ThemeCone}" Margin="0,48,114,0" HorizontalAlignment="Right" VerticalAlignment="Top">
                   <Panel>
                     <Panel IsHitTestVisible="False">
                       <Path Classes="tubeConverter" Data="{StaticResource GeometryTubeConverter}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" />
@@ -801,27 +833,27 @@
                   </Panel>
                 </ContentControl>
                 <Panel Width="170" Margin="0,48,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" ClipToBounds="False" IsHitTestVisible="False">
-                  <TemplatedControl Theme="{StaticResource ThemeBracketFootLower}" Margin="94,-40,0,0" />
-                  <TemplatedControl Theme="{StaticResource ThemeBracketFootLower}" Margin="124,-40,0,0" />
-                  <Path Classes="aluminum" Data="M58,-23.75 L58,-27.75 A24,6 0 0 1 82,-33.75 L138.975,-33.75 A2,1.94 0 0 0 139.99,-34.0185 L138.24,-33.0185 A2,1.94 0 0 0 139.225,-34.69 L139.225,-72.5 L140.975,-73.5 L151.775,-73.5 L151.775,-35.69 A12.8,12.39 0 0 1 145.476,-25.017 L143.726,-24.017 A12.8,12.39 0 0 1 137.225,-22.3 L82,-22.3 A20,5 0 0 0 62,-17.3 L62,-23.75 Z" />
-                  <Path Classes="top" Data="M58,-27.75 A24,6 0 0 1 82,-33.75 L138.975,-33.75 A2,1.94 0 0 0 139.99,-34.0185 L138.24,-33.0185 A2,1.94 0 0 1 137.225,-32.75 L82,-32.75 A20,5 0 0 0 62,-27.75 Z M139.225,-72.5 L140.975,-73.5 H151.775 L150.025,-72.5 Z" />
-                  <Path Classes="side" Data="M150.025,-72.5 L151.775,-73.5 L151.775,-35.69 A12.8,12.39 0 0 1 145.476,-25.017 L143.726,-24.017 A12.8,12.39 0 0 0 150.025,-34.69 Z" />
-                  <Path Classes="shine" Data="M82,-32.75 H137.225 M150.025,-72.5 V-34.69 A12.8,12.39 0 0 1 143.726,-24.017" />
+                  <TemplatedControl Theme="{StaticResource ThemeBracketFootLower}" Margin="86,-40,0,0" />
+                  <TemplatedControl Theme="{StaticResource ThemeBracketFootLower}" Margin="104,-40,0,0" />
+                  <Path Classes="aluminum" Data="M58,-23.75 L58,-27.75 A24,6 0 0 1 82,-33.75 L114,-33.75 A14,3.5 0 0 1 128,-30.25 L128,-25.75 A4,1 0 0 0 132,-24.75 L138.975,-24.75 A2,1.94 0 0 0 139.99,-25.0185 L138.24,-24.0185 A2,1.94 0 0 0 139.225,-25.69 L139.225,-72.5 L140.975,-73.5 L151.775,-73.5 L151.775,-26.69 A12.8,12.39 0 0 1 145.476,-16.017 L143.726,-15.017 A12.8,12.39 0 0 1 137.225,-13.3 L132,-13.3 A8,2 0 0 1 124,-15.3 L124,-19.8 A10,2.5 0 0 0 114,-22.3 L82,-22.3 A20,5 0 0 0 62,-17.3 L62,-23.75 Z" />
+                  <Path Classes="top" Data="M58,-27.75 A24,6 0 0 1 82,-33.75 L114,-33.75 A14,3.5 0 0 1 128,-30.25 L128,-25.75 A4,1 0 0 0 132,-24.75 L138.975,-24.75 A2,1.94 0 0 0 139.99,-25.0185 L138.24,-24.0185 A2,1.94 0 0 1 137.225,-23.75 L132,-23.75 A8,2 0 0 1 124,-25.75 L124,-30.25 A10,2.5 0 0 0 114,-32.75 L82,-32.75 A20,5 0 0 0 62,-27.75 Z M139.225,-72.5 L140.975,-73.5 H151.775 L150.025,-72.5 Z" />
+                  <Path Classes="side" Data="M150.025,-72.5 L151.775,-73.5 L151.775,-26.69 A12.8,12.39 0 0 1 145.476,-16.017 L143.726,-15.017 A12.8,12.39 0 0 0 150.025,-25.69 Z" />
+                  <Path Classes="shine" Data="M82,-32.75 H114 M132,-23.75 H137.225 M150.025,-72.5 V-25.69 A12.8,12.39 0 0 1 143.726,-15.017" />
                   <Path Data="M140.4625,-72.75 L141.3375,-73.25 H150.5375 L149.6625,-72.75 Z" Fill="#05070A" />
-                  <Path Classes="aluminum" Data="M64,-23.75 L64,-27.75 A18,4.5 0 0 1 82,-32.25 L136.35,-32.25 A2,1.94 0 0 0 137.365,-32.5185 L135.615,-31.5185 A2,1.94 0 0 0 136.6,-33.19 L136.6,-71 L138.35,-72 L149.15,-72 L149.15,-34.19 A12.8,12.39 0 0 1 142.851,-23.517 L141.101,-22.517 A12.8,12.39 0 0 1 134.6,-20.8 L82,-20.8 A14,3.5 0 0 0 68,-17.3 L68,-23.75 Z" />
-                  <Path Classes="top" Data="M64,-27.75 A18,4.5 0 0 1 82,-32.25 L136.35,-32.25 A2,1.94 0 0 0 137.365,-32.5185 L135.615,-31.5185 A2,1.94 0 0 1 134.6,-31.25 L82,-31.25 A14,3.5 0 0 0 68,-27.75 Z M136.6,-71 L138.35,-72 H149.15 L147.4,-71 Z" />
-                  <Path Classes="side" Data="M147.4,-71 L149.15,-72 L149.15,-34.19 A12.8,12.39 0 0 1 142.851,-23.517 L141.101,-22.517 A12.8,12.39 0 0 0 147.4,-33.19 Z" />
-                  <Path Classes="shine" Data="M82,-31.25 H134.6 M147.4,-71 V-33.19 A12.8,12.39 0 0 1 141.101,-22.517" />
+                  <Path Classes="aluminum" Data="M64,-23.75 L64,-27.75 A18,4.5 0 0 1 82,-32.25 L114,-32.25 A8,2 0 0 1 122,-30.25 L122,-25.75 A10,2.5 0 0 0 132,-23.25 L136.35,-23.25 A2,1.94 0 0 0 137.365,-23.5185 L135.615,-22.5185 A2,1.94 0 0 0 136.6,-24.19 L136.6,-71 L138.35,-72 L149.15,-72 L149.15,-25.19 A12.8,12.39 0 0 1 142.851,-14.517 L141.101,-13.517 A12.8,12.39 0 0 1 134.6,-11.8 L132,-11.8 A14,3.5 0 0 1 118,-15.3 L118,-19.8 A4,1 0 0 0 114,-20.8 L82,-20.8 A14,3.5 0 0 0 68,-17.3 L68,-23.75 Z" />
+                  <Path Classes="top" Data="M64,-27.75 A18,4.5 0 0 1 82,-32.25 L114,-32.25 A8,2 0 0 1 122,-30.25 L122,-25.75 A10,2.5 0 0 0 132,-23.25 L136.35,-23.25 A2,1.94 0 0 0 137.365,-23.5185 L135.615,-22.5185 A2,1.94 0 0 1 134.6,-22.25 L132,-22.25 A14,3.5 0 0 1 118,-25.75 L118,-30.25 A4,1 0 0 0 114,-31.25 L82,-31.25 A14,3.5 0 0 0 68,-27.75 Z M136.6,-71 L138.35,-72 H149.15 L147.4,-71 Z" />
+                  <Path Classes="side" Data="M147.4,-71 L149.15,-72 L149.15,-25.19 A12.8,12.39 0 0 1 142.851,-14.517 L141.101,-13.517 A12.8,12.39 0 0 0 147.4,-24.19 Z" />
+                  <Path Classes="shine" Data="M82,-31.25 H114 M132,-22.25 H134.6 M147.4,-71 V-24.19 A12.8,12.39 0 0 1 141.101,-13.517" />
                   <Path Data="M137.8375,-71.25 L138.7125,-71.75 H147.9125 L147.0375,-71.25 Z" Fill="#05070A" />
-                  <TemplatedControl Theme="{StaticResource ThemeBracket}" Margin="94,-40,0,0" />
-                  <TemplatedControl Theme="{StaticResource ThemeBracket}" Margin="124,-40,0,0" />
+                  <TemplatedControl Theme="{StaticResource ThemeBracket}" Margin="86,-40,0,0" />
+                  <TemplatedControl Theme="{StaticResource ThemeBracket}" Margin="104,-40,0,0" />
                   <Path Classes="aluminum" Data="M62,-27.75 L62,-13.3 A8,2 0 0 1 54,-11.3 L27.4,-11.3 A2,1.94 0 0 0 25.4,-9.36 L25.4,-5.97 L14.6,-5.97 L14.6,-10.36 A12.8,12.39 0 0 1 27.4,-22.75 L54,-22.75 A4,1 0 0 0 58,-23.75 L58,-27.75" />
                   <Path Classes="top" Data="M58,-27.75 L62,-27.75 L62,-23.75 A8,2 0 0 1 54,-21.75 L27.4,-21.75 A12.8,12.39 0 0 0 14.6,-9.36 L14.6,-10.36 A12.8,12.39 0 0 1 27.4,-22.75 L54,-22.75 A4,1 0 0 0 58,-23.75 Z" />
                   <Path Classes="aluminum" Data="M68,-27.75 L68,-23.75 A4,1 0 0 0 72,-22.75 L98.6,-22.75 A12.8,12.39 0 0 1 111.4,-10.36 L111.4,-7.89 L100.6,-7.89 L100.6,-9.36 A2,1.94 0 0 0 98.6,-11.3 L72,-11.3 A8,2 0 0 1 64,-13.3 L64,-27.75" />
                   <Path Classes="top" Data="M64,-27.75 L68,-27.75 L68,-23.75 A4,1 0 0 0 72,-22.75 L98.6,-22.75 A12.8,12.39 0 0 1 111.4,-10.36 L111.4,-9.36 A12.8,12.39 0 0 0 98.6,-21.75 L72,-21.75 A8,2 0 0 1 64,-23.75 Z" />
                   <Path Classes="shine" Data="M27.4,-21.75 H54 M72,-21.75 H98.6" />
-                  <Path Classes="busbarChip" Data="M20,-6.47 L20,-9.86 A7.4,7.163 0 0 1 27.4,-17.025 L54,-17.025 A6,1.5 0 0 0 60,-18.525 L60,-22.525 A22,5.5 0 0 1 82,-28.025 L138.1,-28.025 A7.4,7.163 0 0 0 145.5,-35.19 L145.5,-73" />
-                  <Path Classes="busbarAnchor" Data="M106,-8.39 L106,-9.86 A7.4,7.163 0 0 0 98.6,-17.025 L72,-17.025 A6,1.5 0 0 1 66,-18.525 L66,-22.525 A16,4 0 0 1 82,-26.525 L135.475,-26.525 A7.4,7.163 0 0 0 142.875,-33.69 L142.875,-71.5" />
+                  <Path Classes="busbarChip" Data="M20,-6.47 L20,-9.86 A7.4,7.163 0 0 1 27.4,-17.025 L54,-17.025 A6,1.5 0 0 0 60,-18.525 L60,-22.525 A22,5.5 0 0 1 82,-28.025 L114,-28.025 A12,3 0 0 1 126,-25.025 L126,-20.525 A6,1.5 0 0 0 132,-19.025 L138.1,-19.025 A7.4,7.163 0 0 0 145.5,-26.19 L145.5,-73" />
+                  <Path Classes="busbarAnchor" Data="M106,-8.39 L106,-9.86 A7.4,7.163 0 0 0 98.6,-17.025 L72,-17.025 A6,1.5 0 0 1 66,-18.525 L66,-22.525 A16,4 0 0 1 82,-26.525 L114,-26.525 A6,1.5 0 0 1 120,-25.025 L120,-20.525 A12,3 0 0 0 132,-17.525 L135.475,-17.525 A7.4,7.163 0 0 0 142.875,-24.69 L142.875,-71.5" />
                 </Panel>
                 <Canvas Width="0" Height="0" Margin="0,48,59,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False">
                   <Path Classes="pipeAnchor" Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" StrokeJoin="Round" />
@@ -829,9 +861,6 @@
                   <Path Data="{StaticResource GeometryPipeAnchor}" Stroke="{StaticResource BrushSteel}" StrokeThickness="5" StrokeJoin="Round" Opacity="0.36" />
                 </Canvas>
               </Panel>
-              <ContentControl x:Name="ContentTankPool" Classes="tankPool" Theme="{StaticResource ThemeCone}" Margin="0,92,223,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
-                <ItemsControl x:Name="ItemsTXsPool" Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" />
-              </ContentControl>
               <Panel x:Name="PanelConverter" Width="164" Height="140" Margin="0,114,25,0" HorizontalAlignment="Right" VerticalAlignment="Top" Classes.glowing="{Binding IsMining}">
                 <Path Classes="glow" Data="{StaticResource GeometrySphereGlow}" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0" IsHitTestVisible="False">
                   <Path.Effect>
@@ -879,6 +908,9 @@
                   <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="97,22.092,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Panel>
               </Panel>
+              <ContentControl x:Name="ContentTankPool" Theme="{StaticResource ThemeTankPool}" Margin="0,151,145,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
+                <ItemsControl x:Name="ItemsTXsPool" Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" Clip="M57.128,40.418 A34,1.952 -90.982 1 0 58.294,108.37 L97.784,84.702 A11,0.632 -90.982 0 0 97.407,62.718 Z" />
+              </ContentControl>
             </Grid>
             <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10" />
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
@@ -921,7 +953,7 @@
                   </Panel>
                 </Panel>
               </Panel>
-              <ContentControl Classes="tank" Theme="{StaticResource ThemeCone}" Margin="0,48,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
+              <ContentControl Theme="{StaticResource ThemeCone}" Margin="0,48,12,0" HorizontalAlignment="Right" VerticalAlignment="Top">
                 <Panel Classes.glowing="{Binding Tank.IsAutoActive}">
                   <Panel IsHitTestVisible="False">
                     <Path Data="{StaticResource GeometryTubeCenter}" Stroke="{StaticResource BrushSteel}" StrokeThickness="8" />
