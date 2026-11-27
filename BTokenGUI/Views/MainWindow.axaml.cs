@@ -10,7 +10,7 @@ namespace BTokenGUI.Views;
 public partial class MainWindow : Window
 {
   const double FACTOR_ZOOM = 1.2;
-  const double SCALE_MAX_ZOOM = 8;
+  const double SCALE_MAX_ZOOM = 20;
 
 
   public MainWindow()

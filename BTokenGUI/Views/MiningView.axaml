@@ -489,7 +489,19 @@
         </Template>
       </Setter>
     </ControlTheme>
-    <ControlTheme x:Key="{x:Type views:BlockBToken}" TargetType="views:BlockBToken" BasedOn="{StaticResource ThemeBlock}" />
+    <ControlTheme x:Key="{x:Type views:BlockBToken}" TargetType="views:BlockBToken" BasedOn="{StaticResource ThemeBlock}">
+      <Setter Property="Outside">
+        <Template>
+          <Panel Clip="M37,19 H73 V97 H37 Z" RenderTransformOrigin="0,0">
+            <Panel.RenderTransform>
+              <MatrixTransform Matrix="0.5,-0.5,0,1,18.5,18.5" />
+            </Panel.RenderTransform>
+            <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
+            <Path Data="M13.732,-2.434 L22.264,-0.307 L21.657,2.129 L18.607,1.369 L17.391,6.247 L14.948,5.672 L16.173,0.762 L13.125,0.002 Z" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="Black" />
+          </Panel>
+        </Template>
+      </Setter>
+    </ControlTheme>
     <ControlTheme x:Key="ThemeChip" TargetType="ContentControl">
       <Setter Property="Width" Value="32" />
       <Setter Property="Height" Value="32" />
@@ -1005,13 +1017,16 @@
                 <ItemsControl x:Name="ItemsTXsPool" Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" Clip="M57.128,40.418 A34,1.952 -90.982 1 0 58.294,108.37 L97.784,84.702 A11,0.632 -90.982 0 0 97.407,62.718 Z" />
               </ContentControl>
             </Grid>
-            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10">
-              <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="models:Blockchain+Block">
-                  <views:BlockBToken BorderBrush="{Binding BrushPair}" />
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Panel>
+              <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="models:Blockchain+Block">
+                    <views:BlockBToken BorderBrush="{Binding BrushPair}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <views:BlockBToken Margin="0,10,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" DataContext="{x:Null}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" />
+            </Panel>
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
               <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
                 <Canvas>
