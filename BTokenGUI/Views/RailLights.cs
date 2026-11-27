@@ -12,7 +12,8 @@ namespace BTokenGUI.Views;
 public class RailLights : Control
 {
   const double SPACING_SEGMENTS = 10;
-  const double Y_HOLES = 48.2;
+  const double Y_HOLES = 45.8;
+  const double SCALE_HOLES = 2;
   const double WIDTH_HOLES = 1.6;
   const double OFFSET_HOLES_RIGHT = 2;
   const double SECONDS_STEP_CHASE = 0.05;
@@ -24,8 +25,8 @@ public class RailLights : Control
   const int MILLISECONDS_FRAME = 33;
 
   static readonly IBrush BrushBitcoin = new SolidColorBrush(Color.Parse("#F7931A"));
-  static readonly IDashStyle DashStyleHoles = new DashStyle([1.5, 2.875], 0);
-  static readonly IPen PenHoles = new Pen(new SolidColorBrush(Color.Parse("#262B33")), WIDTH_HOLES, DashStyleHoles, PenLineCap.Round);
+  static readonly IDashStyle DashStyleHoles = new DashStyle([4, 13.5], 0);
+  static readonly IPen PenHoles = new Pen(new SolidColorBrush(Color.Parse("#0B0D11")), WIDTH_HOLES, DashStyleHoles, PenLineCap.Round);
   static readonly DateTime TimeStart = DateTime.UtcNow;
 
   DispatcherTimer TimerFrame = new() { Interval = TimeSpan.FromMilliseconds(MILLISECONDS_FRAME) };
@@ -85,6 +86,8 @@ public class RailLights : Control
 
     Point startHoles = new(Bounds.Width - OFFSET_HOLES_RIGHT, Y_HOLES);
     Point endHoles = new(0, Y_HOLES);
+
+    using DrawingContext.PushedState pushedScale = context.PushTransform(Matrix.CreateTranslation(0, -Y_HOLES) * Matrix.CreateScale(1, SCALE_HOLES) * Matrix.CreateTranslation(0, Y_HOLES));
 
     context.DrawLine(PenHoles, startHoles, endHoles);
 

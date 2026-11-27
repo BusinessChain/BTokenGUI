@@ -630,18 +630,18 @@
       </Setter>
     </ControlTheme>
     <ControlTheme x:Key="ThemeRail" TargetType="TemplatedControl">
-      <Setter Property="Height" Value="10" />
+      <Setter Property="Height" Value="40" />
       <Setter Property="VerticalAlignment" Value="Center" />
       <Setter Property="IsHitTestVisible" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
-          <Panel>
+          <Panel Height="10" VerticalAlignment="Top" RenderTransformOrigin="0,0" RenderTransform="scale(1,4)">
             <Border Height="5.6" Margin="0,1.4,0,0" VerticalAlignment="Top">
               <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                  <GradientStop Offset="0" Color="#3E4550" />
-                  <GradientStop Offset="0.3" Color="#6E7886" />
-                  <GradientStop Offset="1" Color="#A3ACB8" />
+                  <GradientStop Offset="0" Color="#181C22" />
+                  <GradientStop Offset="0.3" Color="#2A3038" />
+                  <GradientStop Offset="1" Color="#414852" />
                 </LinearGradientBrush>
               </Border.Background>
             </Border>
@@ -649,37 +649,34 @@
               <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
                   <GradientStop Offset="0" Color="#00FFFFFF" />
-                  <GradientStop Offset="1" Color="#28FFFFFF" />
+                  <GradientStop Offset="1" Color="#10FFFFFF" />
                 </LinearGradientBrush>
               </Border.Background>
             </Border>
-            <Canvas ClipToBounds="True">
-              <Path Width="10000" Height="10" Canvas.Right="0" Data="M9998,4.8 H0" Stroke="#C9D1DC" StrokeThickness="0.3" StrokeDashArray="8,15.3333" Opacity="0.7" />
-            </Canvas>
             <Border Height="0.25" Margin="0,6.9,0,0" VerticalAlignment="Top" Background="#1E232B" Opacity="0.6" />
-            <Path Width="0.8" Height="10" HorizontalAlignment="Right" Data="M0,1.4 H0.8 L0,2.2 Z" Fill="#D8DFE7" />
-            <Border Height="0.8" Margin="0,7,0.8,0" VerticalAlignment="Top" Background="#D8DFE7" />
-            <Path Width="0.8" Height="10" HorizontalAlignment="Right" Data="M0,7 H0.8 L0,7.8 Z" Fill="#D8DFE7" />
+            <Path Width="0.8" Height="10" HorizontalAlignment="Right" Data="M0,1.4 H0.8 L0,2.2 Z" Fill="#6E7888" />
+            <Border Height="0.8" Margin="0,7,0.8,0" VerticalAlignment="Top" Background="#6E7888" />
+            <Path Width="0.8" Height="10" HorizontalAlignment="Right" Data="M0,7 H0.8 L0,7.8 Z" Fill="#6E7888" />
             <Border Height="2.2" Margin="0,0,0.8,0" VerticalAlignment="Top">
               <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                  <GradientStop Offset="0" Color="#B9C1CB" />
-                  <GradientStop Offset="1" Color="#8F99A6" />
+                  <GradientStop Offset="0" Color="#5A626D" />
+                  <GradientStop Offset="1" Color="#3A414B" />
                 </LinearGradientBrush>
               </Border.Background>
             </Border>
             <Border Height="2.2" Margin="0,7.8,0.8,0" VerticalAlignment="Top">
               <Border.Background>
                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                  <GradientStop Offset="0" Color="#B9C1CB" />
-                  <GradientStop Offset="1" Color="#8F99A6" />
+                  <GradientStop Offset="0" Color="#5A626D" />
+                  <GradientStop Offset="1" Color="#3A414B" />
                 </LinearGradientBrush>
               </Border.Background>
             </Border>
-            <Path Width="0.8" Height="10" HorizontalAlignment="Right" Data="M0,0 V2.2 L0.8,1.4 V7 L0,7.8 V10" Stroke="#C9D1DC" StrokeThickness="0.25" StrokeJoin="Round" />
-            <Border Height="0.3" Margin="0,0,0.8,0" VerticalAlignment="Top" Background="#E6ECF3" />
+            <Path Width="0.8" Height="10" HorizontalAlignment="Right" Data="M0,0 V2.2 L0.8,1.4 V7 L0,7.8 V10" Stroke="#6E7888" StrokeThickness="0.25" StrokeJoin="Round" />
+            <Border Height="0.3" Margin="0,0,0.8,0" VerticalAlignment="Top" Background="#8F99A6" />
             <Border Height="0.3" Margin="0,1.95,0.8,0" VerticalAlignment="Top" Background="#1E232B" Opacity="0.8" />
-            <Border Height="0.3" Margin="0,7.8,0.8,0" VerticalAlignment="Top" Background="White" Opacity="0.6" />
+            <Border Height="0.3" Margin="0,7.8,0.8,0" VerticalAlignment="Top" Background="White" Opacity="0.3" />
             <Border Height="0.25" Margin="0,0,0.8,0" VerticalAlignment="Bottom" Background="#1E232B" />
           </Panel>
         </ControlTemplate>
