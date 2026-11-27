@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:BTokenGUI.ViewModels"
+             xmlns:models="using:BTokenGUI.Models"
+             x:Class="BTokenGUI.Views.TXsPoolView"
+             x:DataType="vm:MainViewModel">
+  <Grid DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" IsVisible="{Binding IsFormTXsPoolOpen}">
+    <Border Background="#99000000" />
+    <Border Classes="Panel" Background="{DynamicResource SystemControlBackgroundAltHighBrush}" MaxWidth="480" Margin="16" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+      <StackPanel Spacing="12" Margin="16">
+        <Grid ColumnDefinitions="*,Auto">
+          <SelectableTextBlock Grid.Column="0" Text="TX pool" FontWeight="Bold" VerticalAlignment="Center" />
+          <Button Grid.Column="1" Classes="Close" Command="{Binding CloseFormTXsPoolCommand}" />
+        </Grid>
+        <ScrollViewer MaxHeight="240">
+          <ItemsControl ItemsSource="{Binding TXsPool}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:Blockchain+Chip">
+                <Button Margin="0,0,0,4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                  <Button.Flyout>
+                    <Flyout>
+                      <StackPanel Spacing="12" MaxWidth="420">
+                        <SelectableTextBlock Text="TX" FontWeight="Bold" />
+                        <ContentControl Content="{Binding TX}" ContentTemplate="{StaticResource TemplateTX}" />
+                      </StackPanel>
+                    </Flyout>
+                  </Button.Flyout>
+                  <TextBlock Text="{Binding Hash}" TextTrimming="CharacterEllipsis" />
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>

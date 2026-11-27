@@ -24,6 +24,7 @@
         <views:WithdrawalView />
         <views:ConverterView />
         <views:AnchorsView />
+        <views:TXsPoolView />
       </Grid>
     </LayoutTransformControl>
   </ScrollViewer>

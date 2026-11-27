@@ -23,6 +23,8 @@ public partial class Blockchain : ObservableObject
   public partial double FillingPowder { get; set; }
   [ObservableProperty]
   public partial bool IsFormAnchorsOpen { get; set; }
+  [ObservableProperty]
+  public partial bool IsFormTXsPoolOpen { get; set; }
   Blockchain BlockchainParent;
   long? FundsTank;
   ObservableCollection<Good> Flights;
@@ -46,6 +48,18 @@ public partial class Blockchain : ObservableObject
   void CloseFormAnchors()
   {
     IsFormAnchorsOpen = false;
+  }
+
+  [RelayCommand]
+  void OpenFormTXsPool()
+  {
+    IsFormTXsPoolOpen = true;
+  }
+
+  [RelayCommand]
+  void CloseFormTXsPool()
+  {
+    IsFormTXsPoolOpen = false;
   }
 
   public void Update(JsonElement snapshotState)

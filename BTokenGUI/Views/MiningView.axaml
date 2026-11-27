@@ -93,8 +93,8 @@
     <StreamGeometry x:Key="GeometryTankPool">F1 M17.063,0.4 A34,17.084 -90.982 0 0 18.229,68.39 A34,1.952 -90.982 0 0 18.294,68.37 L57.784,44.702 A11,0.632 -90.982 0 0 57.407,22.718 L17.128,0.418 A34,1.952 -90.982 0 0 17.063,0.4 Z M57.3,17.713 A16,0.919 -90.982 0 0 57.849,49.708 L59.346,49.682 A16,0.919 -90.982 0 0 58.798,17.687 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryTankPoolInterior">M17.128,0.418 A34,1.952 -90.982 1 0 18.294,68.37 L57.784,44.702 A11,0.632 -90.982 0 0 57.407,22.718 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryCapTankPool">M17.063,0.4 A34,17.084 -90.982 0 0 18.229,68.39 A34,1.952 -90.982 0 0 17.063,0.4 Z</StreamGeometry>
-    <StreamGeometry x:Key="GeometryENG">F1 M1.798,18.687 A16,0.919 -90.982 0 0 2.346,50.682 L3.844,50.656 L3.809,48.657 L24.815,48.297 L24.849,50.296 L26.346,50.271 A16,0.919 -90.982 0 0 25.798,18.275 L24.3,18.301 L24.335,20.301 L3.329,20.661 L3.295,18.661 Z M6.799,20.104 L6.799,21.062 A7.273,2.078 0 0 0 21.345,21.062 L21.345,20.104 A7.273,2.078 0 0 0 6.799,20.104 Z M9.072,6.688 L9.072,20.104 A5,1.429 0 0 0 19.072,20.104 L19.072,6.688 A5,1.429 0 0 0 9.072,6.688 Z M8.072,4.292 A6,1.714 0 0 0 20.072,4.292 A6,1.714 0 0 0 8.072,4.292 Z</StreamGeometry>
-    <StreamGeometry x:Key="GeometryENGInterior">M3.329,20.661 A14,0.804 -90.982 0 0 3.809,48.657 L24.815,48.297 A14,0.804 -90.982 0 0 24.335,20.301 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryENG">F1 M1.798,9.687 A16,0.919 -90.982 0 0 2.346,41.682 L3.844,41.656 L3.809,39.657 L24.815,39.297 L24.849,41.296 L26.346,41.271 A16,0.919 -90.982 0 0 25.798,9.275 L24.3,9.301 L24.335,11.301 L3.329,11.661 L3.295,9.661 Z M12.685,3.747 L12.685,8.702 L13.191,9.714 L13.191,11.506 A0.594,0.17 0 0 0 14.379,11.506 L14.379,9.714 L14.885,8.702 L14.885,3.747 A1.1,1.1 0 0 0 12.685,3.747 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryENGInterior">M3.329,11.661 A14,0.804 -90.982 0 0 3.809,39.657 L24.815,39.297 A14,0.804 -90.982 0 0 24.335,11.301 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryPipeAnchor">M-26,93 C-26,79 -5,80 -5,65</StreamGeometry>
     <StreamGeometry x:Key="GeometryTubeAway">M36,76 C36,94 46,104 64,104 L104,104</StreamGeometry>
     <StreamGeometry x:Key="GeometrySphere">M42,70 A40,40 0 1 1 122,70 A40,40 0 1 1 42,70 Z</StreamGeometry>
@@ -633,7 +633,7 @@
     </ControlTheme>
     <ControlTheme x:Key="ThemeENG" TargetType="TemplatedControl">
       <Setter Property="Width" Value="28" />
-      <Setter Property="Height" Value="52" />
+      <Setter Property="Height" Value="43" />
       <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="IsHitTestVisible" Value="False" />
       <Setter Property="Template">
@@ -645,34 +645,24 @@
               </Path.Effect>
             </Path>
             <Panel>
-              <Path Data="M24.3,18.301 A16,0.919 -90.982 0 0 24.849,50.296 L26.346,50.271 A16,0.919 -90.982 0 0 25.798,18.275 Z" Fill="{StaticResource BrushMetalLying}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
-              <Path Data="M24.3,18.301 A16,0.919 -90.982 0 1 24.849,50.296 A16,0.919 -90.982 0 1 24.3,18.301 Z" Fill="{StaticResource BrushMetalTop}" />
-              <Path Data="M24.22,45.342 A0.6,0.034 -90.982 0 1 24.241,46.542 A0.6,0.034 -90.982 0 1 24.22,45.342 Z M23.734,35.247 A0.6,0.034 -90.982 0 1 23.755,36.447 A0.6,0.034 -90.982 0 1 23.734,35.247 Z M23.734,24.245 A0.6,0.034 -90.982 0 1 23.755,25.445 A0.6,0.034 -90.982 0 1 23.734,24.245 Z M24.22,18.781 A0.6,0.034 -90.982 0 1 24.241,19.981 A0.6,0.034 -90.982 0 1 24.22,18.781 Z M24.908,22.055 A0.6,0.034 -90.982 0 1 24.929,23.255 A0.6,0.034 -90.982 0 1 24.908,22.055 Z M25.395,32.15 A0.6,0.034 -90.982 0 1 25.415,33.35 A0.6,0.034 -90.982 0 1 25.395,32.15 Z M25.395,43.152 A0.6,0.034 -90.982 0 1 25.415,44.352 A0.6,0.034 -90.982 0 1 25.395,43.152 Z M24.908,48.616 A0.6,0.034 -90.982 0 1 24.929,49.816 A0.6,0.034 -90.982 0 1 24.908,48.616 Z" Fill="#1A1E25" />
-              <Path Data="M25.045,23.174 A16,0.919 -90.982 0 1 25.521,36.371" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
-              <Path Data="{StaticResource GeometryENGInterior}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
-              <Path Data="{StaticResource GeometryENGInterior}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
-              <Path Data="M3.329,20.661 A14,0.804 -90.982 0 1 3.809,48.657 L24.815,48.297 A14,0.804 -90.982 0 0 24.335,20.301 Z" Fill="{StaticResource BrushGlassLying}" />
-              <Path Data="M6.853,30.102 L20.717,29.864" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
-              <Path Data="M10.331,20.541 A14,0.804 -90.982 0 1 10.811,48.537 M17.333,20.421 A14,0.804 -90.982 0 1 17.813,48.417" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.5" Opacity="0.7" />
-              <Path Data="M3.329,20.661 L24.335,20.301 M3.809,48.657 L24.815,48.297" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
-              <Path Data="M1.798,18.687 A16,0.919 -90.982 0 0 2.346,50.682 L3.844,50.656 A16,0.919 -90.982 0 0 3.295,18.661 Z" Fill="{StaticResource BrushMetalLying}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
+              <Path Data="M13.191,9.714 V11.506 A0.594,0.17 0 0 0 14.379,11.506 V9.714 Z" Fill="{StaticResource BrushMetal}" />
+              <Path Data="M13.271,9.799 V11.591 M13.488,9.861 V11.653 M13.785,9.883 V11.675 M14.082,9.861 V11.653 M14.3,9.799 V11.591" Stroke="#1E232B" StrokeThickness="0.06" Opacity="0.6" />
+              <Path Data="M13.191,10.22 A0.594,0.17 0 0 0 14.379,10.22" Stroke="#1E232B" StrokeThickness="0.12" />
+              <Path Data="M12.685,3.747 A1.1,1.1 0 0 1 14.885,3.747 V8.702 C14.885,9.208 14.379,9.208 14.379,9.714 A0.594,0.17 0 0 1 13.191,9.714 C13.191,9.208 12.685,9.208 12.685,8.702 Z" Fill="{StaticResource BrushSteel}" />
+              <Path Data="M14.445,8.414 V3.747" Stroke="White" StrokeThickness="0.25" StrokeLineCap="Round" Opacity="0.35" />
             </Panel>
             <Panel>
-              <Path Data="M6.799,20.104 V21.062 A7.273,2.078 0 0 0 21.345,21.062 V20.104 Z" Fill="{StaticResource BrushMetal}" Stroke="#1E232B" StrokeThickness="0.2" StrokeJoin="Round" />
-              <Path Data="M6.799,20.104 A7.273,2.078 0 0 1 21.345,20.104 A7.273,2.078 0 0 1 6.799,20.104 Z" Fill="{StaticResource BrushMetalTop}" />
-              <Path Data="M19.344,20.787 A0.5,0.143 0 0 1 20.344,20.787 A0.5,0.143 0 0 1 19.344,20.787 Z M15.963,21.753 A0.5,0.143 0 0 1 16.963,21.753 A0.5,0.143 0 0 1 15.963,21.753 Z M11.181,21.753 A0.5,0.143 0 0 1 12.181,21.753 A0.5,0.143 0 0 1 11.181,21.753 Z M7.8,20.787 A0.5,0.143 0 0 1 8.8,20.787 A0.5,0.143 0 0 1 7.8,20.787 Z M7.8,19.421 A0.5,0.143 0 0 1 8.8,19.421 A0.5,0.143 0 0 1 7.8,19.421 Z M11.181,18.455 A0.5,0.143 0 0 1 12.181,18.455 A0.5,0.143 0 0 1 11.181,18.455 Z M15.963,18.455 A0.5,0.143 0 0 1 16.963,18.455 A0.5,0.143 0 0 1 15.963,18.455 Z M19.344,19.421 A0.5,0.143 0 0 1 20.344,19.421 A0.5,0.143 0 0 1 19.344,19.421 Z" Fill="#1A1E25" />
-              <Path Data="M9.072,6.688 V20.104 A5,1.429 0 0 0 19.072,20.104 V6.688 Z" Fill="{StaticResource BrushMetal}" />
-              <Path Data="M9.072,6.688 A5,1.429 0 0 1 19.072,6.688 A5,1.429 0 0 1 9.072,6.688 Z" Fill="{StaticResource BrushMetalTop}" />
-              <Path Data="M10.072,14.824 A4,3.833 0 1 1 18.072,14.824 A4,3.833 0 1 1 10.072,14.824 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1A1E25" StrokeThickness="0.22" />
-              <Path Data="M10.739,14.824 A3.333,3.194 0 1 1 17.405,14.824 A3.333,3.194 0 1 1 10.739,14.824 Z" Fill="#05070A" />
-              <Path Data="M11.761,16.102 A2.667,2.556 0 1 1 16.383,16.102" Stroke="{StaticResource BrushSteel}" StrokeThickness="0.533" StrokeLineCap="Round" />
-              <Path Data="M14.072,14.824 L14.072,12.482" Stroke="White" StrokeThickness="0.444" StrokeLineCap="Round" />
-              <Path Data="M13.539,14.824 A0.533,0.511 0 1 1 14.605,14.824 A0.533,0.511 0 1 1 13.539,14.824 Z" Fill="White" />
-              <Path Data="M13.272,6.688 V4.292 H14.872 V6.688 Z" Fill="{StaticResource BrushMetal}" />
-              <Path Data="M8.072,4.292 A6,1.714 0 0 1 20.072,4.292 A6,1.714 0 0 1 8.072,4.292 Z" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.2" />
-              <Path Data="M8.705,3.525 L19.439,5.058 M11.389,5.825 L16.755,2.758" Stroke="{StaticResource BrushSteel}" StrokeThickness="0.7" StrokeLineCap="Round" />
-              <Path Data="M12.872,4.292 A1.2,0.343 0 0 1 15.272,4.292 A1.2,0.343 0 0 1 12.872,4.292 Z" Fill="{StaticResource BrushMetalTop}" />
-              <Path Data="M18.668,3.19 A6,1.714 0 0 1 18.668,5.394" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
+              <Path Data="M24.3,9.301 A16,0.919 -90.982 0 0 24.849,41.296 L26.346,41.271 A16,0.919 -90.982 0 0 25.798,9.275 Z" Fill="{StaticResource BrushMetalLying}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
+              <Path Data="M24.3,9.301 A16,0.919 -90.982 0 1 24.849,41.296 A16,0.919 -90.982 0 1 24.3,9.301 Z" Fill="{StaticResource BrushMetalTop}" />
+              <Path Data="M24.22,36.342 A0.6,0.034 -90.982 0 1 24.241,37.542 A0.6,0.034 -90.982 0 1 24.22,36.342 Z M23.734,26.247 A0.6,0.034 -90.982 0 1 23.755,27.447 A0.6,0.034 -90.982 0 1 23.734,26.247 Z M23.734,15.245 A0.6,0.034 -90.982 0 1 23.755,16.445 A0.6,0.034 -90.982 0 1 23.734,15.245 Z M24.22,9.781 A0.6,0.034 -90.982 0 1 24.241,10.981 A0.6,0.034 -90.982 0 1 24.22,9.781 Z M24.908,13.055 A0.6,0.034 -90.982 0 1 24.929,14.255 A0.6,0.034 -90.982 0 1 24.908,13.055 Z M25.395,23.15 A0.6,0.034 -90.982 0 1 25.415,24.35 A0.6,0.034 -90.982 0 1 25.395,23.15 Z M25.395,34.152 A0.6,0.034 -90.982 0 1 25.415,35.352 A0.6,0.034 -90.982 0 1 25.395,34.152 Z M24.908,39.616 A0.6,0.034 -90.982 0 1 24.929,40.816 A0.6,0.034 -90.982 0 1 24.908,39.616 Z" Fill="#1A1E25" />
+              <Path Data="M25.045,14.174 A16,0.919 -90.982 0 1 25.521,27.371" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.7" />
+              <Path Data="{StaticResource GeometryENGInterior}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
+              <Path Data="{StaticResource GeometryENGInterior}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
+              <Path Data="M3.329,11.661 A14,0.804 -90.982 0 1 3.809,39.657 L24.815,39.297 A14,0.804 -90.982 0 0 24.335,11.301 Z" Fill="{StaticResource BrushGlassLying}" />
+              <Path Data="M6.853,21.102 L20.717,20.864" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
+              <Path Data="M10.331,11.541 A14,0.804 -90.982 0 1 10.811,39.537 M17.333,11.421 A14,0.804 -90.982 0 1 17.813,39.417" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.5" Opacity="0.7" />
+              <Path Data="M3.329,11.661 L24.335,11.301 M3.809,39.657 L24.815,39.297" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" StrokeLineCap="Round" />
+              <Path Data="M1.798,9.687 A16,0.919 -90.982 0 0 2.346,41.682 L3.844,41.656 A16,0.919 -90.982 0 0 3.295,9.661 Z" Fill="{StaticResource BrushMetalLying}" Stroke="#1E232B" StrokeThickness="0.4" StrokeJoin="Round" />
             </Panel>
           </Panel>
         </ControlTemplate>
@@ -1064,15 +1054,18 @@
                   <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="97,22.092,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Panel>
               </Panel>
-              <TemplatedControl x:Name="ChamberENG" Theme="{StaticResource ThemeENG}" Margin="0,150,145,0" HorizontalAlignment="Right" VerticalAlignment="Top" />
+              <TemplatedControl x:Name="ChamberENG" Theme="{StaticResource ThemeENG}" Margin="0,159,145,0" HorizontalAlignment="Right" VerticalAlignment="Top" />
               <ContentControl x:Name="ContentTankPool" Theme="{StaticResource ThemeTankPool}" Margin="0,151,169,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
-                <ItemsControl x:Name="ItemsTXsPool" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateNeutron}" Clip="{StaticResource GeometryTankPoolInterior}" IsHitTestVisible="False">
-                  <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <views:PanelSwirl />
-                    </ItemsPanelTemplate>
-                  </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                <Panel>
+                  <Button Command="{Binding OpenFormTXsPoolCommand}" Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                  <ItemsControl x:Name="ItemsTXsPool" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateNeutron}" Clip="{StaticResource GeometryTankPoolInterior}" IsHitTestVisible="False">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <views:PanelSwirl />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                  </ItemsControl>
+                </Panel>
               </ContentControl>
             </Grid>
             <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10">
