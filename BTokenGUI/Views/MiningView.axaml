@@ -740,11 +740,15 @@
         </Path>
       </Panel>
     </DataTemplate>
-    <DataTemplate x:Key="TemplateChipTX" x:DataType="models:Blockchain+Chip">
-      <Panel Width="32" Height="32">
-        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" Background="{DynamicResource SystemControlHighlightAccentBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <Path Width="7" Height="7" Stretch="Uniform" Data="M1,2.5 H8 M6,0.5 L8,2.5 L6,4.5 M8,7.5 H1 M3,5.5 L1,7.5 L3,9.5" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeLineCap="Round" StrokeJoin="Round" />
-        </ContentControl>
+    <DataTemplate x:Key="TemplateNeutron" x:DataType="models:Blockchain+Chip">
+      <Panel Width="12" Height="12">
+        <Ellipse Width="7" Height="7" Fill="{DynamicResource SystemControlHighlightAccentBrush}" Opacity="0.8">
+          <Ellipse.Effect>
+            <BlurEffect Radius="3" />
+          </Ellipse.Effect>
+        </Ellipse>
+        <Ellipse Width="3" Height="3" Fill="{DynamicResource SystemControlHighlightAccentBrush}" />
+        <Ellipse Width="1.4" Height="1.4" Fill="White" />
       </Panel>
     </DataTemplate>
     <ControlTheme x:Key="ThemeBlockchain" TargetType="ItemsControl">
@@ -1012,7 +1016,13 @@
                 </Panel>
               </Panel>
               <ContentControl x:Name="ContentTankPool" Theme="{StaticResource ThemeTankPool}" Margin="0,151,145,0" HorizontalAlignment="Right" VerticalAlignment="Top" DataContext="{Binding $parent[views:MiningView].((vm:MainViewModel)DataContext).BlockchainBToken}" x:DataType="models:Blockchain">
-                <ItemsControl x:Name="ItemsTXsPool" Classes="heap" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateChipTX}" Clip="M57.128,40.418 A34,1.952 -90.982 1 0 58.294,108.37 L97.784,84.702 A11,0.632 -90.982 0 0 97.407,62.718 Z" />
+                <ItemsControl x:Name="ItemsTXsPool" ItemsSource="{Binding TXsPool}" ItemTemplate="{StaticResource TemplateNeutron}" Clip="{StaticResource GeometryTankPoolInterior}" IsHitTestVisible="False">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <views:PanelSwirl />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
               </ContentControl>
             </Grid>
             <Panel>
