@@ -359,6 +359,7 @@
     <ControlTheme x:Key="ThemeBlock" TargetType="views:Block">
       <Setter Property="Width" Value="56" />
       <Setter Property="Height" Value="98" />
+      <Setter Property="ClipToBounds" Value="False" />
       <Setter Property="Template">
         <ControlTemplate>
           <Panel x:DataType="models:Blockchain+Block" Classes.flying="{Binding IsFlying}">
@@ -653,7 +654,6 @@
               </Border.Background>
             </Border>
             <Canvas ClipToBounds="True">
-              <Path Width="10000" Height="10" Canvas.Right="0" Data="M9998,4.2 H0" Stroke="#262B33" StrokeThickness="1.6" StrokeLineCap="Round" StrokeDashArray="1.5,2.875" />
               <Path Width="10000" Height="10" Canvas.Right="0" Data="M9998,4.8 H0" Stroke="#C9D1DC" StrokeThickness="0.3" StrokeDashArray="8,15.3333" Opacity="0.7" />
             </Canvas>
             <Border Height="0.25" Margin="0,6.9,0,0" VerticalAlignment="Top" Background="#1E232B" Opacity="0.6" />
@@ -757,6 +757,7 @@
         <ControlTemplate TargetType="ItemsControl">
           <Panel>
             <TemplatedControl Theme="{StaticResource ThemeRail}" />
+            <views:RailLights />
             <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
           </Panel>
         </ControlTemplate>
