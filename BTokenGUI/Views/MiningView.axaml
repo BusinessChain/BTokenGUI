@@ -317,19 +317,18 @@
         <ControlTemplate>
           <Panel>
             <Border Width="36" Height="78" Margin="19,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource BrushWindowBackground}" IsHitTestVisible="False">
-              <Border Background="{TemplateBinding BorderBrush}" Opacity="0.27" />
+              <Border Background="{TemplateBinding BorderBrush}" Opacity="0.35" />
             </Border>
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L19,79 L1,97 Z M1,97 L19,79 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.45" />
-              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.62" />
-              <Path Data="M19,1 L19,79 L55,79 M19,79 L1,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.5" />
+              <Path Data="M1,19 L19,1 L19,79 L1,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.58" />
+              <Path Data="M1,97 L19,79 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.81" />
             </Panel>
             <Canvas Classes="slots" IsVisible="False" IsHitTestVisible="False" Clip="M0,0 L134,0 L37,97 L0,97 Z">
               <Path Data="M17,89 L21.5,84.5 L49.5,84.5 L45,89 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.3" StrokeJoin="Round" />
-              <Path Data="M22.6,85.5 H50 V86.5 H22.6 Z M22.6,87 H50 V88 H22.6 Z" Fill="#2A303A" />
-              <Path Data="M22.6,86.2 H50 M22.6,87.7 H50" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" />
-              <Path Data="M22.6,85.8 H50 M22.6,87.3 H50" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" StrokeDashOffset="0.667" />
+              <Path Data="M22.6,85.5 H50 V86.5 H22.6 Z M22.6,87 H50 V88 H22.6 Z" Fill="#05070A" />
+              <Path Data="M22.6,86.25 H50 M22.6,87.75 H50" Stroke="#9AA4B2" StrokeThickness="0.5" StrokeDashArray="0.4,0.6" />
+              <Path Data="M22.6,85.75 H50 M22.6,87.25 H50" Stroke="#9AA4B2" StrokeThickness="0.5" StrokeDashArray="0.4,0.6" StrokeDashOffset="0.5" />
               <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
                 <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="22.6,82.5,0,0" />
                 <TemplatedControl Theme="{StaticResource ThemeRiserTip}" Margin="22.6,84,0,0" />
@@ -338,28 +337,24 @@
             <ContentPresenter Name="PART_ContentPresenter" Content="{TemplateBinding Content}" />
             <Panel IsHitTestVisible="False">
               <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.77" />
+              <Path Data="M1,19 L19,1 L55,1 L37,19 Z" Fill="{TemplateBinding BorderBrush}" Opacity="1" />
               <Path Data="M1,19 L37,19 L37,97 L1,97 Z" Fill="{StaticResource BrushGlass}" />
               <Path Data="F0 M1,19 H37 V97 H1 Z M5,23 H33 V93 H5 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="F0 M1,19 H37 V97 H1 Z M5,23 H33 V93 H5 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.33" />
-              <Path Data="M5,23 H33 V93 H5 Z" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1" Opacity="0.8" />
-              <Path Data="M2.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0" Fill="{TemplateBinding BorderBrush}" Stroke="#1E232B" StrokeThickness="0.3" />
+              <Path Data="F0 M1,19 H37 V97 H1 Z M5,23 H33 V93 H5 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.43" />
+              <Path Data="M2.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0" Fill="{StaticResource BrushWindowBackground}" />
+              <Path Data="M2.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,21 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M10.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M18.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M26.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,95 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M2.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,30.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,39.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,48.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,58 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,67.25 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,76.5 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0 M34.1,85.75 a0.9,0.9 0 1 0 1.8,0 a0.9,0.9 0 1 0 -1.8,0" Fill="{TemplateBinding BorderBrush}" Opacity="0.5" Stroke="#1E232B" StrokeThickness="0.3" />
               <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{StaticResource BrushWindowBackground}" />
-              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.55" />
+              <Path Data="M37,19 L55,1 L55,79 L37,97 Z" Fill="{TemplateBinding BorderBrush}" Opacity="0.71" />
               <Panel Classes="logo" IsVisible="False" Clip="M37,19 H73 V97 H37 Z" RenderTransformOrigin="0,0">
                 <Panel.RenderTransform>
                   <MatrixTransform Matrix="0.5,-0.5,0,1,18.5,18.5" />
                 </Panel.RenderTransform>
                 <Path Data="{StaticResource GeometryLogoBitcoin}" Width="26.59" Height="35.2" Margin="41.7,40.4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Stretch="Uniform" Fill="White" />
               </Panel>
-              <Path Data="M1,19 L19,1 L55,1 L55,79 L37,97 L1,97 Z M1,19 L37,19 L55,1 M37,19 L37,97" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="2" StrokeJoin="Round" />
+              <Path Classes="slots" IsVisible="False" Data="M45,89 L49.5,84.5 L49.5,79.5 L45,84 Z" Fill="{StaticResource BrushMetalTop}" Stroke="#1E232B" StrokeThickness="0.3" StrokeJoin="Round" />
               <Canvas Classes="slots" IsVisible="False" Clip="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z">
-                <Path Data="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z" Fill="#2A303A" />
-                <Path Data="M46.3,84.5 V89 M47.8,83 V87.5" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" />
-                <Path Data="M46.7,84.5 V89 M48.2,83 V87.5" Stroke="#B8C0CA" StrokeThickness="0.6" StrokeDashArray="0.667,0.667" StrokeDashOffset="0.667" />
-                <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
-                  <Path Data="M22.6,80 H33.4 V92 H22.6 Z" Fill="#05070A" />
-                </Panel>
+                <Path Data="M46,89.5 L47,88.5 L47,84 L46,85 Z M47.5,88 L48.5,87 L48.5,82.5 L47.5,83.5 Z" Fill="#05070A" />
+                <Path Data="M46,84.9 l0.5,-0.5 M46,85.4 l0.5,-0.5 M46,85.9 l0.5,-0.5 M46,86.4 l0.5,-0.5 M46,86.9 l0.5,-0.5 M46,87.4 l0.5,-0.5 M46,87.9 l0.5,-0.5 M46,88.4 l0.5,-0.5 M46,88.9 l0.5,-0.5 M46,89.4 l0.5,-0.5 M46,89.9 l0.5,-0.5 M47,83.65 l-0.5,0.5 M47,84.15 l-0.5,0.5 M47,84.65 l-0.5,0.5 M47,85.15 l-0.5,0.5 M47,85.65 l-0.5,0.5 M47,86.15 l-0.5,0.5 M47,86.65 l-0.5,0.5 M47,87.15 l-0.5,0.5 M47,87.65 l-0.5,0.5 M47,88.15 l-0.5,0.5 M47,88.65 l-0.5,0.5 M47.5,83.4 l0.5,-0.5 M47.5,83.9 l0.5,-0.5 M47.5,84.4 l0.5,-0.5 M47.5,84.9 l0.5,-0.5 M47.5,85.4 l0.5,-0.5 M47.5,85.9 l0.5,-0.5 M47.5,86.4 l0.5,-0.5 M47.5,86.9 l0.5,-0.5 M47.5,87.4 l0.5,-0.5 M47.5,87.9 l0.5,-0.5 M47.5,88.4 l0.5,-0.5 M48.5,82.15 l-0.5,0.5 M48.5,82.65 l-0.5,0.5 M48.5,83.15 l-0.5,0.5 M48.5,83.65 l-0.5,0.5 M48.5,84.15 l-0.5,0.5 M48.5,84.65 l-0.5,0.5 M48.5,85.15 l-0.5,0.5 M48.5,85.65 l-0.5,0.5 M48.5,86.15 l-0.5,0.5 M48.5,86.65 l-0.5,0.5 M48.5,87.15 l-0.5,0.5" Stroke="#9AA4B2" StrokeThickness="0.2" />
               </Canvas>
               <Canvas Classes="slots" IsVisible="False" Clip="M47.5,88 L47.5,83.5 L48.5,82.5 L48.5,78 L57.5,78 Z">
                 <Panel Canvas.Left="{Binding $self.(views:PanelBlocks.DistanceArrival)}">
