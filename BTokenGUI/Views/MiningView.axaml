@@ -1025,16 +1025,13 @@
                 </ItemsControl>
               </ContentControl>
             </Grid>
-            <Panel>
-              <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10">
-                <ItemsControl.ItemTemplate>
-                  <DataTemplate x:DataType="models:Blockchain+Block">
-                    <views:BlockBToken BorderBrush="{Binding BrushPair}" />
-                  </DataTemplate>
-                </ItemsControl.ItemTemplate>
-              </ItemsControl>
-              <views:BlockBToken Margin="0,10,0,10" HorizontalAlignment="Right" VerticalAlignment="Top" IsHitTestVisible="False" DataContext="{x:Null}" BorderBrush="{DynamicResource SystemControlHighlightAccentBrush}" />
-            </Panel>
+            <ItemsControl x:Name="ItemsBlocksBToken" Theme="{StaticResource ThemeBlockchain}" DataContext="{Binding BlockchainBToken}" ItemsSource="{Binding Blocks}" x:DataType="models:Blockchain" Margin="-20,10,0,10">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="models:Blockchain+Block">
+                  <views:BlockBToken BorderBrush="{Binding BrushPair}" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <Panel x:Name="PanelTankBToken" DataContext="{Binding BlockchainBToken}" x:DataType="models:Blockchain" Margin="0,0,0,10">
               <Panel Margin="0,48,76,0" ClipToBounds="True" IsHitTestVisible="False">
                 <Canvas>
