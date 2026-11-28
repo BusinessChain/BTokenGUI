@@ -1021,7 +1021,7 @@
                     <BlurEffect Radius="8" />
                   </Path.Effect>
                 </Path>
-                <TemplatedControl x:Name="PortHatch" Theme="{StaticResource ThemePortBlock}" Margin="72,94,0,0" RenderTransform="rotate(-90deg)" />
+                <TemplatedControl x:Name="PortHatch" Theme="{StaticResource ThemePortBlock}" Margin="116.5,50,0,0" RenderTransform="scale(-1,1)" />
                 <Panel IsHitTestVisible="False">
                   <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushWindowBackground}" Opacity="0.6" />
                   <Path Data="{StaticResource GeometrySphere}" Fill="{StaticResource BrushTintGlass}" Opacity="0.12" />
@@ -1034,23 +1034,6 @@
                   <Path Data="{StaticResource GeometrySphere}" Stroke="{StaticResource BrushSteel}" StrokeThickness="2" />
                   <Path Data="M54.3,54 A32,32 0 0 1 71.1,39.9" Stroke="White" StrokeThickness="2" StrokeLineCap="Round" Opacity="0.25" />
                   <Path Data="M58,47 a3,2 0 1 0 6,0 a3,2 0 1 0 -6,0" Fill="White" Opacity="0.5" />
-                  <Path Data="M90,85 A9,9 0 1 1 108,85 A9,9 0 1 1 90,85 Z" Stroke="#1A1E25" StrokeThickness="0.5">
-                    <Path.Fill>
-                      <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-                        <GradientStop Offset="0" Color="#E6ECF3" />
-                        <GradientStop Offset="1" Color="#6E7888" />
-                      </LinearGradientBrush>
-                    </Path.Fill>
-                  </Path>
-                  <Path Data="M91.5,85 A7.5,7.5 0 1 1 106.5,85 A7.5,7.5 0 1 1 91.5,85 Z" Fill="#05070A" />
-                  <Path Data="M93.8,88 A6,6 0 1 1 104.2,88" Stroke="{StaticResource BrushSteel}" StrokeThickness="1.2" StrokeLineCap="Round" />
-                  <Path Data="M99,85 L99,79.5" Stroke="White" StrokeThickness="1" StrokeLineCap="Round" RenderTransformOrigin="99,85">
-                    <Path.RenderTransform>
-                      <RotateTransform Angle="{Binding AngleGaugeConverter}" />
-                    </Path.RenderTransform>
-                  </Path>
-                  <Path Data="M97.8,85 a1.2,1.2 0 1 0 2.4,0 a1.2,1.2 0 1 0 -2.4,0" Fill="White" />
-                  <Path Data="M92.5,82 A7,7 0 0 1 97,78.3" Stroke="White" StrokeThickness="0.6" StrokeLineCap="Round" Opacity="0.5" />
                   <TemplatedControl Theme="{StaticResource ThemeReceptacle}" Margin="52,30,0,0" />
                   <TemplatedControl Theme="{StaticResource ThemeReceptacle}" Margin="96,30,0,0" />
                   <TemplatedControl Theme="{StaticResource ThemePlug}" Margin="53,22.092,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
