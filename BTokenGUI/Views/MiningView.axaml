@@ -736,6 +736,18 @@
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <StackPanel Spacing="12" IsVisible="{Binding Anchors.Count}">
+          <SelectableTextBlock Text="Anchors" FontWeight="SemiBold" />
+          <ItemsControl ItemsSource="{Binding Anchors}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:Blockchain+Anchor">
+                <Border Classes="Panel" Margin="0,0,0,6">
+                  <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateFlyoutAnchor}" Margin="8" />
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
         <SelectableTextBlock Text="TXs" FontWeight="SemiBold" />
         <ItemsControl ItemsSource="{Binding TXs}">
           <ItemsControl.ItemTemplate>
@@ -749,22 +761,15 @@
       </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateAnchor" x:DataType="models:Blockchain+Anchor">
-      <Panel Width="72" Height="72" Margin="-20" Classes.glowing="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNull}}" Classes.flying="{Binding IsFlying}">
-        <Path Classes="glow" Data="M30,30 L42,30 L42,42 L30,42 Z" Fill="{Binding BrushPair}" Stroke="{Binding BrushPair}" StrokeThickness="5" StrokeJoin="Round" Opacity="0" IsHitTestVisible="False">
+      <Panel Width="72" Height="72" Margin="-20" IsHitTestVisible="False" Classes.glowing="{Binding ReasonForNotGlowing, Converter={x:Static ObjectConverters.IsNull}}" Classes.flying="{Binding IsFlying}">
+        <Path Classes="glow" Data="M30,30 L42,30 L42,42 L30,42 Z" Fill="{Binding BrushPair}" Stroke="{Binding BrushPair}" StrokeThickness="5" StrokeJoin="Round" Opacity="0">
           <Path.Effect>
             <BlurEffect Radius="8" />
           </Path.Effect>
         </Path>
-        <Button Padding="0" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-          <Button.Flyout>
-            <Flyout>
-              <ContentControl Content="{Binding}" ContentTemplate="{StaticResource TemplateFlyoutAnchor}" />
-            </Flyout>
-          </Button.Flyout>
-          <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{Binding BrushPair}" Background="{Binding BrushPair}">
-            <Path Width="5.4" Height="6.75" Stretch="Uniform" Data="M0.37,1.63 L1.63,0.37 L5.27,0.37 L5.27,5.83 L4.01,7.09 L0.37,7.09 Z M0.37,1.63 L4.01,1.63 L5.27,0.37 M4.01,1.63 L4.01,7.09" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeJoin="Round" />
-          </ContentControl>
-        </Button>
+        <ContentControl Theme="{StaticResource ThemeChip}" BorderBrush="{Binding BrushPair}" Background="{Binding BrushPair}" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Path Width="5.4" Height="6.75" Stretch="Uniform" Data="M0.37,1.63 L1.63,0.37 L5.27,0.37 L5.27,5.83 L4.01,7.09 L0.37,7.09 Z M0.37,1.63 L4.01,1.63 L5.27,0.37 M4.01,1.63 L4.01,7.09" Stroke="#FFF6DC" StrokeThickness="0.9" StrokeJoin="Round" />
+        </ContentControl>
       </Panel>
     </DataTemplate>
     <DataTemplate x:Key="TemplateChip" x:DataType="models:Blockchain+Chip">
