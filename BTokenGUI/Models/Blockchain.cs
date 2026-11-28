@@ -13,7 +13,7 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain : ObservableObject
 {
-  const int COUNT_POLLS_CHASE = 10;
+  const int COUNT_POLLS_CHASE = 7;
 
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
