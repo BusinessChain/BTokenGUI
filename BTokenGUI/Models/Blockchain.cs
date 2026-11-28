@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -12,6 +13,8 @@ namespace BTokenGUI.Models;
 
 public partial class Blockchain : ObservableObject
 {
+  const int COUNT_POLLS_CHASE = 10;
+
   public string Name { get; }
   public ObservableCollection<Block> Blocks { get; } = [];
   public ObservableCollection<Anchor> Anchors { get; } = [];
@@ -25,7 +28,12 @@ public partial class Blockchain : ObservableObject
   public partial bool IsFormAnchorsOpen { get; set; }
   [ObservableProperty]
   public partial bool IsFormTXsPoolOpen { get; set; }
+  public IBrush BrushTip { get; private set; }
+  public DateTime TimeStartChase { get; private set; }
+  public DateTime TimeStartChorus { get; private set; }
   Blockchain BlockchainParent;
+  string HashTip;
+  int CountPollsChase;
   long? FundsTank;
   ObservableCollection<Good> Flights;
 
@@ -81,7 +89,31 @@ public partial class Blockchain : ObservableObject
     if (snapshotState.TryGetProperty("tXPool", out JsonElement tXPool))
       PlaceTXsPool(tXPool);
 
+    UpdateLights(snapshotState.GetProperty("tip").GetProperty("hash").GetString());
+
     IsPlaced = true;
+  }
+
+  void UpdateLights(string hashTip)
+  {
+    if (hashTip != HashTip)
+    {
+      if (HashTip != null)
+        TimeStartChorus = DateTime.UtcNow;
+
+      HashTip = hashTip;
+
+      if (BlockchainParent != null)
+        BrushTip = Good.CreateBrushPair(hashTip);
+    }
+
+    CountPollsChase += 1;
+
+    if (CountPollsChase == COUNT_POLLS_CHASE)
+    {
+      TimeStartChase = DateTime.UtcNow;
+      CountPollsChase = 0;
+    }
   }
 
   void PlaceTXsPool(JsonElement tXPool)

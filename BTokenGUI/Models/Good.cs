@@ -23,7 +23,7 @@ public partial class Blockchain
     public partial bool IsExploding { get; set; }
 
 
-    protected static IBrush CreateBrushPair(string hash)
+    internal static IBrush CreateBrushPair(string hash)
     {
       byte[] bytes = Convert.FromHexString(hash[^6..]);
 
